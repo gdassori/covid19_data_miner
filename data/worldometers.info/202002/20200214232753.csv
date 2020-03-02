@@ -1,0 +1,30 @@
+Country/ Territory,Total Cases,Change (cases),Total Deaths,Change (deaths),Total Recovered,Serious/  Critical,Region
+China,66291,2440,1520,140,7977,10730,Asia
+Japan,259,8,1,,11,9,Asia
+Singapore,67,9,,,17,8,Asia
+Hong Kong,56,3,1,,1,7,Asia
+Thailand,33,,,,13,1,Asia
+S. Korea,28,,,,7,,Asia
+Malaysia,19,,,,7,,Asia
+Taiwan,18,,,,1,,Asia
+Germany,16,,,,1,,Europe
+Vietnam,16,,,,7,,Asia
+USA,15,,,,3,,N.America
+Australia,15,,,,10,,Oceania
+France,11,,,,3,1,Europe
+Macao,10,,,,3,,Asia
+U.K.,9,,,,1,,Europe
+Canada,8,1,,,1,,N.America
+U.A.E.,8,,,,1,1,Asia
+Philippines,3,,1,,2,,Asia
+Italy,3,,,,,2,Europe
+India,3,,,,1,,Asia
+Spain,2,,,,1,,Europe
+Russia,2,,,,2,,Europe
+Sweden,1,,,,,,Europe
+Belgium,1,,,,,,Europe
+Egypt,1,1,,,,,Africa
+Nepal,1,,,,1,,Asia
+Sri Lanka,1,,,,1,,Asia
+Finland,1,,,,1,,Europe
+Cambodia,1,,,,1,,Asia

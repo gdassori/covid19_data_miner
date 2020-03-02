@@ -1,6 +1,7 @@
 import abc
-import datetime
 import threading
+import typing
+
 import influxdb as influxdb
 from influxdb import InfluxDBClient
 
@@ -29,10 +30,11 @@ class InfluxDBRepository(metaclass=abc.ABCMeta):
 class InfluxDataRepository(InfluxDBRepository):
     def __init__(self, influxdb_client: InfluxDBClient):
         super().__init__(influxdb_client)
-        self.databases = ['historical_data']
+        self.databases = ['historical_data', 'projections']
         self.influxdb_client.ping()
 
     def save_historical_points(self, *points: CovidPoint):
+        print('Saving', len(points), 'points')
         saving_points = [
             {
                 "measurement": point.source,
@@ -57,5 +59,12 @@ class InfluxDataRepository(InfluxDBRepository):
         return self.influxdb_client.write_points(
             saving_points,
             database="historical_data",
+            time_precision="u"
+        )
+
+    def save_projections(self, *projections: typing.Dict):
+        return self.influxdb_client.write_points(
+            projections,
+            database="projections",
             time_precision="u"
         )

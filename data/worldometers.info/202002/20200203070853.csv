@@ -1,0 +1,28 @@
+Country,Total Cases,New Today,Total Deaths,Today's Deaths,Total Cured,Total Critical,Region
+China,17205,2824,361,57,494,2296,Asia
+Japan,20,,,,,,Asia
+Thailand,19,,,,7,,Asia
+Singapore,18,,,,,,Asia
+South Korea,15,3,,,,,Asia
+Hong Kong,15,2,,,,,Asia
+Australia,12,,,,2,,Oceania
+U.S.,11,3,,,,,N.America
+Taiwan,10,,,,,,Asia
+Germany,10,2,,,,,Europe
+Vietnam,8,2,,,1,,Asia
+Malaysia,8,,,,,,Asia
+Macao,8,1,,,,,Asia
+France,6,,,,,2,Europe
+U.A.E.,5,,,,,,Asia
+Canada,4,,,,,,N.America
+Philippines,2,1,1,1,,,Asia
+U.K.,2,,,,,,Europe
+Italy,2,,,,,,Europe
+India,2,1,,,,,Asia
+Russia,2,,,,,,Europe
+Cambodia,1,,,,,,Asia
+Sweden,1,,,,,,Europe
+Nepal,1,,,,,,Asia
+Sri Lanka,1,,,,1,,Asia
+Finland,1,,,,,,Europe
+Spain,1,,,,,,Europe

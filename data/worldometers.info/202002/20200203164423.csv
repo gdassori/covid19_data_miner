@@ -1,0 +1,28 @@
+Country,Total Cases,Feb 3 Cases,Total Deaths,Feb 3  Deaths,Total Recovered,Total Critical,Region
+China,17302,97,361,,512,2296,Asia
+Japan,20,,,,,,Asia
+Thailand,19,,,,7,,Asia
+Singapore,18,,,,,,Asia
+Hong Kong,15,,,,,,Asia
+South Korea,15,,,,,,Asia
+Australia,12,,,,2,,Oceania
+U.S.,11,2,,,,,N.America
+Germany,10,,,,,,Europe
+Taiwan,10,,,,,,Asia
+Vietnam,8,1,,,1,,Asia
+Macao,8,,,,,,Asia
+Malaysia,8,,,,,,Asia
+France,6,,,,,2,Europe
+U.A.E.,5,,,,,,Asia
+Canada,4,,,,,,N.America
+India,3,1,,,,,Asia
+Philippines,2,,1,,,,Asia
+Italy,2,,,,,,Europe
+U.K.,2,,,,,,Europe
+Russia,2,,,,,,Europe
+Finland,1,,,,,,Europe
+Sri Lanka,1,,,,1,,Asia
+Nepal,1,,,,,,Asia
+Sweden,1,,,,,,Europe
+Cambodia,1,,,,,,Asia
+Spain,1,,,,,,Europe

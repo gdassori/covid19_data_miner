@@ -1,6 +1,5 @@
 import csv
 import datetime
-import time
 import typing
 
 from github import Github
@@ -57,7 +56,7 @@ class CSSEGISandDataPointsService:
                 if i == len(formats) - 1:
                     raise e
 
-    def _get_points(self, data: typing.List[typing.List], min_timestamp) -> typing.List[CovidPoint]:
+    def _get_points(self, data: typing.List[typing.List]) -> typing.List[CovidPoint]:
         res = []
         for entry in data:
             rows = self._parse_csv(entry[1])
@@ -82,4 +81,4 @@ class CSSEGISandDataPointsService:
 
     def get_points_since(self, timestamp: int) -> typing.List[CovidPoint]:
         data = self._fetch_data(timestamp)
-        return self._get_points(data, timestamp)
+        return self._get_points(data)

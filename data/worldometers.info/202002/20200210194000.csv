@@ -1,0 +1,29 @@
+Country/ Territory,Total Cases,Feb 9/10  Cases,Total Deaths,Feb 9/10  Deaths,Total Recovered,Total Severe,Region
+China,40199,3001,908,97,3623,6484,Asia
+Japan,161,72,,,4,,Asia
+Singapore,45,5,,,7,7,Asia
+Hong Kong,42,16,1,,,,Asia
+Thailand,32,,,,10,1,Asia
+S. Korea,27,3,,,3,,Asia
+Taiwan,18,1,,,1,,Asia
+Malaysia,18,2,,,3,,Asia
+Australia,15,,,,5,,Oceania
+Vietnam,14,1,,,3,,Asia
+Germany,14,,,,,,Europe
+USA,12,,,,3,,N.America
+France,11,,,,,1,Europe
+Macao,10,,,,1,,Asia
+U.K.,8,5,,,,,Europe
+U.A.E.,8,1,,,1,,Asia
+Canada,7,,,,,,N.America
+Philippines,3,,1,,2,,Asia
+India,3,,,,,,Asia
+Italy,3,,,,,2,Europe
+Russia,2,,,,,,Europe
+Spain,2,1,,,,,Europe
+Finland,1,,,,1,,Europe
+Nepal,1,,,,,,Asia
+Sweden,1,,,,,,Europe
+Sri Lanka,1,,,,1,,Asia
+Cambodia,1,,,,1,,Asia
+Belgium,1,,,,,,Europe
