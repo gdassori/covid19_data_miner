@@ -1,7 +1,7 @@
 import shutil
 import csv
 import os
-from covid_data_miner.service.worldometers_web_points_service import WorldometersWebPointsService
+from tools.worldometers_web_points_service import WorldometersWebPointsService
 import sys
 
 if __name__ == '__main__':
@@ -27,7 +27,6 @@ if __name__ == '__main__':
     csvs = [w.fetch_current()]
     filename = None
     for updated_at, data in csvs:
-        #if not updated_at[:6] in os.listdir('{}/data/worldometers.info'.format(prefix)):
         os.makedirs('{}/worldometers.info/{}'.format(prefix, updated_at[:6]), exist_ok=True)
         filename = '{}/worldometers.info/{}/{}.csv'.format(prefix, updated_at[:6], updated_at)
         with open(filename, 'w') as f:
