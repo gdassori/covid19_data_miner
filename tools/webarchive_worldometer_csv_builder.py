@@ -1,3 +1,4 @@
+import shutil
 import csv
 import os
 from covid_data_miner.service.worldometers_points_service import WorldometersPointsService
@@ -10,10 +11,12 @@ if __name__ == '__main__':
     #csvs = w.fetch_since(starts_at)
 
     csvs = [w.fetch_current()]
+    filename = None
     for updated_at, data in csvs:
         if not updated_at[:6] in os.listdir('data/worldometers.info'):
             os.mkdir('data/worldometers.info/{}'.format(updated_at[:6]))
-        with open('data/worldometers.info/{}/{}.csv'.format(updated_at[:6], updated_at), 'w') as f:
+        filename = 'data/worldometers.info/{}/{}.csv'.format(updated_at[:6], updated_at)
+        with open(filename, 'w') as f:
             writer = csv.writer(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
             for i, row in enumerate(data):
                 if not i:
@@ -23,3 +26,4 @@ if __name__ == '__main__':
                 if 'total' in row[0].lower():
                     continue
                 writer.writerow(row)
+    filename and shutil.copyfile(filename, 'data/worldometers.info/latest.csv')
