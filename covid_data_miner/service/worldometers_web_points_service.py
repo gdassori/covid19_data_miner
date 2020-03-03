@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from covid_data_miner.domain import CovidPoint
 
 
-class WorldometersPointsService:
+class WorldometersWebPointsService:
     def __init__(self, interval=21600):
         self.interval = interval  # 6 hours
         self.nearest_template = 'https://archive.org/wayback/available?timestamp={}' \
