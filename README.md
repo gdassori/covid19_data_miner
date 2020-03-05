@@ -1,2 +1,2 @@
 # covid19_data_miner
-Covid12 data to influxdb
+Covid19 data to influxdb

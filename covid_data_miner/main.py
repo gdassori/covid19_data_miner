@@ -20,8 +20,8 @@ if __name__ == '__main__':
     starts_at = int(datetime.datetime.strptime('2020-01-20', '%Y-%m-%d').strftime('%s'))
     starts_at = starts_at - (starts_at % 21600)
     now = int(time.time())
-    now = now - 7200
+    now = now - 86400
     csse_points = csse_points_service.get_points_since(now)
     points_repository.save_historical_points(*csse_points)
-    wom_points = worldometer_points_service.get_points_since(starts_at)
+    wom_points = worldometer_points_service.get_points_since(now)
     points_repository.save_historical_points(*wom_points)
