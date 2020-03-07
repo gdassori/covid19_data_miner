@@ -40,12 +40,9 @@ class InfluxDataRepository(InfluxDBRepository):
                 "measurement": point.source,
                 "time": point.last_update * 1000000 + i,
                 "tags": {
-                    "source": point.source,
                     "country": point.country,
                     "province": point.province,
-                    "day": int(point.timestamp.strftime('%s')),
-                    "lat": 0,
-                    "lon": 0,
+                    "city": point.city
                 },
                 "fields": {
                     "confirmed_cumulative": point.confirmed_cumulative,
@@ -62,9 +59,29 @@ class InfluxDataRepository(InfluxDBRepository):
             time_precision="u"
         )
 
-    def save_projections(self, *projections: typing.Dict):
+    def get_projection(self, measurement: str, time: int):
+        pass
+
+    def get_projections_with_timestamps(self, measurement: str, *timestamps):
+        pass
+
+    def save_projections(self, measurement: str, *projections: typing.Dict):
         return self.influxdb_client.write_points(
             projections,
             database="projections",
             time_precision="u"
         )
+
+    def get_nearest_historical_points_by_fields(self, timestamp: int, measurement: str, field: str) \
+            -> typing.List[CovidPoint]:
+        assert isinstance(timestamp, int)
+        timestamp *= 10**9
+        query = "select * from {} where time < {} group by {} order by desc limit 1;".format(
+            measurement, timestamp, field
+        )
+
+    def get_first_historical_point_time_for_measurement(self, measurement: str):
+        query = "select time from {} order by asc limit 1;".format(
+            measurement
+        )
+        # time_precision='s'

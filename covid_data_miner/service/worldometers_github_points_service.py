@@ -115,6 +115,7 @@ class WorldometersGithubPointsService:
         for entry in data:
             updated_at, rows = entry
             rows = self._parse_csv(rows)
+            error = False
             for v in range(1, 7):
                 try:
                     parser = getattr(self, '_get_points_from_csv_v' + str(v))
