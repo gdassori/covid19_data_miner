@@ -1,0 +1,43 @@
+{
+ "default": {
+  "influxdb_host": "127.0.0.1",
+  "influxdb_port": 8086
+ },
+ "sources": [
+  {
+   "name": "worldometers",
+   "enabled": true
+   },
+  {
+   "name": "csse",
+   "enabled": true
+  }
+ ],
+ "projections": [
+  {
+   "name": "summary",
+   "source": "worldometers",
+   "tag": "country",
+   "interval": 86400,
+   "enabled": true
+  },
+  {
+   "name": "summary",
+   "source": "csse",
+   "tag": "country",
+   "interval": 86400,
+   "enabled": true
+  }
+ ],
+ "plugins": [
+  {
+   "name": "growth",
+   "projection": {
+    "name": "worldometers",
+    "interval": 86400,
+    "tag": "country"
+   },
+   "enabled": true
+  }
+ ]
+}

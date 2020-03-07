@@ -1,0 +1,78 @@
+#!/usr/bin/env python
+
+import click
+from tabulate import tabulate
+
+from covid_data_miner.src.context_manager import ContextManager
+from covid_data_miner.src.main import sources_factory
+
+
+context = ContextManager()
+
+
+@click.group(name='covid19')
+def main():
+    pass
+
+
+@main.group()
+def source():
+    pass
+
+
+@main.group()
+def summary():
+    pass
+
+
+@main.group()
+def plugins():
+    pass
+
+
+@source.command()
+def ls():
+    sources = sources_factory.list_sources()
+    enabled = context.get_enabled_sources_names()
+    table = [
+        [s['name'], ', '.join(s['tags']), 'on' if s['name'] in enabled else 'off', '-'] for s in sources
+    ]
+    click.echo('\n' + tabulate(table, headers=["name", "tags", "status", "last_update"]) + '\n')
+
+
+@source.command()
+@click.argument('name')
+def enable(name):
+    enabled = context.get_enabled_sources_names()
+    if name in enabled:
+        click.echo(f'source "{name}" already enabled')
+        exit(1)
+    sources = sources_factory.list_sources()
+    names = [s['name'] for s in sources]
+    if name not in names:
+        click.echo(f'source "{name}" does not exist')
+        exit(1)
+    context.enable_source(name)
+    click.echo(f'source "{name}" enabled')
+    exit()
+
+
+@source.group()
+@click.argument('name')
+def disable(name):
+    enabled = context.get_enabled_sources_names()
+    if name not in enabled:
+        click.echo(f'source "{name}" not enabled')
+        exit(1)
+    sources = sources_factory.list_sources()
+    names = [s['name'] for s in sources]
+    if name not in names:
+        click.echo(f'source "{name}" does not exist')
+        exit(1)
+    context.disable_source(name)
+    click.echo(f'source "{name}" disabled')
+    exit()
+
+
+if __name__ == '__main__':
+    main()

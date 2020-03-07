@@ -5,7 +5,7 @@ import typing
 import influxdb as influxdb
 from influxdb import InfluxDBClient
 
-from covid_data_miner.domain import CovidPoint
+from covid_data_miner.src.domain import CovidPoint
 
 
 class InfluxDBRepository(metaclass=abc.ABCMeta):

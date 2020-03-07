@@ -4,8 +4,6 @@ import datetime
 import requests
 from bs4 import BeautifulSoup
 
-from covid_data_miner.domain import CovidPoint
-
 
 class WorldometersWebPointsService:
     def __init__(self, interval=21600):

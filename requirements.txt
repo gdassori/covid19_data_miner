@@ -2,3 +2,5 @@ PyGithub
 requests
 influxdb
 bs4
+click
+tabulate

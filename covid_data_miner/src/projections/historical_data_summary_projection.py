@@ -2,8 +2,8 @@ import datetime
 import time
 import typing
 
-from covid_data_miner.domain import CovidPoint
-from covid_data_miner.projections.base_projection import BaseProjection
+from covid_data_miner.src.domain import CovidPoint
+from covid_data_miner.src.projections.base_projection import BaseProjection
 
 
 class HistoricalDataSummaryProjection(BaseProjection):

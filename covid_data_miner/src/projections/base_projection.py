@@ -2,7 +2,7 @@ import abc
 import datetime
 import typing
 
-from covid_data_miner.utils import influxdb_repository_factory
+from covid_data_miner.src.utils import influxdb_repository_factory
 
 
 class BaseProjection(metaclass=abc.ABCMeta):
