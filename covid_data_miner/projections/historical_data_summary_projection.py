@@ -2,24 +2,20 @@ import datetime
 import time
 import typing
 
-from covid_data_miner import repository
 from covid_data_miner.domain import CovidPoint
 from covid_data_miner.projections.base_projection import BaseProjection
-from covid_data_miner.repository import InfluxDataRepository
 
 
-class SummaryProjection(BaseProjection):
+class HistoricalDataSummaryProjection(BaseProjection):
     def __init__(
         self,
         origin_measurement,
-        repository: InfluxDataRepository,
         interval=14400,  # 4 Hours
         key='country',
         projection_name=None
     ):
         super().__init__()
         self.origin_measurement = origin_measurement
-        self.repository = repository
         self.interval = interval
         self.TEMPLATE = dict(
             confirmed_cumulative=0,
@@ -40,7 +36,7 @@ class SummaryProjection(BaseProjection):
         )
         self.key = key
         self._projection_name = projection_name or f'summary_{self.origin_measurement}_{self.key}'
-        
+
     def _get_previous_and_current_values(self, value, timestamp, relevants):
         try:
             previous = relevants[timestamp - self.interval]
@@ -91,7 +87,7 @@ class SummaryProjection(BaseProjection):
                 "hospitalized_diff": current['hospitalized_cumulative'] - previous['hospitalized_cumulative'],
                 "severe_diff": current['severe_cumulative'] - previous['severe_cumulative'],
                 "death_diff": current['death_cumulative'] - previous['death_cumulative'],
-                "recovered_diff": current['recovered_cumulative'] - previous['recovered_cumulative']
+                "recovered_diff": current['recovered_cumulative'] - previous['recovered_cumulative'],
             }
         )
         relevants["current"][current_timestamp] = current

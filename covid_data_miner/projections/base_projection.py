@@ -2,11 +2,21 @@ import abc
 import datetime
 import typing
 
+from covid_data_miner.utils import influxdb_repository_factory
+
 
 class BaseProjection(metaclass=abc.ABCMeta):
-    def __init__(self):
+    def __init__(self, repository_factory=influxdb_repository_factory):
         self._normalizers = {}
         self.observers = []
+        self.influxdb_factory = repository_factory
+        self._repository = None
+
+    @property
+    def repository(self):
+        if not self._repository:
+            self._repository = self.influxdb_factory()
+        return self._repository
 
     @staticmethod
     def _to_influxtime(dtime: datetime.datetime) -> int:

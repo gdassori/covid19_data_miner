@@ -13,6 +13,7 @@ class WorldometersGithubPointsService:
         self.repo_name = 'gdassori/covid19_data'
         self.folder = '/data/worldometers.info/'
         self.repo = Github(login_or_token=authentication_key, per_page=1000)
+        self.tags = ['country']
 
     @staticmethod
     def _filename_to_datetime(filename):

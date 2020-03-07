@@ -13,6 +13,7 @@ class CSSEGISandDataPointsService:
         self.repo_name = 'CSSEGISandData/COVID-19'
         self.folder = '/csse_covid_19_data/csse_covid_19_daily_reports/'
         self.repo = Github(login_or_token=authentication_key, per_page=100)
+        self.tags = ['country']
 
     @staticmethod
     def _filename_to_datetime(filename):
