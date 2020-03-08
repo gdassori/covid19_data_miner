@@ -1,3 +1,6 @@
+from covid_data_miner.src import exceptions
+
+
 class Covid19DataMinerManager:
     def __init__(self, sources_factory, projections_factory, plugins_loader):
         self._sources = {}
@@ -19,14 +22,14 @@ class Covid19DataMinerManager:
 
     def add_source(self, source_config, source):
         if source_config['name'] in self._sources:
-            raise ValueError('SourceDuplicatedException')
+            raise exceptions.SourceDuplicatedException
         self._sources[source_config['name']] = source
 
     def add_projection(self, projection_config, projection):
         if not projection_config['source'] in self._sources:
-            raise ValueError('UnknownSourceException')
+            raise exceptions.UnknownSourceException
         if not projection_config['tag'] in self._sources[projection_config['source']].tags:
-            raise ValueError('UnknownTagForSourceException')
+            raise exceptions.UnknownTagForSourceException
         self._projections[projection_config['source']] = \
             self._projections.get(projection_config['source'], []) + [projection]
 
