@@ -50,11 +50,10 @@ class ContextManager:
                 "influxdb_port": settings.DEFAULT_INFLUXDB_PORT,
                 "github_api_key": ""
             },
-            "sources": [],
-            "projections": [],
-            "plugins": []
+            "sources": {},
+            "projections": {},
+            "plugins": {}
         }
-
         return self._save_config_file()
 
     def _save_config_file(self):
@@ -69,26 +68,60 @@ class ContextManager:
         if not self._load_config_file(config_file):
             self._init_config_file(config_file)
 
-    def save_config_file(self):
-        pass
+    def get_configured_sources(self):
+        return self._config['sources']
 
-    def get_sources(self):
-        pass
+    def get_configured_source(self, source_name):
+        return self._config['sources'].get(source_name)
 
-    def get_enabled_sources_names(self):
-        return []
-
-    def get_projections(self):
-        pass
-
-    def get_plugins(self):
-        pass
+    def add_source(self, source_name):
+        if source_name not in self._config['sources']:
+            self._config['sources'][source_name] = {}
+        self._config['sources'][source_name]['enabled'] = True
+        return self._save_config_file()
 
     def enable_source(self, source_name):
-        pass
+        self._config['sources'][source_name]['enabled'] = True
+        return self._save_config_file()
 
     def disable_source(self, source_name):
-        pass
+        assert source_name in self._config['sources']
+        self._config['sources'][source_name]['enabled'] = False
+        return self._save_config_file()
+
+    def remove_source(self, source_name):
+        self._config['sources'].pop(source_name)
+        return self._save_config_file()
+
+    def get_configured_projections(self):
+        return self._config['projections']
+
+    def get_configured_projection(self, projection_name):
+        return self._config['projections'].get(projection_name)
+
+    def add_projection(self, projection_name, source, tag, timeframe, alias):
+        if projection_name not in self._config['projections']:
+            self._config['projections'][alias] = {
+                "type": projection_name,
+                "source": source,
+                "tag": tag,
+                "timeframe": timeframe
+            }
+        self._config['projections'][alias]['enabled'] = True
+        return self._save_config_file()
+
+    def enable_projection(self, alias):
+        self._config['projections'][alias]['enabled'] = True
+        return self._save_config_file()
+
+    def disable_projection(self, alias):
+        assert alias in self._config['projections']
+        self._config['projections'][alias]['enabled'] = False
+        return self._save_config_file()
+
+    def remove_projection(self, projection_name):
+        self._config['projections'].pop(projection_name)
+        return self._save_config_file()
 
     def set_github_api_key(self, api_key):
         self._config['default']['github_api_key'] = api_key

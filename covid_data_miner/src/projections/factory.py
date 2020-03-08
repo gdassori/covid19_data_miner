@@ -16,3 +16,13 @@ class ProjectionsFactory:
             interval=projection_config.get('interval')
         )
         return instance
+
+    def list_projections(self):
+        res = []
+        keys = sorted(self._projections.keys())
+        for key in keys:
+            res.append({
+                "name": key,
+                "description": self._projections[key].description
+            })
+        return res

@@ -7,6 +7,8 @@ from covid_data_miner.src.projections.base_projection import BaseProjection
 
 
 class HistoricalDataSummaryProjection(BaseProjection):
+    description = "Aggregate spare CovidPoints into <time_interval> summaries using <last> group by <tag>"
+
     def __init__(
         self,
         origin_measurement,
