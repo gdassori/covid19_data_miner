@@ -228,6 +228,20 @@ def add(name, source, tag, timeframe, alias=None):
 
 @projections.command()
 @click.argument('alias')
+def enable(alias):
+    configured = context.get_configured_projections()
+    if alias not in configured:
+        click.echo(f'projection "{alias}" not added')
+        exit(1)
+    elif configured[alias]['enabled']:
+        click.echo(f'projection "{alias}" already enabled')
+        exit(1)
+    context.enable_projection(alias)
+    click.echo(f'projection "{alias}" enabled')
+
+
+@projections.command()
+@click.argument('alias')
 def disable(alias):
     configured = context.get_configured_projections()
     if alias not in configured or not configured[alias]['enabled']:
@@ -239,16 +253,17 @@ def disable(alias):
 
 @projections.command()
 @click.argument('alias')
-def enable(alias):
+def remove(alias):
     configured = context.get_configured_projections()
     if alias not in configured:
-        click.echo(f'projection "{alias}" not added')
+        click.echo(f'projection "{alias}" not configured')
         exit(1)
-    elif configured[alias]['enabled']:
-        click.echo(f'projection "{alias}" already enabled')
-        exit(1)
-    context.enable_projection(alias)
-    click.echo(f'projection "{alias}" enabled')
+    response = input('Remove projection and data from db? (y/n)')
+    if response.strip().lower() == 'y':
+        from covid_data_miner.src import influx_repository
+        #influx_repository.remove_projection(name)
+        context.remove_projection(alias)
+        click.echo(f'projection "{alias}" removed')
 
 
 @settings.command()
