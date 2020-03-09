@@ -14,7 +14,7 @@ class CSSEGISandDataPointsService:
     def __init__(self, authentication_key):
         self.repo_name = 'CSSEGISandData/COVID-19'
         self.folder = '/csse_covid_19_data/csse_covid_19_daily_reports/'
-        self.repo = Github(login_or_token=authentication_key, per_page=100)
+        self.repo = Github(login_or_token=authentication_key, per_page=1000)
 
     @staticmethod
     def _filename_to_datetime(filename):
@@ -84,3 +84,6 @@ class CSSEGISandDataPointsService:
     def get_points_since(self, timestamp: int) -> typing.List[CovidPoint]:
         data = self._fetch_data(timestamp)
         return self._get_points(data)
+
+    def get_latest(self):
+        raise NotImplementedError

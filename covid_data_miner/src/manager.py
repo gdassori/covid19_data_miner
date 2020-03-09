@@ -2,13 +2,14 @@ from covid_data_miner.src import exceptions
 
 
 class Covid19DataMinerManager:
-    def __init__(self, sources_factory, projections_factory, plugins_loader):
+    def __init__(self, sources_factory, projections_factory, plugins_loader, repository):
         self._sources = {}
         self._projections = {}
         self._plugins = {}
         self._sources_factory = sources_factory
         self._projections_factory = projections_factory
         self._plugins_loader = plugins_loader
+        self.repository = repository
 
     def load_config(self, config):
         for source_config in config.sources:
@@ -36,24 +37,19 @@ class Covid19DataMinerManager:
     def add_plugin(self, plugin_name, plugin):
         self._plugins[plugin_name] = plugin
 
-    def remove_source(self, source_name):
-        pass
-
-    def remove_projection(self, projection_name):
-        pass
-
-    def remove_plugin(self, plugin_name):
-        pass
-
-    def rewind_source(self, source):
-        pass
+    def rewind_source(self, source, start_time=None):
+        points = self._sources[source].get_points_since(start_time)
+        self.repository.delete_points_for_source(source, start_time=start_time)
+        self.repository.save_historical_points(points)
+        for projection in self._projections.get(source, []):
+            projection.project(points)
 
     def update_source(self, source):
-        pass
-
-    def rewind_projection(self, source, projection):
-        pass
-
-    def update_projection(self, source, projection):
-        pass
-
+        local_last = self.repository.get_last_update_for_source(source)
+        remote_last = self._sources[source].get_last_update()
+        if not remote_last or not remote_last > local_last:
+            return False
+        points = self._sources[source].get_points_since(local_last)
+        for projection in self._projections.get(source, []):
+            projection.project(points)
+        return True

@@ -85,3 +85,6 @@ class InfluxDataRepository(InfluxDBRepository):
             measurement
         )
         # time_precision='s'
+
+    def get_last_update_for_source(self, measurement: str):
+        pass

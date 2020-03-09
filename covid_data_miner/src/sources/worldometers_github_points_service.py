@@ -1,7 +1,6 @@
 import csv
 import datetime
 import typing
-
 from github import Github
 import base64
 
@@ -156,3 +155,8 @@ class WorldometersGithubPointsService:
         data = self._fetch_data(timestamp)
         points = self._get_points(data)
         return points
+
+    def get_last_update(self) -> int:
+        repo = self.repo.get_repo(self.repo_name)
+        f = repo.get_contents(self.folder + self.folder + 'updated_at')
+        return f.content and int(base64.b64decode(f.content).decode())

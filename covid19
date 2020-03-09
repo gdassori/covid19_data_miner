@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import os
-import binascii
 import click
 from tabulate import tabulate
 
@@ -66,6 +65,11 @@ def projections():
     pass
 
 
+@main.command()
+def update(source_name):
+    pass
+
+
 @sources.command()
 def ls():
     click.echo('\nAvailable sources:')
@@ -113,18 +117,21 @@ def enable(name):
     if configured and configured['enabled']:
         click.echo(f'source "{name}" already enabled')
         exit(1)
+    if not configured:
+        click.echo(f'source "{name}" not added for sampling')
+        exit(1)
     context.enable_source(name)
     click.echo(f'source "{name}" enabled')
 
 
 @sources.command()
 @click.argument('name')
-def enable(name):
+def disable(name):
     configured = context.get_configured_sources()
     if name not in configured:
         click.echo(f'source "{name}" not added')
         exit(1)
-    elif configured[name]['enabled']:
+    elif not configured[name]['enabled']:
         click.echo(f'source "{name}" already enabled')
         exit(1)
     context.disable_source(name)
@@ -159,7 +166,7 @@ def remove(name):
     if name not in configured:
         click.echo(f'source "{name}" not configured')
         exit(1)
-    response = input('Remove configured source and source data from db? (y/n)')
+    response = input('Remove configured source and source data from db? (y/n) ')
     if response.strip().lower() == 'y':
         from covid_data_miner.src import influx_repository
         #influx_repository.remove_source(name)
@@ -217,11 +224,11 @@ def add(name, source, tag, timeframe, alias=None):
         click.echo(f'invalid tag "{tag}" for source "{source}"')
         exit(1)
     configured = context.get_configured_projections()
-    alias = validate_projection_alias(alias) or f'summary_{source}_{binascii.hexlify(os.urandom(4)).decode()}'
+    timeframe = validate_projection_timeframe(timeframe)
+    alias = validate_projection_alias(alias) or f'summary_{source}_{tag}_{timeframe}'
     if alias in configured.keys():
         click.echo(f'projection alias "{alias}" already exists')
         exit(1)
-    timeframe = validate_projection_timeframe(timeframe)
     context.add_projection(name, source, tag, timeframe, alias)
     click.echo(f'source "{alias}" added, type "{name}"')
 
@@ -258,7 +265,7 @@ def remove(alias):
     if alias not in configured:
         click.echo(f'projection "{alias}" not configured')
         exit(1)
-    response = input('Remove projection and data from db? (y/n)')
+    response = input('Remove projection and data from db? (y/n) ')
     if response.strip().lower() == 'y':
         from covid_data_miner.src import influx_repository
         #influx_repository.remove_projection(name)
