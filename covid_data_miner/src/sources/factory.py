@@ -5,19 +5,15 @@ from covid_data_miner.src.sources.worldometers_github_points_service import Worl
 
 
 class SourcesFactory:
-    def __init__(self, default_github_key):
-        self._github_key = default_github_key
+    def __init__(self):
         self._sources = {
             'worldometers': WorldometersGithubPointsService,
             'csse': CSSEGISandDataPointsService
         }
 
     def get_source(self, source_config: typing.Dict):
-        assert self._github_key
         cls = self._sources[source_config['name']]
-        return cls(
-            source_config.get('authentication_key', self._github_key)
-        )
+        return cls(source_config.get('authentication_key', ""))
 
     def list_sources(self):
         res = []

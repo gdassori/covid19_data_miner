@@ -1,22 +1,24 @@
-def influxdb_repository_factory():
+
+
+def get_influxdb_repository(hostname, port):
     from covid_data_miner.src.influx_repository import InfluxDataRepository
     from influxdb import InfluxDBClient
-    from covid_data_miner.src import settings
-
-    if not influxdb_repository_factory.repo:
-        influxdb_repository_factory.repo = InfluxDataRepository(
-            InfluxDBClient(host=settings.INFLUXDB_HOST, port=settings.INFLUXDB_PORT)
+    if not get_influxdb_repository.repo:
+        get_influxdb_repository.repo = InfluxDataRepository(
+            InfluxDBClient(host=hostname, port=port)
         )
-    return influxdb_repository_factory.repo
+    return get_influxdb_repository.repo
 
 
-influxdb_repository_factory.repo = None
+def influxdb_repository_factory():
+    from covid_data_miner.src.cli import context
+    return get_influxdb_repository(context.influxdb_host, context.influxdb_port)
 
 
-def load_config_file():
-    return {
-        "github_api_key": "",
-        "source": [],
-        "projections": [],
-        "plugins": [],
-    }
+get_influxdb_repository.repo = None
+
+
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]

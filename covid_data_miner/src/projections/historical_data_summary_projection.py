@@ -1,5 +1,4 @@
 import datetime
-import time
 import typing
 
 from covid_data_miner.src.domain import CovidPoint
@@ -31,51 +30,70 @@ class HistoricalDataSummaryProjection(BaseProjection):
             death_diff=0,
             recovered_diff=0,
             time=0,
-            updated_at=0,
             country="",
             city="",
             region=""
         )
         self.key = key
-        self._projection_name = projection_name or f'summary_{self.origin_measurement}_{self.key}'
+        self._projection_name = projection_name
+        assert projection_name
 
     def _get_previous_and_current_values(self, value, timestamp, relevants):
         try:
-            previous = relevants[timestamp - self.interval]
-            assert previous[self.key] == value
+            previous = relevants[f'{timestamp - self.interval}|{value}']
+            assert previous[self.key] == value, (previous[self.key], value, self.key)
         except KeyError:
             previous = {k: v for k, v in self.TEMPLATE.items()}
-            previous[f'tag:{self.key}'] = value
+            previous[self.key] = value
             previous['time'] = timestamp - self.interval
         try:
-            current = relevants[timestamp]
-            assert current[self.key] == value
+            current = relevants[f'{timestamp}|{value}']
+            assert current[self.key] == value, (current[self.key], value, self.key)
         except KeyError:
             current = {k: v for k, v in self.TEMPLATE.items()}
-            current[f'tag:{self.key}'] = value
+            current[self.key] = value
             previous['time'] = timestamp
         return {'previous': previous, 'current': current}
 
     def _get_relevant_projections_for_points(self, points: typing.List[CovidPoint]):
-        _timestamps = [(point.last_update % self.interval + self.interval) for point in points]
-        previous_timestamps = [t - self.interval for t in _timestamps]
-        timestamps = sorted(set(_timestamps) | set(previous_timestamps))
-        return self.repository.get_projections_with_timestamps(self._projection_name, *timestamps)
+        _timestamps = [
+            (point.last_update - (point.last_update % self.interval) + self.interval, getattr(point, self.key)) for point in points
+        ]
+        params = [(t[1], t[0] - self.interval) for t in _timestamps]
+        points = self.repository.get_points_from_projections(self._projection_name, self.key, *params)
+        res = {}
+        for point in points:
+            res[f'{point["time"]}|{getattr(point, self.key)}'] = {
+                "time": point['time'],
+                "country": point['country'] or '',
+                "region": point['region'] or '',
+                "city": point['city'] or '',
+                "confirmed_cumulative": point['confirmed_cumulative'],
+                "hospitalized_cumulative": point['hospitalized_cumulative'],
+                "severe_cumulative": point['severe_cumulative'],
+                "death_cumulative": point['death_cumulative'],
+                "recovered_cumulative": point['recovered_cumulative'],
+                "confirmed_diff": point['confirmed_diff'],
+                "hospitalized_diff": point['hospitalized_diff'],
+                "severe_diff": point['severe_diff'],
+                "death_diff": point['death_diff'],
+                "recovered_diff": point['recovered_diff']
+            }
+        return res
 
     def _make_projection(self, point, relevants):
         key = self._normalize_key(self.key, getattr(point, self.key))
         current_timestamp = point.last_update - (point.last_update % self.interval) + self.interval
         data = self._get_previous_and_current_values(key, current_timestamp, relevants)
         current, previous = data["current"], data["previous"]
-        if current["updated_at"] > point.last_update:
+        if current["time"] > point.last_update:
             return
-        assert current[self.key] == key
+
         for k in [x for x in ["country", "region", "city"] if x != self.key]:
             current[k] = self._normalize_key(k, getattr(point, k))
         current.update(
             {
                 "time": current_timestamp,
-                "updated_at": point.last_update,
                 "confirmed_cumulative": point.confirmed_cumulative,
                 "hospitalized_cumulative": point.hospitalized_cumulative,
                 "severe_cumulative": point.severe_cumulative,
@@ -92,33 +110,42 @@ class HistoricalDataSummaryProjection(BaseProjection):
                 "recovered_diff": current['recovered_cumulative'] - previous['recovered_cumulative'],
             }
         )
-        relevants["current"][current_timestamp] = current
+        relevants[f'{current_timestamp}|{current[self.key]}'] = current
         return current
                 
-    def project(self, points: typing.List[CovidPoint]):
+    def project(self, points: typing.List[CovidPoint], disable_plugins=False):
         relevants = self._get_relevant_projections_for_points(points)
         projections = []
         for point in points:
-            projections.append(self._make_projection(point, relevants))
+            projection = self._make_projection(point, relevants)
+            projection and projections.append(projection)
         self.repository.save_projections(self._projection_name, *projections)
-        for observer in self.observers:
-            for projection in projections:
-                observer.on_projection(projection)
+        if not disable_plugins:
+            for observer in self.observers:
+                for projection in projections:
+                    observer.on_projection(projection)
         return projections
 
-    def rewind(self, since: datetime.datetime = None, to: datetime.datetime = None) -> typing.Dict:
-        to = to or int(time.time())
+    def rewind(self, since: datetime.datetime = None, disable_plugins: bool = False) -> typing.Dict:
         first_point_time = int(since.strftime('%s')) if since else \
-            self.repository.get_first_historical_point_time_for_measurement(self.origin_measurement)
-        last_point_time = int(to.strftime('%s')) if to else int(time.time())
+            self.repository.get_first_update_for_source(self.origin_measurement)
+        last_point_time = self.repository.get_last_update_for_source(self.origin_measurement)
         if not first_point_time or first_point_time < 0:
-            return {}
-        next_point = first_point_time % self.interval + self.interval
-        last_point = last_point_time % self.interval
-        report = {}
+            return {
+                "rewind": False,
+                "first_point": first_point_time,
+                "last_point": last_point_time
+            }
+        next_point = first_point_time - (first_point_time % self.interval) + self.interval
+        last_point = last_point_time - (last_point_time % self.interval) + self.interval
+        self.repository.delete_points_for_projection(self._projection_name, next_point, last_point)
         for timestamp in range(next_point, last_point + self.interval, self.interval):
             data = self.repository.get_nearest_historical_points_by_fields(
                 timestamp, self.origin_measurement, self.key
             )
-            self.project(data)
-        return report
+            self.project(data, disable_plugins=disable_plugins)
+        return {
+            "rewind": True,
+            "first_point": next_point,
+            "last_point": last_point
+        }

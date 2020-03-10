@@ -22,10 +22,6 @@ if __name__ == '__main__':
 
     w = WorldometersWebPointsService()
 
-    #starts_at = int(datetime.datetime.strptime('2020-01-10', '%Y-%m-%d').strftime('%s'))
-    #starts_at = starts_at - (starts_at % 21600)
-    #csvs = w.fetch_since(starts_at)
-
     csvs = [w.fetch_current()]
     filename = None
     updates = []

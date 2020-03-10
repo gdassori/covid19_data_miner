@@ -28,3 +28,11 @@ class UnknownTagForSourceException(Covid19Exception):
 
 class ErrorSavingConfigFile(Covid19Exception):
     pass
+
+
+class NoPointsForSource(Covid19Exception):
+    pass
+
+
+class ProjectionRewindFailed(Covid19Exception):
+    pass

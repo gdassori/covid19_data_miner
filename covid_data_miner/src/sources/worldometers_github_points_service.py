@@ -15,7 +15,6 @@ class WorldometersGithubPointsService:
         self.folder = '/data/worldometers.info/'
         self.repo = Github(login_or_token=authentication_key, per_page=1000)
 
-
     @staticmethod
     def _filename_to_datetime(filename):
         filedate = filename.replace('.csv', '')
@@ -29,7 +28,7 @@ class WorldometersGithubPointsService:
         contents = repo.get_contents(self.folder)
         data = []
         for content in contents:
-            if not content.name.startswith(start_folder[:3]):
+            if not content.name.isdigit():
                 continue
             if content.name < start_folder:
                 continue
@@ -112,7 +111,7 @@ class WorldometersGithubPointsService:
         ]), rows[0]
         return [[r[0], r[1], r[3], '', ''] for r in rows[1:]]
 
-    def _get_points(self, data: typing.List[typing.List]) -> typing.List[CovidPoint]:
+    def _get_points(self, data: typing.List[typing.List], min_timestamp=None) -> typing.List[CovidPoint]:
         res = []
         for entry in data:
             updated_at, rows = entry
@@ -129,6 +128,8 @@ class WorldometersGithubPointsService:
             if error:
                 raise ValueError('Error parsing row: %s' % rows and rows[0])
             for row in rows:
+                if min_timestamp and updated_at < datetime.datetime.fromtimestamp(min_timestamp):
+                    continue
                 if 'ases' in row[1]:
                     continue
                 try:
@@ -137,14 +138,13 @@ class WorldometersGithubPointsService:
                         timestamp=updated_at,
                         last_update=int(updated_at.strftime('%s')),
                         country=row[0],
-                        province="",
+                        region="",
+                        city="",
                         confirmed_cumulative=int(row[1].replace(',', '').strip() or 0),
                         death_cumulative=int(row[2].replace(',', '').strip() or 0),
                         recovered_cumulative=int(row[3].replace(',', '').strip() or 0),
                         hospitalized_cumulative=0,
-                        severe_cumulative=int(row[4].replace(',', '').strip() or 0),
-                        lat=0,
-                        lon=0
+                        severe_cumulative=int(row[4].replace(',', '').strip() or 0)
                     )
                 except:
                     raise
@@ -153,10 +153,10 @@ class WorldometersGithubPointsService:
 
     def get_points_since(self, timestamp: int):
         data = self._fetch_data(timestamp)
-        points = self._get_points(data)
+        points = self._get_points(data, timestamp)
         return points
 
     def get_last_update(self) -> int:
         repo = self.repo.get_repo(self.repo_name)
-        f = repo.get_contents(self.folder + self.folder + 'updated_at')
+        f = repo.get_contents(self.folder + 'updated_at')
         return f.content and int(base64.b64decode(f.content).decode())

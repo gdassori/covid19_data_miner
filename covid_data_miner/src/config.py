@@ -4,7 +4,7 @@ import os
 from covid_data_miner.src import settings, exceptions
 
 
-class ContextManager:
+class ConfigurationContext:
     def _init__(self):
         self._config = None
         self._config_file_path = None
@@ -20,6 +20,24 @@ class ContextManager:
     @property
     def influxdb_port(self):
         return self._config['default']['influxdb_port']
+
+    @property
+    def sources(self):
+        sources = self._config['sources']
+        res = {}
+        for name, data in sources.items():
+            res[name] = data
+            if not data.get('authentication_key', ''):
+                res[name]['authentication_key'] = self.github_api_key
+        return sources
+
+    @property
+    def projections(self):
+        return self._config['projections']
+
+    @property
+    def plugins(self):
+        return self._config['plugins']
 
     def _load_config_file(self, config_file):
         try:
@@ -74,9 +92,11 @@ class ContextManager:
     def get_configured_source(self, source_name):
         return self._config['sources'].get(source_name)
 
-    def add_source(self, source_name):
+    def add_source(self, source_name, authentication_key):
         if source_name not in self._config['sources']:
-            self._config['sources'][source_name] = {}
+            self._config['sources'][source_name] = {
+                "authentication_key": authentication_key or ""
+            }
         self._config['sources'][source_name]['enabled'] = True
         return self._save_config_file()
 

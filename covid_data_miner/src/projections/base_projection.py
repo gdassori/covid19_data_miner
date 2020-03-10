@@ -24,7 +24,7 @@ class BaseProjection(metaclass=abc.ABCMeta):
         return dtime * 10**9
 
     @abc.abstractmethod
-    def rewind(self, since: int = None):
+    def rewind(self, since: datetime.datetime = None, disable_plugins: bool = False):
         pass
 
     @abc.abstractmethod

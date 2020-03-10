@@ -8,12 +8,12 @@ class ProjectionsFactory:
         }
 
     def get_projection(self, projection_config):
-        cls = self._projections[projection_config['name']]
+        cls = self._projections[projection_config['type']]
         instance = cls(
             projection_config['source'],
             key=projection_config['tag'],
-            projection_name=projection_config.get('alias'),
-            interval=projection_config.get('interval')
+            projection_name=projection_config['name'],
+            interval=projection_config.get('timeframe')
         )
         return instance
 

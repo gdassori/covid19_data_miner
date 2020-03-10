@@ -1,1 +1,0 @@
-Data moved to https://github.com/gdassori/covid19_data
