@@ -315,8 +315,11 @@ def update_source(name, no_cascade):
         click.echo('Local data updated, last update %s' % response['remote_last'])
         exit()
     click.echo('Updates available, local: %s, remote: %s' % (response['local_last'], response['remote_last']))
-    if manager.update_source(name, response['local_last'], no_cascade=no_cascade):
+    response = manager.update_source(name, response['local_last'], no_cascade=no_cascade)
+    if response['source_updated']:
         click.echo('Source %s updated' % name)
+    for projection in response['projections']:
+        click.echo('Projection %s updated' % projection)
 
 
 @update.command('projection')
@@ -327,16 +330,29 @@ def update_projection(name, no_cascade):
 
 
 @update.command('all')
-@click.option('--no-cascade')
 def update_all(no_cascade):
     configured = context.get_configured_sources()
 
 
 @rewind.command('source')
 @click.argument('name')
+@click.argument('--start-from')
 @click.option('--no-cascade')
 def rewind_source(name, no_cascade):
-    pass
+    configured = context.get_configured_sources()
+    if name not in configured:
+        click.echo(f'source "{name}" not configured')
+        exit(1)
+    response = manager.check_source_updates_available(name)
+    if not response['updates_available']:
+        click.echo('Local data updated, last update %s' % response['remote_last'])
+        exit()
+    click.echo('Updates available, local: %s, remote: %s' % (response['local_last'], response['remote_last']))
+    response = manager.update_source(name, response['local_last'], no_cascade=no_cascade)
+    if response['source_updated']:
+        click.echo('Source %s updated' % name)
+    for projection in response['projections']:
+        click.echo('Projection %s updated' % projection)
 
 
 @rewind.command('projection')
@@ -359,3 +375,8 @@ def rewind_projection(name, start_from, no_cascade):
     except exceptions.NoPointsForSource as e:
         click.echo('Error: %s' % e)
         exit(1)
+
+
+@rewind.command('all')
+def rewind_all(no_cascade):
+    configured = context.get_configured_sources()

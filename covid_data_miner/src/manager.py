@@ -1,5 +1,4 @@
 import datetime
-import typing
 
 from covid_data_miner.src import exceptions
 
@@ -74,10 +73,18 @@ class Covid19DataMinerManager:
         points = self._sources[source].get_points_since(update_from)
         self.repository.save_historical_points(*points)
         if no_cascade:
-            return True
+            return {
+                "source_updated": True,
+                "projections": []
+            }
+        projections_updated = []
         for projection in self._projections_by_source.get(source, []):
             projection.project(points)
-        return True
+            projections_updated.append(projection.name)
+            return {
+                "source_updated": True,
+                "projections": projections_updated
+            }
 
     def rewind_projection(self, projection_name: str, start_from: datetime.datetime, no_cascade: bool):
         projection = self._projections_by_name[projection_name]

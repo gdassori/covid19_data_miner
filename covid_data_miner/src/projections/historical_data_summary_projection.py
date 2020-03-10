@@ -38,6 +38,10 @@ class HistoricalDataSummaryProjection(BaseProjection):
         self._projection_name = projection_name
         assert projection_name
 
+    @property
+    def name(self):
+        return self._projection_name
+
     def _get_previous_and_current_values(self, value, timestamp, relevants):
         try:
             previous = relevants[f'{timestamp - self.interval}|{value}']

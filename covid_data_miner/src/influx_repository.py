@@ -38,7 +38,7 @@ class InfluxDataRepository(InfluxDBRepository):
         saving_points = [
             {
                 "measurement": point.source,
-                "time": point.last_update * 1000000 + i,
+                "time": point.last_update,
                 "tags": {
                     "country": point.country,
                     "region": point.region,
@@ -56,7 +56,7 @@ class InfluxDataRepository(InfluxDBRepository):
         return self.influxdb_client.write_points(
             saving_points,
             database="covid19",
-            time_precision="u"
+            time_precision="s"
         )
 
     def get_point_from_projection(self, projection_name: str, timestamp: int):
@@ -67,7 +67,7 @@ class InfluxDataRepository(InfluxDBRepository):
     def get_points_from_projections(self, projection_name: str, tag, *tuples):
         points = []
         for chunk in chunks(tuples, 500):
-            query = 'select * from '
+            query = 'select *, country, region, city from '
             for i, tag_and_timestamp in enumerate(chunk):
                 query += f'(select *, country, region, city ' \
                          f'from {projection_name} ' \
@@ -79,7 +79,6 @@ class InfluxDataRepository(InfluxDBRepository):
 
     @staticmethod
     def _projection_to_influx_point(projection: typing.Dict, projection_name: str):
-        print(projection)
         return {
             "measurement": projection_name,
             "time": projection.pop('time'),
