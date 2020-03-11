@@ -61,28 +61,33 @@ class HistoricalDataSummaryProjection(BaseProjection):
 
     def _get_relevant_projections_for_points(self, points: typing.List[CovidPoint]):
         _timestamps = [
-            (point.last_update - (point.last_update % self.interval) + self.interval, getattr(point, self.key)) for point in points
+            (point.last_update - (point.last_update % self.interval) + self.interval, getattr(point, self.key))
+            for point in points
         ]
         params = [(t[1], t[0] - self.interval) for t in _timestamps]
         points = self.repository.get_points_from_projections(self._projection_name, self.key, *params)
         res = {}
         for point in points:
-            res[f'{point["time"]}|{getattr(point, self.key)}'] = {
-                "time": point['time'],
-                "country": point['country'] or '',
-                "region": point['region'] or '',
-                "city": point['city'] or '',
-                "confirmed_cumulative": point['confirmed_cumulative'],
-                "hospitalized_cumulative": point['hospitalized_cumulative'],
-                "severe_cumulative": point['severe_cumulative'],
-                "death_cumulative": point['death_cumulative'],
-                "recovered_cumulative": point['recovered_cumulative'],
-                "confirmed_diff": point['confirmed_diff'],
-                "hospitalized_diff": point['hospitalized_diff'],
-                "severe_diff": point['severe_diff'],
-                "death_diff": point['death_diff'],
-                "recovered_diff": point['recovered_diff']
-            }
+            try:
+                res[f'{point["time"]}|{point[self.key]}'] = {
+                    "time": point['time'],
+                    "country": point['country'] or '',
+                    "region": point['region'] or '',
+                    "city": point['city'] or '',
+                    "confirmed_cumulative": point['confirmed_cumulative'],
+                    "hospitalized_cumulative": point['hospitalized_cumulative'],
+                    "severe_cumulative": point['severe_cumulative'],
+                    "death_cumulative": point['death_cumulative'],
+                    "recovered_cumulative": point['recovered_cumulative'],
+                    "confirmed_diff": point['confirmed_diff'],
+                    "hospitalized_diff": point['hospitalized_diff'],
+                    "severe_diff": point['severe_diff'],
+                    "death_diff": point['death_diff'],
+                    "recovered_diff": point['recovered_diff']
+                }
+            except:
+                print('Error with point: %s' % point)
+                raise
         return res
 
     def _make_projection(self, point, relevants):

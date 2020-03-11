@@ -67,9 +67,9 @@ class InfluxDataRepository(InfluxDBRepository):
     def get_points_from_projections(self, projection_name: str, tag, *tuples):
         points = []
         for chunk in chunks(tuples, 500):
-            query = 'select *, country, region, city from '
+            query = 'select *, country as country, region as region, city as city from '
             for i, tag_and_timestamp in enumerate(chunk):
-                query += f'(select *, country, region, city ' \
+                query += f'(select *, country as country, region as region, city as city ' \
                          f'from {projection_name} ' \
                          f'where time < {tag_and_timestamp[1] * 10**9} and {tag} = \'{tag_and_timestamp[0]}\' limit 1)'
                 query += ';' if i == len(chunk) - 1 else ','

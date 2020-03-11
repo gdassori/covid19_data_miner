@@ -8,4 +8,4 @@ docker run -d \
   -p 8086:8086 \
   -v ~/.covid19/influxdb:/var/lib/influxdb \
   -v ~/.covid19/grafana:/var/lib/grafana \
-  philhawthorne/docker-influxdb-grafana:latest
+  gdassori/docker-influxdb-grafana:latest
