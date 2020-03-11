@@ -2,19 +2,28 @@
 
 - A sampler to run covid19 data into influxdb grafana ready time series.
 
+demo: http://covid19.chatsubo.it
+
+The client:
+
+![covid19-cli](https://github.com/gdassori/covid19_data_miner/blob/master/docs/images/covid19-cli.png?raw=true "Covid19 cli")
+
+The dashboard
+
+![covid19-grafana](https://github.com/gdassori/covid19_data_miner/blob/master/docs/images/covid19_grafana.png?raw=true "covid19 dashboard")
 
 
-#####Done:
+##### Done:
 - sampler
 - projections system 
 - first projection: summary 
 
-#####Todo:
+##### Todo:
 - more sources
 - plugin system 
 
 
-##Howto 
+## Howto 
 
 - install docker
 - `./run_grafana.sh`
@@ -24,7 +33,7 @@
 
 Open your browser on `http://localhost:3003` and import the dashboard under `contrib/`
 
-#####Configuration by example:
+##### Configuration by example:
 ```
 ./covid19 settings --set-github-api-key <github-api-key>
 ./covid19 settings --set-influxdb-endpoint localhost 8086
@@ -32,7 +41,7 @@ Open your browser on `http://localhost:3003` and import the dashboard under `con
 ./covid19 projections add summary worldometers country 1d
 ```
 
-#####Update to last data:
+##### Update to last data:
 ```
 ./covid19 update sources worldometers
 ```
@@ -51,15 +60,15 @@ Run docker influxdb\grafana image:
 ```
 then open browser on `http://localhost:3003`
 
-#####Inside grafana:
+##### Inside grafana:
 
 Add influxdb source, database `covid19`
 Import a dashboard from contrib directory
 Navigate data.
 
-#####Contacts:
+##### Contacts:
 - https://twitter.com/khs9ne
 
-#####Features request:
+##### Features request:
 - more sources
 
