@@ -1,67 +1,65 @@
 # covid19_data_miner
-Covid19 data to influxdb
+
+- A sampler to run covid19 data into influxdb grafana ready time series.
 
 
 
-Todo (concept):
+#####Done:
+- sampler
+- projections system 
+- first projection: summary 
+
+#####Todo:
+- more sources
+- plugin system 
+
+
+##Howto 
+
+- install docker
+- `./run_grafana.sh`
+- prepare and activate >= python 3.6 virtualenv
+- `pip install -r requirements.txt`
+- `./covid19 --help`
+
+Open your browser on `http://localhost:3003` and import the dashboard under `contrib/`
+
+#####Configuration by example:
 ```
-$ covid19 source add worldometers
-
-- Added source worldometers
-
-  
-$ covid19 summary worldometers country 
-
-- Added summary projection country to source worldometers
-
-
-$ covid19 source add protezione_civile_ita
-
-- Added source protezione_civile_ita
-
-
-$ covid19 summary protezione_civile_ita region
-
-- Added summary projection region to source protezione_civile_ita
-
-
-$ covid19 plugin add worldometers country growth 4d
-
-- Added plugin growth 4d to worldometers country
-
-
-$ covid19 plugin add worldometers country growth 4d
-
-- Added plugin growth 4d to protezione_civile_ita country
-
-
-$ covid19 plugin rewind growth 4d worldometers
-
-- Rewind plugin output, first point: 2020-01-29, last: current, done.
-
-
-$ covid19 update worldometers
-
-- Updating source: worldometers
-- Updating projection: summary country
-- Updating plugin output: growth 4d on country
-
-  
-$ covid19 update protezione_civile_ita
-
-- Updating source: protezione_civile_ita
-- Updatingsou projection: summary region
-- Updating plugin output: growth 4d on region
-
-  
-$ covid19 update all
-
-- Updating source: worldometers
-- Updating projection: summary country
-- Updating plugin output: growth 4d on country
-
-- Updating source: protezione_civile_ita
-- Updating projection: summary region
-- Updating plugin output: growth 4d on region
-
+./covid19 settings --set-github-api-key <github-api-key>
+./covid19 settings --set-influxdb-endpoint localhost 8086
+./covid19 sources add worldometers
+./covid19 projections add summary worldometers country 1d
 ```
+
+#####Update to last data:
+```
+./covid19 update sources worldometers
+```
+
+Some stuff is saved into `~/.covid19`
+```
+:~/covid19_data_miner$ ls ~/.covid19
+config.json  grafana  influxdb
+:~/covid19_data_miner$
+```
+
+
+Run docker influxdb\grafana image:
+```
+./run_grafana.sh
+```
+then open browser on `http://localhost:3003`
+
+#####Inside grafana:
+
+Add influxdb source, database `covid19`
+Import a dashboard from contrib directory
+Navigate data.
+
+#####Contacts:
+- https://twitter.com/khs9ne
+
+#####Features request:
+- more sources
+
