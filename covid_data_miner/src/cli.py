@@ -336,9 +336,9 @@ def update_all(no_cascade):
 
 @rewind.command('source')
 @click.argument('name')
-@click.argument('--start-from')
+@click.option('--start-from')
 @click.option('--no-cascade')
-def rewind_source(name, no_cascade):
+def rewind_source(name, start_from, no_cascade):
     configured = context.get_configured_sources()
     if name not in configured:
         click.echo(f'source "{name}" not configured')
