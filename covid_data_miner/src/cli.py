@@ -339,16 +339,13 @@ def update_all(no_cascade):
 @click.option('--start-from')
 @click.option('--no-cascade')
 def rewind_source(name, start_from, no_cascade):
+    no_cascade = bool(no_cascade)
+    start_from = start_from or 0
     configured = context.get_configured_sources()
     if name not in configured:
         click.echo(f'source "{name}" not configured')
         exit(1)
-    response = manager.check_source_updates_available(name)
-    if not response['updates_available']:
-        click.echo('Local data updated, last update %s' % response['remote_last'])
-        exit()
-    click.echo('Updates available, local: %s, remote: %s' % (response['local_last'], response['remote_last']))
-    response = manager.update_source(name, response['local_last'], no_cascade=no_cascade)
+    response = manager.update_source(name, start_from, no_cascade=no_cascade)
     if response['source_updated']:
         click.echo('Source %s updated' % name)
     for projection in response['projections']:

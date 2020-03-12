@@ -67,9 +67,9 @@ class InfluxDataRepository(InfluxDBRepository):
     def get_points_from_projections(self, projection_name: str, tag, *tuples):
         points = []
         for chunk in chunks(tuples, 500):
-            query = 'select *, country as country, region as region, city as city from '
+            query = 'select *, time as time, country as country, region as region, city as city from '
             for i, tag_and_timestamp in enumerate(chunk):
-                query += f'(select *, country as country, region as region, city as city ' \
+                query += f'(select *, time as time, country as country, region as region, city as city ' \
                          f'from {projection_name} ' \
                          f'where time < {tag_and_timestamp[1] * 10**9} and {tag} = \'{tag_and_timestamp[0]}\' ' \
                          f'order by time desc limit 1)'
@@ -80,24 +80,28 @@ class InfluxDataRepository(InfluxDBRepository):
 
     @staticmethod
     def _projection_to_influx_point(projection: typing.Dict, projection_name: str):
-        return {
-            "measurement": projection_name,
-            "time": projection.pop('time'),
-            "tags": {
-                "country": projection.pop('country', ''),
-                "province": projection.pop('province', ''),
-                "city": projection.pop('city', ''),
-            },
-            "fields": {
-                k: v for k, v in projection.items()
+        p = {k: v for k, v in projection.items()}
+        try:
+            return {
+                "measurement": projection_name,
+                "time": p.pop('time'),
+                "tags": {
+                    "country": p.pop('country', ''),
+                    "region": p.pop('region', ''),
+                    "city": p.pop('city', ''),
+                },
+                "fields": p
             }
-        }
+        except Exception as e:
+            print('Error with projection: ', projection)
+            raise e
 
     def save_projections(self, projection_name: str, *projections: typing.Dict):
         assert projections
         self.influxdb_client.write_points(
-            (self._projection_to_influx_point(p, projection_name) for p in projections),
-            database="covid19", time_precision="s"
+            [self._projection_to_influx_point(p, projection_name) for p in projections],
+            database="covid19",
+            time_precision="s"
         )
         return True
 
