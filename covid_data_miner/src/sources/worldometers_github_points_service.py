@@ -86,12 +86,13 @@ class WorldometersGithubPointsService:
         # Country,Total Cases,New Today,Total Deaths,Today's Deaths,Total Cured,Total Critical,Region
         # Country/ Territory,Total Cases,New Cases,Total Deaths,NewDeaths,Total Recovered,Serious/  Critical,Region
         # Country/ Territory,Total Cases,New Cases,Total Deaths,NewDeaths,Total Recovered,Serious/  Critical
+        # CountryOther, Total Cases, NewCases, TotalDeaths, NewDeaths, TotalRecovered, SeriousCritical
         h = rows[0]
         assert len(rows[0]) in [7, 8]
         assert all([
             'ountry' in h[0], 'otal' in h[1], 'ases' in h[1],
-            'otal' in h[3], 'eath' in h[3], any(['ured' in h[5], 'overed' in h[6]]), 'otal' in h[5],
-            'otal' in h[6], any(['ritical' in h[6], 'severe' in h[6]])
+            'otal' in h[3], 'eath' in h[3], any(['ured' in h[5], 'overed' in h[5]]), 'otal' in h[5],
+            any(['ritical' in h[6], 'severe' in h[6]])
         ]), rows[0]
         return [[r[0], r[1], r[3], r[5], r[6]] for r in rows[1:]]
 
