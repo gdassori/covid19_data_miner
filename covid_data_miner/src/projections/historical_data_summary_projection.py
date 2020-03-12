@@ -44,19 +44,30 @@ class HistoricalDataSummaryProjection(BaseProjection):
 
     def _get_previous_and_current_values(self, value, timestamp, relevants):
         try:
+            print(f'{timestamp - self.interval}|{value}')
             previous = relevants[f'{timestamp - self.interval}|{value}']
             assert previous[self.key] == value, (previous[self.key], value, self.key)
         except KeyError:
-            previous = {k: v for k, v in self.TEMPLATE.items()}
-            previous[self.key] = value
-            previous['time'] = timestamp - self.interval
+            point = self.repository.get_points_from_projections(self._projection_name, self.key, (value, timestamp))
+            point = point and point[0]
+            if point:
+                previous = self._point_to_projection(point)
+            else:
+                previous = {k: v for k, v in self.TEMPLATE.items()}
+                previous[self.key] = value
+                previous['time'] = timestamp - self.interval
         try:
             current = relevants[f'{timestamp}|{value}']
             assert current[self.key] == value, (current[self.key], value, self.key)
         except KeyError:
-            current = {k: v for k, v in self.TEMPLATE.items()}
-            current[self.key] = value
-            previous['time'] = timestamp
+            point = self.repository.get_points_from_projections(self._projection_name, self.key, (value, timestamp))
+            point = point and point[0]
+            if point:
+                current = self._point_to_projection(point)
+            else:
+                current = {k: v for k, v in self.TEMPLATE.items()}
+                current[self.key] = value
+                current['time'] = timestamp
         return {'previous': previous, 'current': current}
 
     def _get_relevant_projections_for_points(self, points: typing.List[CovidPoint]):
@@ -64,35 +75,19 @@ class HistoricalDataSummaryProjection(BaseProjection):
         _Ts = []
         for point in points:
             _p = [
-                point.last_update - (point.last_update % self.interval) + self.interval,
-                point.last_update - (point.last_update % self.interval)
+                point.last_update - (point.last_update % self.interval) - self.interval,
+                point.last_update - (point.last_update % self.interval),
+                point.last_update - (point.last_update % self.interval) + self.interval
             ]
             for p in _p:
-                if p not in _Ts:
+                if (p, getattr(point, self.key)) not in _timestamps:
                     _timestamps.append((p, getattr(point, self.key)))
-                    _Ts.append(p)
-
         params = [(t[1], t[0] - self.interval) for t in _timestamps]
-        points = self.repository.get_points_from_projections(self._projection_name, self.key, *params)
+        projection_points = self.repository.get_points_from_projections(self._projection_name, self.key, *params)
         res = {}
-        for point in points:
+        for point in projection_points:
             try:
-                res[f'{point["time"]}|{point[self.key]}'] = {
-                    "time": point['time'],
-                    "country": point['country'] or '',
-                    "region": point['region'] or '',
-                    "city": point['city'] or '',
-                    "confirmed_cumulative": point['confirmed_cumulative'],
-                    "hospitalized_cumulative": point['hospitalized_cumulative'],
-                    "severe_cumulative": point['severe_cumulative'],
-                    "death_cumulative": point['death_cumulative'],
-                    "recovered_cumulative": point['recovered_cumulative'],
-                    "confirmed_diff": point['confirmed_diff'],
-                    "hospitalized_diff": point['hospitalized_diff'],
-                    "severe_diff": point['severe_diff'],
-                    "death_diff": point['death_diff'],
-                    "recovered_diff": point['recovered_diff']
-                }
+                res[f'{point["time"]}|{point[self.key]}'] = self._point_to_projection(point)
             except:
                 print('Error with point: %s' % point)
                 raise
@@ -103,8 +98,6 @@ class HistoricalDataSummaryProjection(BaseProjection):
         current_timestamp = point.last_update - (point.last_update % self.interval) + self.interval
         data = self._get_previous_and_current_values(key, current_timestamp, relevants)
         current, previous = data["current"], data["previous"]
-        if current["time"] > point.last_update:
-            return
 
         for k in [x for x in ["country", "region", "city"] if x != self.key]:
             current[k] = self._normalize_key(k, getattr(point, k))
@@ -136,7 +129,7 @@ class HistoricalDataSummaryProjection(BaseProjection):
         for point in points:
             projection = self._make_projection(point, relevants)
             projection and projections.append(projection)
-        self.repository.save_projections(self._projection_name, *projections)
+        projections and self.repository.save_projections(self._projection_name, *projections)
         if not disable_plugins:
             for observer in self.observers:
                 for projection in projections:
@@ -153,6 +146,7 @@ class HistoricalDataSummaryProjection(BaseProjection):
                 "first_point": first_point_time,
                 "last_point": last_point_time
             }
+        print('Rewind from first_point %s to last_point %s' % (first_point_time, last_point_time))
         next_point = first_point_time - (first_point_time % self.interval) + self.interval
         last_point = last_point_time - (last_point_time % self.interval) + self.interval
         self.repository.delete_points_for_projection(self._projection_name, next_point, last_point)
@@ -165,4 +159,22 @@ class HistoricalDataSummaryProjection(BaseProjection):
             "rewind": True,
             "first_point": next_point,
             "last_point": last_point
+        }
+
+    def _point_to_projection(self, point):
+        return {
+            "time": point['time'],
+            "country": point['country'] or '',
+            "region": point['region'] or '',
+            "city": point['city'] or '',
+            "confirmed_cumulative": point['confirmed_cumulative'],
+            "hospitalized_cumulative": point['hospitalized_cumulative'],
+            "severe_cumulative": point['severe_cumulative'],
+            "death_cumulative": point['death_cumulative'],
+            "recovered_cumulative": point['recovered_cumulative'],
+            "confirmed_diff": point['confirmed_diff'],
+            "hospitalized_diff": point['hospitalized_diff'],
+            "severe_diff": point['severe_diff'],
+            "death_diff": point['death_diff'],
+            "recovered_diff": point['recovered_diff']
         }

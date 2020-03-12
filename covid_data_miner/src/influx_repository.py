@@ -71,8 +71,9 @@ class InfluxDataRepository(InfluxDBRepository):
             for i, tag_and_timestamp in enumerate(chunk):
                 query += f'(select *, country as country, region as region, city as city ' \
                          f'from {projection_name} ' \
-                         f'where time < {tag_and_timestamp[1] * 10**9} and {tag} = \'{tag_and_timestamp[0]}\' limit 1)'
-                query += ';' if i == len(chunk) - 1 else ','
+                         f'where time < {tag_and_timestamp[1] * 10**9} and {tag} = \'{tag_and_timestamp[0]}\' ' \
+                         f'order by time desc limit 1)'
+                query += ' order by time desc;' if i == len(chunk) - 1 else ','
             res = self.influxdb_client.query(query, epoch='s', database='covid19').get_points()
             points.extend(list(res))
         return points
@@ -153,7 +154,8 @@ class InfluxDataRepository(InfluxDBRepository):
         return True
 
     def delete_points_for_projection(self, projection_name, starts_from: int = 0, to: int = 0) -> typing.Optional[int]:
-        query = f"delete from {projection_name} where time >= {starts_from} and time < {to}"
+        query = f"delete from {projection_name} where time >= {starts_from*10**9} and time < {to*10**9}"
+        print(query)
         self.influxdb_client.query(
             query,
             epoch='s',
