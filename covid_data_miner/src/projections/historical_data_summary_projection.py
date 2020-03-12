@@ -44,7 +44,6 @@ class HistoricalDataSummaryProjection(BaseProjection):
 
     def _get_previous_and_current_values(self, value, timestamp, relevants):
         try:
-            print(f'{timestamp - self.interval}|{value}')
             previous = relevants[f'{timestamp - self.interval}|{value}']
             assert previous[self.key] == value, (previous[self.key], value, self.key)
         except KeyError:
