@@ -60,10 +60,18 @@ class HistoricalDataSummaryProjection(BaseProjection):
         return {'previous': previous, 'current': current}
 
     def _get_relevant_projections_for_points(self, points: typing.List[CovidPoint]):
-        _timestamps = [
-            (point.last_update - (point.last_update % self.interval) + self.interval, getattr(point, self.key))
-            for point in points
-        ]
+        _timestamps = []
+        _Ts = []
+        for point in points:
+            _p = [
+                point.last_update - (point.last_update % self.interval) + self.interval,
+                point.last_update - (point.last_update % self.interval)
+            ]
+            for p in _p:
+                if p not in _Ts:
+                    _timestamps.append((p, getattr(point, self.key)))
+                    _Ts.append(p)
+
         params = [(t[1], t[0] - self.interval) for t in _timestamps]
         points = self.repository.get_points_from_projections(self._projection_name, self.key, *params)
         res = {}
