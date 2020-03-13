@@ -40,7 +40,7 @@ if __name__ == '__main__':
                     row = [x.replace(',', '').replace('+', '') for x in row]
                 else:
                     row = [x.replace(',', '/') for x in row]
-                    
+
                 if 'total' in row[0].lower():
                     continue
                 try:
