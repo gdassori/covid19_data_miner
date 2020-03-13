@@ -35,13 +35,19 @@ if __name__ == '__main__':
         with open(filename, 'w') as f:
             writer = csv.writer(f, delimiter=',', quoting=csv.QUOTE_MINIMAL)
             for i, row in enumerate(data):
-                if not i:
-                    row = [''.join(filter(lambda x: x in printable, x)).replace(',', '/') for x in row]
-                else:
+                row = [''.join(filter(lambda x: x in printable, x)) for x in row]
+                if i:
                     row = [x.replace(',', '').replace('+', '') for x in row]
+                else:
+                    row = [x.replace(',', '/') for x in row]
+                    
                 if 'total' in row[0].lower():
                     continue
-                writer.writerow(row)
+                try:
+                    writer.writerow(row)
+                except Exception as e:
+                    print('Error writing row:', data)
+                    raise
     max_update = max(updates)
     with open('{}/worldometers.info/updated_at'.format(prefix), 'w') as f:
         f.write(str(max_update))
