@@ -69,14 +69,13 @@ class CSSEGISandDataPointsService:
                     timestamp=entry[0],
                     last_update=last_update,
                     country=row[1],
-                    province=row[0],
+                    region="",
+                    city="",
                     confirmed_cumulative=int(row[3] or 0),
                     death_cumulative=int(row[4] or 0),
                     recovered_cumulative=int(row[5] or 0),
                     hospitalized_cumulative=0,
-                    severe_cumulative=0,
-                    lat=row[6] if len(row) > 6 else 0,
-                    lon=row[7] if len(row) > 7 else 0
+                    severe_cumulative=0
                 )
                 res.append(point)
         return res

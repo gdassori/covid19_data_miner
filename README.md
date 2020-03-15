@@ -12,6 +12,8 @@ The dashboard
 
 ![covid19-grafana](https://github.com/gdassori/covid19_data_miner/blob/master/docs/images/covid19_grafana.png?raw=true "covid19 dashboard")
 
+![covid19-grafana](https://github.com/gdassori/covid19_data_miner/blob/master/docs/images/country_insight.png?raw=true "covid19 dashboard")
+
 
 ##### Done:
 - sampler
