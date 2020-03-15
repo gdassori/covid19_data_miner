@@ -13,7 +13,7 @@ class WorldometersGithubPointsService:
     def __init__(self, authentication_key):
         self.repo_name = 'gdassori/covid19_data'
         self.folder = '/data/worldometers.info/'
-        self.repo = Github(login_or_token=authentication_key, per_page=1000)
+        self.repo = Github(login_or_token=authentication_key or None, per_page=1000)
 
     @staticmethod
     def _filename_to_datetime(filename):
@@ -163,7 +163,8 @@ class WorldometersGithubPointsService:
                     death_cumulative=int(row[2].replace(',', '').strip() or 0),
                     recovered_cumulative=int(row[3].replace(',', '').strip() or 0),
                     hospitalized_cumulative=0,
-                    severe_cumulative=int(row[4].replace(',', '').strip() or 0)
+                    severe_cumulative=int(row[4].replace(',', '').strip() or 0),
+                    tests_cumulative=0
                 )
                 res.append(point)
         return res

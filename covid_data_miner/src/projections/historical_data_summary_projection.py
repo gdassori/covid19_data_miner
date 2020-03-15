@@ -24,11 +24,13 @@ class HistoricalDataSummaryProjection(BaseProjection):
             severe_cumulative=0,
             death_cumulative=0,
             recovered_cumulative=0,
+            tests_cumulative=0,
             confirmed_diff=0,
             hospitalized_diff=0,
             severe_diff=0,
             death_diff=0,
             recovered_diff=0,
+            tests_diff=0,
             time=0,
             country="",
             city="",
@@ -107,7 +109,8 @@ class HistoricalDataSummaryProjection(BaseProjection):
                 "hospitalized_cumulative": point.hospitalized_cumulative,
                 "severe_cumulative": point.severe_cumulative,
                 "death_cumulative": point.death_cumulative,
-                "recovered_cumulative": point.recovered_cumulative
+                "recovered_cumulative": point.recovered_cumulative,
+                "tests_cumulative": point.tests_cumulative
             }
         )
         current.update(
@@ -117,6 +120,7 @@ class HistoricalDataSummaryProjection(BaseProjection):
                 "severe_diff": current['severe_cumulative'] - previous['severe_cumulative'],
                 "death_diff": current['death_cumulative'] - previous['death_cumulative'],
                 "recovered_diff": current['recovered_cumulative'] - previous['recovered_cumulative'],
+                "tests_diff": current.get('tests_cumulative', 0) - previous.get('tests_cumulative', 0)
             }
         )
         relevants[f'{current_timestamp}|{current[self.key]}'] = current
@@ -171,9 +175,11 @@ class HistoricalDataSummaryProjection(BaseProjection):
             "severe_cumulative": point['severe_cumulative'],
             "death_cumulative": point['death_cumulative'],
             "recovered_cumulative": point['recovered_cumulative'],
+            "tests_cumulative": point.get('tests_cumulative', 0),
             "confirmed_diff": point['confirmed_diff'],
             "hospitalized_diff": point['hospitalized_diff'],
             "severe_diff": point['severe_diff'],
             "death_diff": point['death_diff'],
-            "recovered_diff": point['recovered_diff']
+            "recovered_diff": point['recovered_diff'],
+            "tests_diff": point.get('tests_diff', 0)
         }

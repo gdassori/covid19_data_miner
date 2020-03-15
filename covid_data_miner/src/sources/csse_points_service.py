@@ -75,7 +75,8 @@ class CSSEGISandDataPointsService:
                     death_cumulative=int(row[4] or 0),
                     recovered_cumulative=int(row[5] or 0),
                     hospitalized_cumulative=0,
-                    severe_cumulative=0
+                    severe_cumulative=0,
+                    tests_cumulative=0
                 )
                 res.append(point)
         return res

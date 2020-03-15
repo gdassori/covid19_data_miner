@@ -42,14 +42,15 @@ class InfluxDataRepository(InfluxDBRepository):
                 "tags": {
                     "country": point.country,
                     "region": point.region,
-                    "city": point.city
+                    "city": point.city,
                 },
                 "fields": {
                     "confirmed_cumulative": point.confirmed_cumulative,
                     "hospitalized_cumulative": point.hospitalized_cumulative,
                     "severe_cumulative": point.severe_cumulative,
                     "death_cumulative": point.death_cumulative,
-                    "recovered_cumulative": point.recovered_cumulative
+                    "recovered_cumulative": point.recovered_cumulative,
+                    "tests_cumulative": point.tests_cumulative
                 },
             } for i, point in enumerate(points)
         ]
@@ -126,6 +127,7 @@ class InfluxDataRepository(InfluxDBRepository):
                 severe_cumulative=point['severe_cumulative'],
                 death_cumulative=point['death_cumulative'],
                 recovered_cumulative=point['recovered_cumulative'],
+                tests_cumulative=point.get('tests_cumulative', 0)
             ) for point in points
         ]
         return res
