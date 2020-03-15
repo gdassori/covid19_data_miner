@@ -120,7 +120,8 @@ class HistoricalDataSummaryProjection(BaseProjection):
                 "severe_diff": current['severe_cumulative'] - previous['severe_cumulative'],
                 "death_diff": current['death_cumulative'] - previous['death_cumulative'],
                 "recovered_diff": current['recovered_cumulative'] - previous['recovered_cumulative'],
-                "tests_diff": current.get('tests_cumulative', 0) - previous.get('tests_cumulative', 0)
+                "tests_diff": (current['tests_cumulative'] if current.get('tests_cumulative', 0) else 0) -
+                              (previous['tests_cumulative'] if previous.get('tests_cumulative', 0) else 0)
             }
         )
         relevants[f'{current_timestamp}|{current[self.key]}'] = current
