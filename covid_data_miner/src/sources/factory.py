@@ -1,5 +1,6 @@
 import typing
 
+from covid_data_miner.src.sources.covidtracking_points_service import CovidTrackingUSAPointsService
 from covid_data_miner.src.sources.csse_points_service import CSSEGISandDataPointsService
 from covid_data_miner.src.sources.dpc_ita_github_points_service import DPCItaGithubPointsService
 from covid_data_miner.src.sources.worldometers_github_points_service import WorldometersGithubPointsService
@@ -10,7 +11,8 @@ class SourcesFactory:
         self._sources = {
             'worldometers': WorldometersGithubPointsService,
             'csse': CSSEGISandDataPointsService,
-            'dpc_ita': DPCItaGithubPointsService
+            'dpc_ita': DPCItaGithubPointsService,
+            'covidtracking_usa': CovidTrackingUSAPointsService
         }
 
     def get_source(self, source_config: typing.Dict):
