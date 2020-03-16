@@ -8,6 +8,10 @@ from covid_data_miner.src.domain import CovidPoint
 
 
 class CovidTrackingUSAPointsService:
+    country = 'USA'
+    source_type = 'regional'
+    source_name = 'covidtracking.com (CDC)'
+
     def __init__(self, authentication_key):
         self._ = authentication_key
 

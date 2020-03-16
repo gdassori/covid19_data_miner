@@ -8,6 +8,10 @@ from covid_data_miner.src.domain import CovidPoint
 
 
 class DPCItaGithubPointsService:
+    country = 'Italy'
+    source_type = 'regional'
+    source_name = 'Dipartimento Protezione Civile'
+
     tags = ['region']
 
     def __init__(self, authentication_key):

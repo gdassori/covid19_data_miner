@@ -88,9 +88,9 @@ def ls():
     click.echo('\nAvailable sources:')
     sources = sources_factory.list_sources()
     table = [
-        [s['name'], ', '.join(s['tags'])] for s in sources
+        [s['name'], ', '.join(s['tags']), s['country'], s['type'], s['alias']] for s in sources
     ]
-    click.echo('\n' + tabulate(table, headers=["name", "tags"]) + '\n')
+    click.echo('\n' + tabulate(table, headers=["name", "tags", "country", "type", "description"]) + '\n')
 
 
 @sources.command()

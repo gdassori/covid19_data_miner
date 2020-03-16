@@ -9,6 +9,10 @@ from covid_data_miner.src.domain import CovidPoint
 
 
 class CSSEGISandDataPointsService:
+    country = 'World'
+    source_type = 'global'
+    source_name = 'CSSE (JHU)'
+
     tags = ['country']
 
     def __init__(self, authentication_key):

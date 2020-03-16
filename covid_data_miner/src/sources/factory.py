@@ -3,6 +3,7 @@ import typing
 from covid_data_miner.src.sources.covidtracking_points_service import CovidTrackingUSAPointsService
 from covid_data_miner.src.sources.csse_points_service import CSSEGISandDataPointsService
 from covid_data_miner.src.sources.dpc_ita_github_points_service import DPCItaGithubPointsService
+from covid_data_miner.src.sources.rki_de_github_points_service import RkiDeGithubPointsService
 from covid_data_miner.src.sources.worldometers_github_points_service import WorldometersGithubPointsService
 
 
@@ -12,7 +13,8 @@ class SourcesFactory:
             'worldometers': WorldometersGithubPointsService,
             'csse': CSSEGISandDataPointsService,
             'dpc_ita': DPCItaGithubPointsService,
-            'covidtracking_usa': CovidTrackingUSAPointsService
+            'covidtracking_usa': CovidTrackingUSAPointsService,
+            'rki_de': RkiDeGithubPointsService
         }
 
     def get_source(self, source_config: typing.Dict):
@@ -25,6 +27,9 @@ class SourcesFactory:
         for key in keys:
             res.append({
                 "name": key,
-                "tags": self._sources[key].tags
+                "tags": self._sources[key].tags,
+                "type": self._sources[key].source_type,
+                "alias": self._sources[key].source_name,
+                "country": self._sources[key].country
             })
         return res

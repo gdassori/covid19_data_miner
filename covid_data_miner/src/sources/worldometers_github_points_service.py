@@ -8,6 +8,9 @@ from covid_data_miner.src.domain import CovidPoint
 
 
 class WorldometersGithubPointsService:
+    country = 'World'
+    source_type = 'global'
+    source_name = 'worldometers.info (many)'
     tags = ['country']
 
     def __init__(self, authentication_key):
