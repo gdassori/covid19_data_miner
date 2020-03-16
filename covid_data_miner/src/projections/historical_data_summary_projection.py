@@ -74,11 +74,13 @@ class HistoricalDataSummaryProjection(BaseProjection):
     def _get_relevant_projections_for_points(self, points: typing.List[CovidPoint]):
         _timestamps = []
         _Ts = []
+
         for point in points:
+            base_point = point.last_update - (point.last_update % self.interval) - 1
             _p = [
-                point.last_update - (point.last_update % self.interval) - self.interval,
-                point.last_update - (point.last_update % self.interval),
-                point.last_update - (point.last_update % self.interval) + self.interval
+                base_point,
+                base_point - self.interval,
+                base_point + self.interval
             ]
             for p in _p:
                 if (p, getattr(point, self.key)) not in _timestamps:
@@ -96,7 +98,7 @@ class HistoricalDataSummaryProjection(BaseProjection):
 
     def _make_projection(self, point, relevants):
         key = self._normalize_key(self.key, getattr(point, self.key))
-        current_timestamp = point.last_update - (point.last_update % self.interval) + self.interval
+        current_timestamp = point.last_update - (point.last_update % self.interval) + self.interval - 1
         data = self._get_previous_and_current_values(key, current_timestamp, relevants)
         current, previous = data["current"], data["previous"]
 
@@ -151,7 +153,7 @@ class HistoricalDataSummaryProjection(BaseProjection):
                 "last_point": last_point_time
             }
         print('Rewind from first_point %s to last_point %s' % (first_point_time, last_point_time))
-        next_point = first_point_time - (first_point_time % self.interval) + self.interval
+        next_point = first_point_time - (first_point_time % self.interval) + self.interval - 1
         last_point = last_point_time - (last_point_time % self.interval) + self.interval
         self.repository.delete_points_for_projection(self._projection_name, next_point, last_point)
         for timestamp in range(next_point, last_point + self.interval, self.interval):
