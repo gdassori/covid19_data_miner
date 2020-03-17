@@ -24,11 +24,13 @@ Multiple sources selection
 - sampler
 - projections system 
 - first projection: summary 
+- 5 different data sources (2 globals, Italy, Germany, USA) 
 
 ##### Todo:
-- more sources
-- plugin system 
-
+- more sources (check github Issues).
+- -->> **plugin system** <<-- 
+- auto import default dashboards in grafana.
+- auto configure sources in grafana. 
 
 ## Howto 
 
@@ -66,6 +68,8 @@ Run docker influxdb\grafana image:
 ./run_grafana.sh
 ```
 then open browser on `http://localhost:3003`
+
+The default admin account for Grafana is `root/root`, anonymous dashboard browsing is enabled.
 
 ##### Inside grafana:
 
