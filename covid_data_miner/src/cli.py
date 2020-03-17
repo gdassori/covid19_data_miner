@@ -21,7 +21,7 @@ def validate_projection_timeframe(timeframe):
     elif timeframe.isnumeric() and not int(timeframe) % 3600:
         timeframe = int(timeframe)
     else:
-        click.echo(f'invalid timeframe "{timeframe}"')
+        click.echo('invalid timeframe "{}"'.format(timeframe))
         click.echo('timeframe must be days (i.e.: 1d), hours (i.e. 12h) or 3600-multiple integer (i.e. 7200)')
         exit(1)
     return timeframe
@@ -36,13 +36,15 @@ def validate_projection_alias(alias):
     for ch in alias:
         rules.append(ch.isalpha() or ch.isdigit() or ch in ('_', '-'))
     if not all(rules):
-        click.echo(f'invalid projection alias "{alias}", len must be 3~24, alpha, numbers, _ or -')
+        click.echo('invalid projection alias "{}", len must be 3~24, alpha, numbers, _ or -'.format(
+            alias
+        ))
         exit(1)
     return alias
 
 
 @click.group(name='covid19')
-@click.option('--conf', '-c', default=f'{userpath}/.covid19/config.json')
+@click.option('--conf', '-c', default='{}/.covid19/config.json'.format(userpath))
 def main(conf):
     context.load_config_file(conf)
 
@@ -114,14 +116,14 @@ def add(name, auth=None):
     sources = sources_factory.list_sources()
     names = [s['name'] for s in sources]
     if name not in names:
-        click.echo(f'source "{name}" does not exist')
+        click.echo('source "{}" does not exist'.format(name))
         exit(1)
     configured = context.get_configured_source(name)
     if configured and configured['enabled']:
-        click.echo(f'source "{name}" already added')
+        click.echo('source "{}" already added'.format(name))
         exit(1)
     context.add_source(name, auth)
-    click.echo(f'source "{name}" added')
+    click.echo('source "{}" added'.format(name))
 
 
 @sources.command()
@@ -129,13 +131,13 @@ def add(name, auth=None):
 def enable(name):
     configured = context.get_configured_source(name)
     if configured and configured['enabled']:
-        click.echo(f'source "{name}" already enabled')
+        click.echo('source "{}" already enabled'.format(name))
         exit(1)
     if not configured:
-        click.echo(f'source "{name}" not added for sampling')
+        click.echo('source "{}" not added for sampling'.format(name))
         exit(1)
     context.enable_source(name)
-    click.echo(f'source "{name}" enabled')
+    click.echo('source "{}" enabled'.format(name))
 
 
 @sources.command()
@@ -143,13 +145,13 @@ def enable(name):
 def disable(name):
     configured = context.get_configured_sources()
     if name not in configured:
-        click.echo(f'source "{name}" not added')
+        click.echo('source "{}" not added'.format(name))
         exit(1)
     elif not configured[name]['enabled']:
-        click.echo(f'source "{name}" already enabled')
+        click.echo('source "{}" already enabled'.format(name))
         exit(1)
     context.disable_source(name)
-    click.echo(f'source "{name}" disabled')
+    click.echo('source "{}" disabled'.format(name))
 
 
 @sources.command()
@@ -158,14 +160,14 @@ def disable(name):
     sources = sources_factory.list_sources()
     names = [s['name'] for s in sources]
     if name not in names:
-        click.echo(f'source "{name}" does not exist')
+        click.echo('source "{}" does not exist'.format(name))
         exit(1)
     configured = context.get_configured_sources()
     if name not in configured or not configured[name]['enabled']:
-        click.echo(f'source "{name}" not enabled')
+        click.echo('source "{}" not enabled'.format(name))
         exit(1)
     context.disable_source(name)
-    click.echo(f'source "{name}" sampling and triggers disabled')
+    click.echo('source "{}" sampling and triggers disabled'.format(name))
 
 
 @sources.command()
@@ -174,18 +176,18 @@ def remove(name):
     sources = sources_factory.list_sources()
     names = [s['name'] for s in sources]
     if name not in names:
-        click.echo(f'source "{name}" does not exist')
+        click.echo('source "{}" does not exist'.format(name))
         exit(1)
     configured = context.get_configured_sources()
     if name not in configured:
-        click.echo(f'source "{name}" not configured')
+        click.echo('source "{}" not configured'.format(name))
         exit(1)
     response = input('Remove configured source and source data from db? (y/n) ')
     if response.strip().lower() == 'y':
         influxdb = influxdb_repository_factory()
         influxdb.delete_points_for_source(name)
         context.remove_source(name)
-        click.echo(f'source "{name}" removed')
+        click.echo('source "{}" removed'.format(name))
 
 
 @projections.command()
@@ -228,23 +230,23 @@ def show():
 def add(name, source, tag, timeframe, alias=None):
     projections = projections_factory.list_projections()
     if name not in [p['name'] for p in projections]:
-        click.echo(f'projection type "{name}" does not exists')
+        click.echo('projection type "{}" does not exists'.format(name))
         exit(1)
     sources = sources_factory.list_sources()
     if source not in [s['name'] for s in sources]:
-        click.echo(f'source "{source}" does not exists')
+        click.echo('source "{}" does not exists'.format(source))
         exit(1)
     if tag not in {s['name']: s for s in sources}[source]["tags"]:
-        click.echo(f'invalid tag "{tag}" for source "{source}"')
+        click.echo('invalid tag "{}" for source "{}"'.format(tag, source))
         exit(1)
     configured = context.get_configured_projections()
     timeframe = validate_projection_timeframe(timeframe)
-    alias = validate_projection_alias(alias) or f'summary_{source}_{tag}_{timeframe}'
+    alias = validate_projection_alias(alias) or 'summary_{}_{}_{}'.format(source, tag, timeframe)
     if alias in configured.keys():
-        click.echo(f'projection alias "{alias}" already exists')
+        click.echo('projection alias "{}" already exists'.format(alias))
         exit(1)
     context.add_projection(name, source, tag, timeframe, alias)
-    click.echo(f'source "{alias}" added, type "{name}"')
+    click.echo('source "{}" added, type "{}"'.format(alias, name))
 
 
 @projections.command()
@@ -252,13 +254,13 @@ def add(name, source, tag, timeframe, alias=None):
 def enable(alias):
     configured = context.get_configured_projections()
     if alias not in configured:
-        click.echo(f'projection "{alias}" not added')
+        click.echo('projection "{}" not added'.format(alias))
         exit(1)
     elif configured[alias]['enabled']:
-        click.echo(f'projection "{alias}" already enabled')
+        click.echo('projection "{}" already enabled'.format(alias))
         exit(1)
     context.enable_projection(alias)
-    click.echo(f'projection "{alias}" enabled')
+    click.echo('projection "{}" enabled'.format(alias))
 
 
 @projections.command()
@@ -266,10 +268,10 @@ def enable(alias):
 def disable(alias):
     configured = context.get_configured_projections()
     if alias not in configured or not configured[alias]['enabled']:
-        click.echo(f'projection "{alias}" not enabled')
+        click.echo('projection "{}" not enabled'.format(alias))
         exit(1)
     context.disable_projection(alias)
-    click.echo(f'projection "{alias}" disabled')
+    click.echo('projection "{}" disabled'.format(alias))
 
 
 @projections.command()
@@ -277,14 +279,14 @@ def disable(alias):
 def remove(alias):
     configured = context.get_configured_projections()
     if alias not in configured:
-        click.echo(f'projection "{alias}" not configured')
+        click.echo('projection "{}" not configured'.format(alias))
         exit(1)
     response = input('Remove projection and data from db? (y/n) ')
     if response.strip().lower() == 'y':
         from covid_data_miner.src import influx_repository
         #influx_repository.remove_projection(name)
         context.remove_projection(alias)
-        click.echo(f'projection "{alias}" removed')
+        click.echo('projection "{}" removed'.format(alias))
 
 
 @settings.command()
@@ -299,7 +301,9 @@ def set_github_api_key(github_api_key):
 @click.argument('port')
 def set_influxdb_endpoint(hostname, port):
     context.set_influxdb_endpoint(hostname, int(port))
-    click.echo(f'\nInfluxdb endpoint set, host: {hostname}, port: {port}\n')
+    click.echo('\nInfluxdb endpoint set, host: {}, port: {}\n'.format(
+        hostname, port
+    ))
 
 
 @update.command('source')
@@ -308,7 +312,7 @@ def set_influxdb_endpoint(hostname, port):
 def update_source(name, no_cascade):
     configured = context.get_configured_sources()
     if name not in configured:
-        click.echo(f'source "{name}" not configured')
+        click.echo('source "{}" not configured'.format(name))
         exit(1)
     response = manager.check_source_updates_available(name)
     if not response['updates_available']:
@@ -343,7 +347,7 @@ def rewind_source(name, start_from, no_cascade):
     start_from = start_from or 0
     configured = context.get_configured_sources()
     if name not in configured:
-        click.echo(f'source "{name}" not configured')
+        click.echo('source "{}" not configured'.format(name))
         exit(1)
     response = manager.update_source(name, start_from, no_cascade=no_cascade)
     if response['source_updated']:
@@ -359,15 +363,15 @@ def rewind_source(name, start_from, no_cascade):
 def rewind_projection(name, start_from, no_cascade):
     configured = context.get_configured_projection(name)
     if not configured:
-        click.echo(f'projection "{name}" not configured')
+        click.echo('projection "{}" not configured'.format(name))
         exit(1)
     try:
         response = manager.rewind_projection(name, start_from=start_from, no_cascade=no_cascade)
         if not response['rewind']:
-            click.echo('Rewind failed for projection "%s"' % name)
+            click.echo('Rewind failed for projection "{}"'.format(name))
             exit(1)
         else:
-            click.echo('Rewind successful for projection "%s"' % name)
+            click.echo('Rewind successful for projection "{}"'.format(name))
             exit()
     except exceptions.NoPointsForSource as e:
         click.echo('Error: %s' % e)

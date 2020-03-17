@@ -46,7 +46,7 @@ class HistoricalDataSummaryProjection(BaseProjection):
 
     def _get_previous_and_current_values(self, value, timestamp, relevants):
         try:
-            previous = relevants[f'{timestamp - self.interval}|{value}']
+            previous = relevants['{}|{}'.format(timestamp - self.interval, value)]
             assert previous[self.key] == value, (previous[self.key], value, self.key)
         except KeyError:
             point = self.repository.get_points_from_projections(self._projection_name, self.key, (value, timestamp))
@@ -58,7 +58,7 @@ class HistoricalDataSummaryProjection(BaseProjection):
                 previous[self.key] = value
                 previous['time'] = timestamp - self.interval
         try:
-            current = relevants[f'{timestamp}|{value}']
+            current = relevants['{}|{}'.format(timestamp, value)]
             assert current[self.key] == value, (current[self.key], value, self.key)
         except KeyError:
             point = self.repository.get_points_from_projections(self._projection_name, self.key, (value, timestamp))
@@ -90,7 +90,7 @@ class HistoricalDataSummaryProjection(BaseProjection):
         res = {}
         for point in projection_points:
             try:
-                res[f'{point["time"]}|{point[self.key]}'] = self._point_to_projection(point)
+                res['{}|{}'.format(point['time'], point[self.key])] = self._point_to_projection(point)
             except:
                 print('Error with point: %s' % point)
                 raise
@@ -126,7 +126,7 @@ class HistoricalDataSummaryProjection(BaseProjection):
                               (previous['tests_cumulative'] if previous.get('tests_cumulative', 0) else 0)
             }
         )
-        relevants[f'{current_timestamp}|{current[self.key]}'] = current
+        relevants['{}|{}'.format(current_timestamp, current[self.key])] = current
         return current
                 
     def project(self, points: typing.List[CovidPoint], disable_plugins=False):

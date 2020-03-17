@@ -53,7 +53,7 @@ class ConfigurationContext:
         try:
             directory, filename = os.path.split(config_file)
             userpath = os.path.expanduser("~")
-            if directory == f'{userpath}/.covid19':
+            if directory == '{}/.covid19'.format(userpath):
                 os.makedirs(directory, exist_ok=True)
             self._config_file_path = config_file
         except:

@@ -61,7 +61,9 @@ class InfluxDataRepository(InfluxDBRepository):
         )
 
     def get_point_from_projection(self, projection_name: str, timestamp: int):
-        query = f'select *, country, region, city from {projection_name} where time < {timestamp * 10**9}'
+        query = 'select *, country, region, city from {} where time < {}'.format(
+            projection_name, timestamp * 10**9
+        )
         points = list(self.influxdb_client.query(query, epoch='s', database='covid19').get_points())
         return points and points[0] or None
 
@@ -70,10 +72,12 @@ class InfluxDataRepository(InfluxDBRepository):
         for chunk in chunks(tuples, 500):
             query = 'select *, time as time, country as country, region as region, city as city from '
             for i, tag_and_timestamp in enumerate(chunk):
-                query += f'(select *, time as time, country as country, region as region, city as city ' \
-                         f'from {projection_name} ' \
-                         f'where time < {tag_and_timestamp[1] * 10**9} and {tag} = \'{tag_and_timestamp[0]}\' ' \
-                         f'order by time desc limit 1)'
+                query += '(select *, time as time, country as country, region as region, city as city ' \
+                         'from {} ' \
+                         'where time < {} and {} = \'{}\' ' \
+                         'order by time desc limit 1)'.format(
+                    projection_name, tag_and_timestamp[1] * 10**9, tag, tag_and_timestamp[0]
+                )
                 query += ' order by time desc;' if i == len(chunk) - 1 else ','
             res = self.influxdb_client.query(query, epoch='s', database='covid19').get_points()
             points.extend(list(res))
@@ -109,10 +113,12 @@ class InfluxDataRepository(InfluxDBRepository):
     def get_nearest_historical_points_by_fields(self, timestamp: int, source: str, field: str) \
             -> typing.List[CovidPoint]:
         assert isinstance(timestamp, int)
-        query = f"select *, country, region, city " \
-                f"from {source} " \
-                f"where time < {timestamp * 10**9} " \
-                f"group by {field} order by desc limit 1"
+        query = "select *, country, region, city " \
+                "from {} " \
+                "where time < {} " \
+                "group by {} order by desc limit 1".format(
+            source, timestamp * 10**9, field
+        )
         points = self.influxdb_client.query(query, epoch='s', database='covid19').get_points()
         res = [
             CovidPoint(
@@ -133,7 +139,7 @@ class InfluxDataRepository(InfluxDBRepository):
         return res
 
     def get_first_update_for_source(self, source: str) -> typing.Optional[int]:
-        query = f"select * from {source} order by asc limit 1"
+        query = "select * from {} order by asc limit 1".format(source)
         res = list(self.influxdb_client.query(
             query,
             epoch='s',
@@ -142,7 +148,7 @@ class InfluxDataRepository(InfluxDBRepository):
         return res and int(res[0]['time']) or 0
 
     def get_last_update_for_source(self, source: str) -> typing.Optional[int]:
-        query = f"select * from {source} order by time desc limit 1"
+        query = "select * from {} order by time desc limit 1".format(source)
         res = list(self.influxdb_client.query(
             query,
             epoch='s',
@@ -151,7 +157,7 @@ class InfluxDataRepository(InfluxDBRepository):
         return res and int(res[0]['time']) or 0
 
     def delete_points_for_source(self, source, starts_from: int = 0) -> typing.Optional[int]:
-        query = f"delete from {source} where time >= {starts_from}"
+        query = "delete from {} where time >= {}".format(source, starts_from)
         self.influxdb_client.query(
             query,
             epoch='s',
@@ -160,7 +166,9 @@ class InfluxDataRepository(InfluxDBRepository):
         return True
 
     def delete_points_for_projection(self, projection_name, starts_from: int = 0, to: int = 0) -> typing.Optional[int]:
-        query = f"delete from {projection_name} where time >= {starts_from*10**9} and time < {to*10**9}"
+        query = "delete from {} where time >= {} and time < {}".format(
+            projection_name, starts_from*10**9, to*10**9
+        )
         print(query)
         self.influxdb_client.query(
             query,
