@@ -69,13 +69,27 @@ then open browser on `http://localhost:3003`
 
 ##### Inside grafana:
 
-Add influxdb source, database `covid19`
+- Add influxdb source (`http://localhost:8086`), database `covid19`
+- Add influxdb shifted series (`http://localhost:8089`), database `covid19` (name: `InfluxDB-Shifted` as naming convention to use existing dashboards without changes.)
+
 Import a dashboard from contrib directory
 Navigate data.
 
+
+#### Series LAG and different timeranges overlap:
+To obtain series lag and overlap series with different timeframes, the InfluxDB Timeshift Proxy is used (https://www.npmjs.com/package/influxdb-timeshift-proxy).
+
+![covid19-grafana](https://github.com/gdassori/covid19_data_miner/blob/master/docs/images/series_lag.png?raw=true "covid19 sources")
+
+An example configuration is:
+
+![covid19-grafana](https://github.com/gdassori/covid19_data_miner/blob/master/docs/images/series_lag_config.png?raw=true "covid19 sources")
+
+Check parameters:
+- Query: `InfluxDB-Shifted` is the timeshift proxy previously configured.
+- alias: `shift_8_days` is the syntax to define a time shift (using aliasing). To know more check influxdb-timeshift-proxy documentation on the link above.
+
+
+
 ##### Contacts:
 - https://twitter.com/khs9ne
-
-##### Features request:
-- more sources
-
