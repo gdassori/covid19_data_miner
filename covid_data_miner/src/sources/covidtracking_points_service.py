@@ -35,7 +35,6 @@ class CovidTrackingUSAPointsService:
                 continue
             updated_at = datetime.datetime.strptime(row[7], '%Y-%m-%dT%H:%M:%SZ')
             if min_timestamp and updated_at < datetime.datetime.fromtimestamp(min_timestamp):
-                print('skip: %s' % updated_at)
                 continue
             point = CovidPoint(
                 source="covidtracking_usa",
