@@ -1,0 +1,3017 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Country Overview",
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 2,
+  "iteration": 1584469440311,
+  "links": [],
+  "panels": [
+    {
+      "datasource": null,
+      "description": "Total detected",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 0,
+        "y": 0
+      },
+      "id": 11,
+      "options": {
+        "colorMode": "value",
+        "fieldOptions": {
+          "calcs": [
+            "last"
+          ],
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "super-light-blue",
+                  "value": null
+                }
+              ]
+            },
+            "title": "",
+            "unit": "none"
+          },
+          "overrides": [],
+          "values": false
+        },
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto"
+      },
+      "pluginVersion": "6.6.2",
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "worldometers",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"confirmed_cumulative\" FROM \"worldometers\" WHERE (\"country\" =~ /^$country$/) ORDER BY time DESC LIMIT 1",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=~",
+              "value": "/^$country$/"
+            }
+          ]
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Detected",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "Quote",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 3,
+        "y": 0
+      },
+      "id": 14,
+      "options": {
+        "colorMode": "value",
+        "fieldOptions": {
+          "calcs": [
+            "last"
+          ],
+          "defaults": {
+            "decimals": 2,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "super-light-blue",
+                  "value": null
+                }
+              ]
+            },
+            "title": "",
+            "unit": "percent"
+          },
+          "overrides": [],
+          "values": false
+        },
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto"
+      },
+      "pluginVersion": "6.6.2",
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "worldometers",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "select sum(b) / sum(a) * 100 from (select a, b from (select sum(c) as a from (SELECT last(\"confirmed_cumulative\") as c FROM \"worldometers\" WHERE (\"country\" != 'None') GROUP BY \"country\" order by time desc LIMIT 1) order by time desc), (SELECT \"confirmed_cumulative\" as b FROM \"worldometers\" WHERE (\"country\" =~ /^$country$/) ORDER BY time DESC LIMIT 1) order by time desc) order by time desc;",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=~",
+              "value": "/^$country$/"
+            }
+          ]
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Quote / Detected",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "Deaths \\ Contagions * 100",
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 7,
+        "y": 0
+      },
+      "id": 15,
+      "options": {
+        "colorMode": "value",
+        "fieldOptions": {
+          "calcs": [
+            "last"
+          ],
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red",
+                  "value": null
+                }
+              ]
+            },
+            "title": "",
+            "unit": "none"
+          },
+          "overrides": [],
+          "values": false
+        },
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto"
+      },
+      "pluginVersion": "6.6.2",
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "worldometers",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"death_cumulative\" FROM \"worldometers\" WHERE (\"country\" =~ /^$country$/) ORDER BY time DESC LIMIT 1",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=~",
+              "value": "/^$country$/"
+            }
+          ]
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Deaths",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "Deaths \\ Contagions * 100",
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 9,
+        "y": 0
+      },
+      "id": 9,
+      "options": {
+        "colorMode": "value",
+        "fieldOptions": {
+          "calcs": [
+            "last"
+          ],
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "title": "",
+            "unit": "percent"
+          },
+          "overrides": [],
+          "values": false
+        },
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto"
+      },
+      "pluginVersion": "6.6.2",
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "worldometers",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT 100*\"death_cumulative\" / \"confirmed_cumulative\" FROM \"worldometers\" WHERE (\"country\" =~ /^$country$/) ORDER BY time DESC LIMIT 1",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=~",
+              "value": "/^$country$/"
+            }
+          ]
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Deaths",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "Deaths \\ Contagions * 100",
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 12,
+        "y": 0
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "fieldOptions": {
+          "calcs": [
+            "last"
+          ],
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "semi-dark-green",
+                  "value": null
+                }
+              ]
+            },
+            "title": "",
+            "unit": "none"
+          },
+          "overrides": [],
+          "values": false
+        },
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto"
+      },
+      "pluginVersion": "6.6.2",
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "worldometers",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"recovered_cumulative\" FROM \"worldometers\" WHERE (\"country\" =~ /^$country$/) ORDER BY time DESC LIMIT 1",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=~",
+              "value": "/^$country$/"
+            }
+          ]
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Recovered",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "Deaths \\ Contagions * 100",
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 14,
+        "y": 0
+      },
+      "id": 16,
+      "options": {
+        "colorMode": "value",
+        "fieldOptions": {
+          "calcs": [
+            "last"
+          ],
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "semi-dark-green",
+                  "value": null
+                }
+              ]
+            },
+            "title": "",
+            "unit": "percent"
+          },
+          "overrides": [],
+          "values": false
+        },
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto"
+      },
+      "pluginVersion": "6.6.2",
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "worldometers",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT 100*\"recovered_cumulative\" / \"confirmed_cumulative\" FROM \"worldometers\" WHERE (\"country\" =~ /^$country$/) ORDER BY time DESC LIMIT 1",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=~",
+              "value": "/^$country$/"
+            }
+          ]
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Recovered",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "Total detected",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 17,
+        "y": 0
+      },
+      "id": 12,
+      "options": {
+        "colorMode": "value",
+        "fieldOptions": {
+          "calcs": [
+            "last"
+          ],
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-yellow",
+                  "value": null
+                }
+              ]
+            },
+            "title": "",
+            "unit": "none"
+          },
+          "overrides": [],
+          "values": false
+        },
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto"
+      },
+      "pluginVersion": "6.6.2",
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "worldometers",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"confirmed_cumulative\" - \"death_cumulative\" - \"recovered_cumulative\" FROM \"worldometers\" WHERE (\"country\" =~ /^$country$/) ORDER BY time DESC LIMIT 1",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=~",
+              "value": "/^$country$/"
+            }
+          ]
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Active",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 20,
+        "y": 0
+      },
+      "id": 13,
+      "options": {
+        "colorMode": "value",
+        "fieldOptions": {
+          "calcs": [
+            "last"
+          ],
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-orange",
+                  "value": null
+                }
+              ]
+            },
+            "title": "",
+            "unit": "none"
+          },
+          "overrides": [],
+          "values": false
+        },
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto"
+      },
+      "pluginVersion": "6.6.2",
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "worldometers",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"severe_cumulative\" FROM \"worldometers\" WHERE (\"country\" =~ /^$country$/) ORDER BY time DESC LIMIT 1",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=~",
+              "value": "/^$country$/"
+            }
+          ]
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "I.C.U.",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 22,
+        "y": 0
+      },
+      "id": 17,
+      "options": {
+        "colorMode": "value",
+        "fieldOptions": {
+          "calcs": [
+            "last"
+          ],
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-orange",
+                  "value": null
+                }
+              ]
+            },
+            "title": "",
+            "unit": "percent"
+          },
+          "overrides": [],
+          "values": false
+        },
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto"
+      },
+      "pluginVersion": "6.6.2",
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "worldometers",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "select 100* mean(a) / mean(b) from (SELECT \"severe_cumulative\" as a FROM \"worldometers\" WHERE (\"country\" =~ /^$country$/) ORDER BY time DESC LIMIT 1), (SELECT (\"confirmed_cumulative\" - \"death_cumulative\" - \"recovered_cumulative\") as b FROM \"worldometers\" WHERE (\"country\" =~ /^$country$/) ORDER BY time DESC LIMIT 1) order by time desc;\n",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=~",
+              "value": "/^$country$/"
+            }
+          ]
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "I.C.U.",
+      "type": "stat"
+    },
+    {
+      "aliasColors": {
+        "3% death rate to severes ~10%": "rgba(236, 211, 81, 0.58)",
+        "Deaths": "semi-dark-red",
+        "ICU": "dark-yellow",
+        "Projection": "rgba(250, 100, 0, 0.46)",
+        "Severe Today": "dark-blue",
+        "Severe Total": "dark-orange"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 13,
+        "w": 11,
+        "x": 0,
+        "y": 4
+      },
+      "hiddenSeries": false,
+      "id": 20,
+      "interval": "",
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 4,
+      "points": true,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "Severe Total"
+        },
+        {
+          "alias": "3% death rate to severes ~10%"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "ICU",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "G",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "severe_diff"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        },
+        {
+          "alias": "Deaths",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "D",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_diff"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Daily",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": null,
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": "-10",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": "1",
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {
+        "Death Today": "dark-blue",
+        "Death Total": "semi-dark-red"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 6,
+        "x": 11,
+        "y": 4
+      },
+      "hiddenSeries": false,
+      "id": 6,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 4,
+      "points": true,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "Recovered Today",
+          "bars": true,
+          "color": "rgba(130, 89, 8, 0.5)",
+          "lines": false,
+          "points": false
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "Recovered Total",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "E",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "recovered_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        },
+        {
+          "alias": "Recovered Today",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "F",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "recovered_diff"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Recovered",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 2,
+          "max": null,
+          "min": "-1",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {
+        "Death Today": "dark-blue",
+        "Death Total": "semi-dark-red"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 7,
+        "x": 17,
+        "y": 4
+      },
+      "hiddenSeries": false,
+      "id": 5,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 4,
+      "points": true,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "Death Today",
+          "bars": true,
+          "color": "rgba(163, 82, 204, 0.31)",
+          "lines": false,
+          "points": false
+        },
+        {
+          "alias": "_",
+          "hiddenSeries": true,
+          "hideTooltip": true,
+          "legend": false
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "Death Total",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "E",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        },
+        {
+          "alias": "Death Today",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "F",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_diff"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Deaths",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 2,
+          "max": null,
+          "min": "-1",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "columns": [],
+      "datasource": null,
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 29,
+        "w": 13,
+        "x": 11,
+        "y": 16
+      },
+      "id": 3,
+      "interval": "",
+      "options": {},
+      "pageSize": null,
+      "showHeader": true,
+      "sort": {
+        "col": 0,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "Time",
+          "align": "auto",
+          "dateFormat": "YYYY-MM-DD",
+          "pattern": "Time",
+          "type": "date"
+        },
+        {
+          "alias": "",
+          "align": "auto",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "/.*ncr*/",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "alias": "Confirmed Total",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        },
+        {
+          "alias": "Confirmed Incr.",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_diff"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        },
+        {
+          "alias": "Severe Active",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "severe_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        },
+        {
+          "alias": "Severe Today",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "D",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "severe_diff"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        },
+        {
+          "alias": "Total Death",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "E",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        },
+        {
+          "alias": "Death Today",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "F",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_diff"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Data",
+      "transform": "timeseries_to_columns",
+      "type": "table"
+    },
+    {
+      "aliasColors": {
+        "Conf w/ Severe 15%": "green",
+        "Conf w/Let.2%": "rgba(31, 96, 196, 0.22)",
+        "Conf w/Let.3%": "light-blue",
+        "Confirmed Incr.": "dark-orange",
+        "Confirmed Total": "dark-blue"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "description": "Projection w/ a 3% let.",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 11,
+        "w": 11,
+        "x": 0,
+        "y": 17
+      },
+      "hiddenSeries": false,
+      "id": 4,
+      "interval": "",
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 4,
+      "points": true,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "Confirmed Incr.",
+          "bars": true,
+          "lines": false,
+          "points": false
+        },
+        {
+          "alias": "Conf w/Let.3%",
+          "fill": 0,
+          "zindex": -3
+        },
+        {
+          "alias": "Conf w/ Severe 15%",
+          "zindex": 1
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "Confirmed Total",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        },
+        {
+          "alias": "Confirmed Incr.",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_diff"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        },
+        {
+          "alias": "Conf w/Let.3%",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "*33.3"
+                ],
+                "type": "math"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Contagions w/ 3% CFR",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": "-1",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {
+        "Conf w/ Severe 15%": "green",
+        "Conf w/Let.2%": "rgba(31, 96, 196, 0.22)",
+        "Conf w/Let.3%": "light-blue",
+        "Confirmed Incr.": "dark-orange",
+        "Confirmed Total": "dark-blue"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "description": "Projection w/ a 3% let.",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 11,
+        "x": 0,
+        "y": 28
+      },
+      "hiddenSeries": false,
+      "id": 7,
+      "interval": "",
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 4,
+      "points": true,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "Confirmed Incr.",
+          "bars": true,
+          "lines": false,
+          "points": false
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "Confirmed Total",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        },
+        {
+          "alias": "Confirmed Incr.",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_diff"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        },
+        {
+          "alias": "Conf w/Let.1%",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "*100"
+                ],
+                "type": "math"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Contagions w/ 1% CFR VS Detected",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": "-1",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {
+        "3% death rate to severes ~10%": "rgba(236, 211, 81, 0.58)",
+        "Projection": "rgba(250, 100, 0, 0.46)",
+        "Severe Today": "dark-blue",
+        "Severe Total": "dark-orange"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 13,
+        "w": 11,
+        "x": 0,
+        "y": 40
+      },
+      "hiddenSeries": false,
+      "id": 2,
+      "interval": "",
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 4,
+      "points": true,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "Severe Today",
+          "bars": true,
+          "color": "rgba(255, 120, 10, 0.27)",
+          "lines": false,
+          "points": false
+        },
+        {
+          "alias": "3% death rate to severes ~10%"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "Severe Total",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "G",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "severe_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        },
+        {
+          "alias": "Severe Today",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "D",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "severe_diff"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        },
+        {
+          "alias": "3% death rate to severes ~10%",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "*33.3 * 0.03"
+                ],
+                "type": "math"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Severe",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 2,
+          "max": null,
+          "min": "-1",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "content": "<img src=\"//www.shinystat.com/cgi-bin/shinystat.cgi?USER=gdax\" alt=\"Users\" style=\"border:0px\" /></a>\n\n\n\n",
+      "datasource": null,
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 0,
+        "y": 53
+      },
+      "id": 19,
+      "mode": "html",
+      "options": {},
+      "pluginVersion": "6.6.2",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Panel Title",
+      "type": "text"
+    }
+  ],
+  "schemaVersion": 22,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": "Italy",
+          "value": "Italy"
+        },
+        "datasource": "InfluxDB",
+        "definition": "select distinct(country) from (select country, confirmed_cumulative from worldometers) ;",
+        "hide": 0,
+        "includeAll": false,
+        "label": "country",
+        "multi": false,
+        "name": "country",
+        "options": [
+          {
+            "selected": false,
+            "text": "Afghanistan",
+            "value": "Afghanistan"
+          },
+          {
+            "selected": false,
+            "text": "Albania",
+            "value": "Albania"
+          },
+          {
+            "selected": false,
+            "text": "Algeria",
+            "value": "Algeria"
+          },
+          {
+            "selected": false,
+            "text": "Andorra",
+            "value": "Andorra"
+          },
+          {
+            "selected": false,
+            "text": "Antigua and Barbuda",
+            "value": "Antigua and Barbuda"
+          },
+          {
+            "selected": false,
+            "text": "Argentina",
+            "value": "Argentina"
+          },
+          {
+            "selected": false,
+            "text": "Armenia",
+            "value": "Armenia"
+          },
+          {
+            "selected": false,
+            "text": "Aruba",
+            "value": "Aruba"
+          },
+          {
+            "selected": false,
+            "text": "Australia",
+            "value": "Australia"
+          },
+          {
+            "selected": false,
+            "text": "Austria",
+            "value": "Austria"
+          },
+          {
+            "selected": false,
+            "text": "Azerbaijan",
+            "value": "Azerbaijan"
+          },
+          {
+            "selected": false,
+            "text": "Bahrain",
+            "value": "Bahrain"
+          },
+          {
+            "selected": false,
+            "text": "Bangladesh",
+            "value": "Bangladesh"
+          },
+          {
+            "selected": false,
+            "text": "Belarus",
+            "value": "Belarus"
+          },
+          {
+            "selected": false,
+            "text": "Belgium",
+            "value": "Belgium"
+          },
+          {
+            "selected": false,
+            "text": "Bhutan",
+            "value": "Bhutan"
+          },
+          {
+            "selected": false,
+            "text": "Bolivia",
+            "value": "Bolivia"
+          },
+          {
+            "selected": false,
+            "text": "Bosnia and Herzegovina",
+            "value": "Bosnia and Herzegovina"
+          },
+          {
+            "selected": false,
+            "text": "Brazil",
+            "value": "Brazil"
+          },
+          {
+            "selected": false,
+            "text": "Brunei",
+            "value": "Brunei"
+          },
+          {
+            "selected": false,
+            "text": "Bulgaria",
+            "value": "Bulgaria"
+          },
+          {
+            "selected": false,
+            "text": "Burkina Faso",
+            "value": "Burkina Faso"
+          },
+          {
+            "selected": false,
+            "text": "Cambodia",
+            "value": "Cambodia"
+          },
+          {
+            "selected": false,
+            "text": "Cameroon",
+            "value": "Cameroon"
+          },
+          {
+            "selected": false,
+            "text": "Canada",
+            "value": "Canada"
+          },
+          {
+            "selected": false,
+            "text": "Cayman Islands",
+            "value": "Cayman Islands"
+          },
+          {
+            "selected": false,
+            "text": "Channel Islands",
+            "value": "Channel Islands"
+          },
+          {
+            "selected": false,
+            "text": "Chile",
+            "value": "Chile"
+          },
+          {
+            "selected": false,
+            "text": "China",
+            "value": "China"
+          },
+          {
+            "selected": false,
+            "text": "Colombia",
+            "value": "Colombia"
+          },
+          {
+            "selected": false,
+            "text": "Costa Rica",
+            "value": "Costa Rica"
+          },
+          {
+            "selected": false,
+            "text": "Croatia",
+            "value": "Croatia"
+          },
+          {
+            "selected": false,
+            "text": "Cuba",
+            "value": "Cuba"
+          },
+          {
+            "selected": false,
+            "text": "Curaao",
+            "value": "Curaao"
+          },
+          {
+            "selected": false,
+            "text": "Cyprus",
+            "value": "Cyprus"
+          },
+          {
+            "selected": false,
+            "text": "Czechia",
+            "value": "Czechia"
+          },
+          {
+            "selected": false,
+            "text": "DRC",
+            "value": "DRC"
+          },
+          {
+            "selected": false,
+            "text": "Denmark",
+            "value": "Denmark"
+          },
+          {
+            "selected": false,
+            "text": "Diamond Princess",
+            "value": "Diamond Princess"
+          },
+          {
+            "selected": false,
+            "text": "Dominican Republic",
+            "value": "Dominican Republic"
+          },
+          {
+            "selected": false,
+            "text": "Ecuador",
+            "value": "Ecuador"
+          },
+          {
+            "selected": false,
+            "text": "Egypt",
+            "value": "Egypt"
+          },
+          {
+            "selected": false,
+            "text": "Estonia",
+            "value": "Estonia"
+          },
+          {
+            "selected": false,
+            "text": "Eswatini",
+            "value": "Eswatini"
+          },
+          {
+            "selected": false,
+            "text": "Ethiopia",
+            "value": "Ethiopia"
+          },
+          {
+            "selected": false,
+            "text": "Faeroe Islands",
+            "value": "Faeroe Islands"
+          },
+          {
+            "selected": false,
+            "text": "Finland",
+            "value": "Finland"
+          },
+          {
+            "selected": false,
+            "text": "France",
+            "value": "France"
+          },
+          {
+            "selected": false,
+            "text": "French Guiana",
+            "value": "French Guiana"
+          },
+          {
+            "selected": false,
+            "text": "French Polynesia",
+            "value": "French Polynesia"
+          },
+          {
+            "selected": false,
+            "text": "Gabon",
+            "value": "Gabon"
+          },
+          {
+            "selected": false,
+            "text": "Georgia",
+            "value": "Georgia"
+          },
+          {
+            "selected": false,
+            "text": "Germany",
+            "value": "Germany"
+          },
+          {
+            "selected": false,
+            "text": "Ghana",
+            "value": "Ghana"
+          },
+          {
+            "selected": false,
+            "text": "Gibraltar",
+            "value": "Gibraltar"
+          },
+          {
+            "selected": false,
+            "text": "Greece",
+            "value": "Greece"
+          },
+          {
+            "selected": false,
+            "text": "Guadeloupe",
+            "value": "Guadeloupe"
+          },
+          {
+            "selected": false,
+            "text": "Guatemala",
+            "value": "Guatemala"
+          },
+          {
+            "selected": false,
+            "text": "Guinea",
+            "value": "Guinea"
+          },
+          {
+            "selected": false,
+            "text": "Guyana",
+            "value": "Guyana"
+          },
+          {
+            "selected": false,
+            "text": "Holy See",
+            "value": "Holy See"
+          },
+          {
+            "selected": false,
+            "text": "Honduras",
+            "value": "Honduras"
+          },
+          {
+            "selected": false,
+            "text": "Hong Kong",
+            "value": "Hong Kong"
+          },
+          {
+            "selected": false,
+            "text": "Hungary",
+            "value": "Hungary"
+          },
+          {
+            "selected": false,
+            "text": "Iceland",
+            "value": "Iceland"
+          },
+          {
+            "selected": false,
+            "text": "India",
+            "value": "India"
+          },
+          {
+            "selected": false,
+            "text": "Indonesia",
+            "value": "Indonesia"
+          },
+          {
+            "selected": false,
+            "text": "Iran",
+            "value": "Iran"
+          },
+          {
+            "selected": false,
+            "text": "Iraq",
+            "value": "Iraq"
+          },
+          {
+            "selected": false,
+            "text": "Ireland",
+            "value": "Ireland"
+          },
+          {
+            "selected": false,
+            "text": "Israel",
+            "value": "Israel"
+          },
+          {
+            "selected": true,
+            "text": "Italy",
+            "value": "Italy"
+          },
+          {
+            "selected": false,
+            "text": "Ivory Coast",
+            "value": "Ivory Coast"
+          },
+          {
+            "selected": false,
+            "text": "Jamaica",
+            "value": "Jamaica"
+          },
+          {
+            "selected": false,
+            "text": "Japan",
+            "value": "Japan"
+          },
+          {
+            "selected": false,
+            "text": "Jordan",
+            "value": "Jordan"
+          },
+          {
+            "selected": false,
+            "text": "Kazakhstan",
+            "value": "Kazakhstan"
+          },
+          {
+            "selected": false,
+            "text": "Kenya",
+            "value": "Kenya"
+          },
+          {
+            "selected": false,
+            "text": "Kuwait",
+            "value": "Kuwait"
+          },
+          {
+            "selected": false,
+            "text": "Latvia",
+            "value": "Latvia"
+          },
+          {
+            "selected": false,
+            "text": "Lebanon",
+            "value": "Lebanon"
+          },
+          {
+            "selected": false,
+            "text": "Liechtenstein",
+            "value": "Liechtenstein"
+          },
+          {
+            "selected": false,
+            "text": "Lithuania",
+            "value": "Lithuania"
+          },
+          {
+            "selected": false,
+            "text": "Luxembourg",
+            "value": "Luxembourg"
+          },
+          {
+            "selected": false,
+            "text": "Macao",
+            "value": "Macao"
+          },
+          {
+            "selected": false,
+            "text": "Macau",
+            "value": "Macau"
+          },
+          {
+            "selected": false,
+            "text": "Malaysia",
+            "value": "Malaysia"
+          },
+          {
+            "selected": false,
+            "text": "Maldives",
+            "value": "Maldives"
+          },
+          {
+            "selected": false,
+            "text": "Malta",
+            "value": "Malta"
+          },
+          {
+            "selected": false,
+            "text": "Martinique",
+            "value": "Martinique"
+          },
+          {
+            "selected": false,
+            "text": "Mauritania",
+            "value": "Mauritania"
+          },
+          {
+            "selected": false,
+            "text": "Mexico",
+            "value": "Mexico"
+          },
+          {
+            "selected": false,
+            "text": "Moldova",
+            "value": "Moldova"
+          },
+          {
+            "selected": false,
+            "text": "Monaco",
+            "value": "Monaco"
+          },
+          {
+            "selected": false,
+            "text": "Mongolia",
+            "value": "Mongolia"
+          },
+          {
+            "selected": false,
+            "text": "Morocco",
+            "value": "Morocco"
+          },
+          {
+            "selected": false,
+            "text": "Namibia",
+            "value": "Namibia"
+          },
+          {
+            "selected": false,
+            "text": "Nepal",
+            "value": "Nepal"
+          },
+          {
+            "selected": false,
+            "text": "Netherlands",
+            "value": "Netherlands"
+          },
+          {
+            "selected": false,
+            "text": "New Zealand",
+            "value": "New Zealand"
+          },
+          {
+            "selected": false,
+            "text": "Nigeria",
+            "value": "Nigeria"
+          },
+          {
+            "selected": false,
+            "text": "North Macedonia",
+            "value": "North Macedonia"
+          },
+          {
+            "selected": false,
+            "text": "Norway",
+            "value": "Norway"
+          },
+          {
+            "selected": false,
+            "text": "Oman",
+            "value": "Oman"
+          },
+          {
+            "selected": false,
+            "text": "Pakistan",
+            "value": "Pakistan"
+          },
+          {
+            "selected": false,
+            "text": "Palestine",
+            "value": "Palestine"
+          },
+          {
+            "selected": false,
+            "text": "Panama",
+            "value": "Panama"
+          },
+          {
+            "selected": false,
+            "text": "Paraguay",
+            "value": "Paraguay"
+          },
+          {
+            "selected": false,
+            "text": "Peru",
+            "value": "Peru"
+          },
+          {
+            "selected": false,
+            "text": "Philippines",
+            "value": "Philippines"
+          },
+          {
+            "selected": false,
+            "text": "Poland",
+            "value": "Poland"
+          },
+          {
+            "selected": false,
+            "text": "Portugal",
+            "value": "Portugal"
+          },
+          {
+            "selected": false,
+            "text": "Puerto Rico",
+            "value": "Puerto Rico"
+          },
+          {
+            "selected": false,
+            "text": "Qatar",
+            "value": "Qatar"
+          },
+          {
+            "selected": false,
+            "text": "Romania",
+            "value": "Romania"
+          },
+          {
+            "selected": false,
+            "text": "Runion",
+            "value": "Runion"
+          },
+          {
+            "selected": false,
+            "text": "Russia",
+            "value": "Russia"
+          },
+          {
+            "selected": false,
+            "text": "Rwanda",
+            "value": "Rwanda"
+          },
+          {
+            "selected": false,
+            "text": "Réunion",
+            "value": "Réunion"
+          },
+          {
+            "selected": false,
+            "text": "S. Korea",
+            "value": "S. Korea"
+          },
+          {
+            "selected": false,
+            "text": "Saint Lucia",
+            "value": "Saint Lucia"
+          },
+          {
+            "selected": false,
+            "text": "Saint Martin",
+            "value": "Saint Martin"
+          },
+          {
+            "selected": false,
+            "text": "San Marino",
+            "value": "San Marino"
+          },
+          {
+            "selected": false,
+            "text": "Saudi Arabia",
+            "value": "Saudi Arabia"
+          },
+          {
+            "selected": false,
+            "text": "Senegal",
+            "value": "Senegal"
+          },
+          {
+            "selected": false,
+            "text": "Serbia",
+            "value": "Serbia"
+          },
+          {
+            "selected": false,
+            "text": "Singapore",
+            "value": "Singapore"
+          },
+          {
+            "selected": false,
+            "text": "Slovakia",
+            "value": "Slovakia"
+          },
+          {
+            "selected": false,
+            "text": "Slovenia",
+            "value": "Slovenia"
+          },
+          {
+            "selected": false,
+            "text": "South Africa",
+            "value": "South Africa"
+          },
+          {
+            "selected": false,
+            "text": "South Korea",
+            "value": "South Korea"
+          },
+          {
+            "selected": false,
+            "text": "Spain",
+            "value": "Spain"
+          },
+          {
+            "selected": false,
+            "text": "Sri Lanka",
+            "value": "Sri Lanka"
+          },
+          {
+            "selected": false,
+            "text": "St. Barth",
+            "value": "St. Barth"
+          },
+          {
+            "selected": false,
+            "text": "St. Vincent Grenadines",
+            "value": "St. Vincent Grenadines"
+          },
+          {
+            "selected": false,
+            "text": "State of Palestine",
+            "value": "State of Palestine"
+          },
+          {
+            "selected": false,
+            "text": "Sudan",
+            "value": "Sudan"
+          },
+          {
+            "selected": false,
+            "text": "Suriname",
+            "value": "Suriname"
+          },
+          {
+            "selected": false,
+            "text": "Sweden",
+            "value": "Sweden"
+          },
+          {
+            "selected": false,
+            "text": "Switzerland",
+            "value": "Switzerland"
+          },
+          {
+            "selected": false,
+            "text": "Taiwan",
+            "value": "Taiwan"
+          },
+          {
+            "selected": false,
+            "text": "Thailand",
+            "value": "Thailand"
+          },
+          {
+            "selected": false,
+            "text": "Togo",
+            "value": "Togo"
+          },
+          {
+            "selected": false,
+            "text": "Trinidad and Tobago",
+            "value": "Trinidad and Tobago"
+          },
+          {
+            "selected": false,
+            "text": "Tunisia",
+            "value": "Tunisia"
+          },
+          {
+            "selected": false,
+            "text": "Turkey",
+            "value": "Turkey"
+          },
+          {
+            "selected": false,
+            "text": "U.A.E.",
+            "value": "U.A.E."
+          },
+          {
+            "selected": false,
+            "text": "U.K.",
+            "value": "U.K."
+          },
+          {
+            "selected": false,
+            "text": "U.S.",
+            "value": "U.S."
+          },
+          {
+            "selected": false,
+            "text": "U.S. Virgin Islands",
+            "value": "U.S. Virgin Islands"
+          },
+          {
+            "selected": false,
+            "text": "UAE",
+            "value": "UAE"
+          },
+          {
+            "selected": false,
+            "text": "UK",
+            "value": "UK"
+          },
+          {
+            "selected": false,
+            "text": "USA",
+            "value": "USA"
+          },
+          {
+            "selected": false,
+            "text": "USA *",
+            "value": "USA *"
+          },
+          {
+            "selected": false,
+            "text": "Ukraine",
+            "value": "Ukraine"
+          },
+          {
+            "selected": false,
+            "text": "United Arab Emirates",
+            "value": "United Arab Emirates"
+          },
+          {
+            "selected": false,
+            "text": "United Kingdom",
+            "value": "United Kingdom"
+          },
+          {
+            "selected": false,
+            "text": "United States",
+            "value": "United States"
+          },
+          {
+            "selected": false,
+            "text": "Uruguay",
+            "value": "Uruguay"
+          },
+          {
+            "selected": false,
+            "text": "Vatican City",
+            "value": "Vatican City"
+          },
+          {
+            "selected": false,
+            "text": "Venezuela",
+            "value": "Venezuela"
+          },
+          {
+            "selected": false,
+            "text": "Vietnam",
+            "value": "Vietnam"
+          }
+        ],
+        "query": "select distinct(country) from (select country, confirmed_cumulative from worldometers) ;",
+        "refresh": 0,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now-30d",
+    "to": "now+1d"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "",
+  "title": "Country Overview",
+  "uid": "Juf9Eu_Zz",
+  "version": 38
+}
