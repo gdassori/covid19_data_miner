@@ -33,8 +33,9 @@ class CovidTrackingUSAPointsService:
         for row in rows:
             if 'date' == row[0].strip():
                 continue
-            updated_at = datetime.datetime.strptime(row[0], '%Y%m%d')
+            updated_at = datetime.datetime.strptime(row[7], '%Y-%m-%dT%H:%M:%SZ')
             if min_timestamp and updated_at < datetime.datetime.fromtimestamp(min_timestamp):
+                print('skip: %s' % updated_at)
                 continue
             point = CovidPoint(
                 source="covidtracking_usa",
@@ -62,7 +63,7 @@ class CovidTrackingUSAPointsService:
         data = self._fetch_data()
         _csv = self._parse_csv(data)
         try:
-            dt = datetime.datetime.strptime(_csv[1][0], '%Y%m%d')
+            dt = datetime.datetime.strptime(_csv[1][7], '%Y-%m-%dT%H:%M:%SZ')
         except Exception as e:
             print(e)
             dt = None
