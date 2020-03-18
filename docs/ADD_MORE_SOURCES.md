@@ -27,6 +27,7 @@ class DPCItaGithubPointsService:
 
 A service is a class with the `authentication_key` argument and two methods: `get_points_since(timestamp)` and `get_last_update`.
 
+- The constructor must accept the "authentication_key" parameter even if not used in the service.
 - The method get_points_since MUST return a list of CovidPoint objects (namedtuple), and MUST take an integer epoch timestamp.
 - The method get_last_update doesn't take any argument and MUST return an interger (or 0) as epoch timestamp.
 
