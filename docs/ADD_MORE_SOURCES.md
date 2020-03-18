@@ -1,8 +1,6 @@
 ### Adding sources
 
-It's easy to add more sources.
-
-As it can be seen into an already implemented class [here](https://github.com/gdassori/covid19_data_miner/blob/master/covid_data_miner/src/sources/dpc_ita_github_points_service.py)
+It's easy to add more sources. A reference impl. can be seen [here](https://github.com/gdassori/covid19_data_miner/blob/master/covid_data_miner/src/sources/dpc_ita_github_points_service.py)
 
 
 The class structure must be compliant to the following:
