@@ -27,6 +27,8 @@ class DPCItaGithubPointsService:
 
 A service is a class with the `authentication_key` argument and two methods: `get_points_since(timestamp)` and `get_last_update`.
 
+
+- Multiple tags can be used! They define data granularity. Accepted values are: `country`, `region`, `city`, it depends on the original data structure the source service is going to read.
 - The constructor must accept the `authentication_key` argument even if it is not used in the service.
 - The method `get_points_since` MUST return a `list` of `CovidPoint` objects (see below), and MUST take an `int` epoch timestamp.
 - The method `get_last_update` doesn't take any argument and MUST return an `int` (or 0 if `None`) as epoch timestamp.
