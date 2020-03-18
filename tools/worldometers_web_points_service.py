@@ -22,7 +22,7 @@ class WorldometersWebPointsService:
     def _snapshots_to_csv(self, snapshot) -> typing.Optional[typing.List]:
         soup = BeautifulSoup(snapshot)
         table = None
-        for tid in ('table3', 'main_table_countries'):
+        for tid in ('table3', 'main_table_countries', 'main_table_countries_today'):
             table = table or soup.find(id=tid)
         if not table:
             return

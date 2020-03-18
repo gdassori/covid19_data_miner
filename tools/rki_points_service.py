@@ -16,13 +16,14 @@ class RKIPointsService:
             return
         output_rows = []
         for i, table_row in enumerate(table.findAll('tr')):
-            if not i:
+            if table_row.findAll('th'):
                 columns = table_row.findAll('th')
-                assert columns
-                output_row = []
-                for column in columns:
-                    output_row.append(column.text.strip())
-                output_rows.append(output_row)
+                if columns and columns[0].contents and 'undesl' in columns[0].contents[0]:
+                    assert columns
+                    output_row = []
+                    for column in columns:
+                        output_row.append(column.text.strip())
+                    output_rows.append(output_row)
             else:
                 columns = table_row.findAll('td')
                 assert columns
@@ -51,7 +52,6 @@ class RKIPointsService:
         data = res.content
         csv = self._snapshots_to_csv(data)
         assert 'undesl' in csv[0][0]
-        assert 'ahl' in csv[0][1] and 'arunter' in csv[0][1]
         data = [['State', 'Confirmed', 'Deaths']]
         for l in csv[1:]:
             data.append(self._parse_row(l))
