@@ -36,7 +36,8 @@ A service is a class with the `authentication_key` argument and two methods: `ge
 What is a [CovidPoint](https://github.com/gdassori/covid19_data_miner/blob/master/covid_data_miner/src/domain.py) ?
 
 Just a `NamedTuple` object representing a time-serie point:
-```
+
+```python
 CovidPoint = typing.NamedTuple(
     "CovidPoint", (
         ("source", str),
