@@ -27,7 +27,7 @@ Multiple sources selection
 - 5 different data sources (2 globals, Italy, Germany, USA) 
 
 ##### Todo:
-- more sources (check github Issues).
+- more sources (check github Issues and the [new sources howto](https://github.com/gdassori/covid19_data_miner/blob/master/docs/ADD_MORE_SOURCES.md)).
 - -->> **plugin system** <<-- 
 - auto import default dashboards in grafana.
 - auto configure sources in grafana. 
