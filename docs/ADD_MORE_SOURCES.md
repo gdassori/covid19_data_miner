@@ -67,7 +67,7 @@ Once a service is created, it must be add to the [sources factory](https://githu
   }
 ```
 
-So just add to the dictionary in the constructor the new source.
+So, just add to the dictionary the class of the newly created service.
 
 If everything is ok, the source will be available in the client:
 
