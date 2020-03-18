@@ -1,6 +1,6 @@
 ### Adding sources
 
-Is easy to add more sources.
+It's easy to add more sources.
 
 As it can be seen into an already implemented class [here](https://github.com/gdassori/covid19_data_miner/blob/master/covid_data_miner/src/sources/dpc_ita_github_points_service.py)
 
