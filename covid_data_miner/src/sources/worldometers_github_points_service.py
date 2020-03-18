@@ -149,7 +149,7 @@ class WorldometersGithubPointsService:
                 except (IndexError, AssertionError):
                     error = True
             if error:
-                raise ValueError('Error parsing row: %s' % rows and rows[0])
+                raise ValueError('Error parsing row: %s' % rows)
             for row in rows:
                 if min_timestamp and updated_at < datetime.datetime.fromtimestamp(min_timestamp):
                     continue
