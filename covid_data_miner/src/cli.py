@@ -123,7 +123,15 @@ def add(name, auth=None):
         click.echo('source "{}" already added'.format(name))
         exit(1)
     context.add_source(name, auth)
+    configured = context.get_configured_source(name)
+    source = sources_factory.get_source(configured)
     click.echo('source "{}" added'.format(name))
+    click.echo('Adding default projection for first tag')
+    tag = source.tags[0]
+    timeframe = 86400
+    alias = 'summary_{}_{}_{}'.format(name, tag, timeframe)
+    context.add_projection('summary', name, tag, timeframe, alias)
+    click.echo('summary projection "{}" added'.format(alias))
 
 
 @sources.command()
@@ -246,7 +254,7 @@ def add(name, source, tag, timeframe, alias=None):
         click.echo('projection alias "{}" already exists'.format(alias))
         exit(1)
     context.add_projection(name, source, tag, timeframe, alias)
-    click.echo('source "{}" added, type "{}"'.format(alias, name))
+    click.echo('projection "{}" added, type "{}"'.format(alias, name))
 
 
 @projections.command()
@@ -334,8 +342,22 @@ def update_projection(name, no_cascade):
 
 
 @update.command('all')
+@click.option('--no-cascade')
 def update_all(no_cascade):
     configured = context.get_configured_sources()
+    for name in configured.keys():
+        response = manager.check_source_updates_available(name)
+        if not response['updates_available']:
+            click.echo('Local data updated for %s, last update %s' % (name, response['remote_last']))
+            continue
+        click.echo('Updates available for %s, local: %s, remote: %s' % (
+            name, response['local_last'], response['remote_last'])
+        )
+        response = manager.update_source(name, response['local_last'], no_cascade=no_cascade)
+        if response['source_updated']:
+            click.echo('Source %s updated' % name)
+        for projection in response['projections']:
+            click.echo('Projection %s updated' % projection)
 
 
 @rewind.command('source')

@@ -82,16 +82,16 @@ for f in files:
             headers=headers
         )
         dashboards_status_codes[c['title']] = r.status_code
-        if 'lobal' in c['title']:
+        if r.status_code == 200 and 'lobal' in c['title']:
             requests.post(star_dashboard_url + str(r.json()['dashboardId']))
             pref = requests.put(
                 preferences_url, data=json.dumps({"homeDashboardId": r.json()['dashboardId']}), headers=headers
             ).json()
 
 response = '\nGrafana bake done\n- Default source: %s\n- Shifted source: %s\n- Dashboards:\n' % (
-    default_source_status_code == 200,
-    shifted_source_status_code == 200
+    'Done' if default_source_status_code == 200 else 'Already set',
+    'Done' if shifted_source_status_code == 200 else 'Already set'
 )
 for name, code in dashboards_status_codes.items():
-    response += '  - %s: %s\n' % (name, code == 200)
+    response += '  - %s: %s\n' % (name, 'Done' if code == 200 else 'Already set')
 print(response)

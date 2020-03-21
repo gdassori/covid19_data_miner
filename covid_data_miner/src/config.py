@@ -90,7 +90,10 @@ class ConfigurationContext:
         return self._config['sources']
 
     def get_configured_source(self, source_name):
-        return self._config['sources'].get(source_name)
+        data = self._config['sources'].get(source_name)
+        if data:
+            data['name'] = source_name
+            return data
 
     def add_source(self, source_name, authentication_key):
         if source_name not in self._config['sources']:
@@ -119,10 +122,10 @@ class ConfigurationContext:
     def get_configured_projection(self, projection_name):
         return self._config['projections'].get(projection_name)
 
-    def add_projection(self, projection_name, source, tag, timeframe, alias):
-        if projection_name not in self._config['projections']:
+    def add_projection(self, projection_type, source, tag, timeframe, alias):
+        if projection_type not in self._config['projections']:
             self._config['projections'][alias] = {
-                "type": projection_name,
+                "type": projection_type,
                 "source": source,
                 "tag": tag,
                 "timeframe": timeframe
