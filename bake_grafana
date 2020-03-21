@@ -1,0 +1,97 @@
+#!/usr/bin/env python3
+
+import json
+import os
+import requests
+
+grafana_username = 'root'
+grafana_password = 'root'
+datasources_url = 'http://{}:{}@127.0.0.1:3003/api/datasources'.format(
+    grafana_username,
+    grafana_password
+)
+dashboards_url = 'http://{}:{}@127.0.0.1:3003/api/dashboards/import'.format(
+    grafana_username,
+    grafana_password
+)
+star_dashboard_url = 'http://{}:{}@127.0.0.1:3003/api/user/stars/dashboard/'.format(
+    grafana_username,
+    grafana_password
+)
+preferences_url = 'http://{}:{}@127.0.0.1:3003/api/org/preferences'.format(
+    grafana_username,
+    grafana_password
+)
+
+__location__ = os.path.realpath(
+    os.path.join(os.getcwd(), os.path.dirname(__file__)))
+
+folder = __location__ + '/contrib/dashboards/'
+headers = {
+    "Content-Type": "application/json;charset=UTF-8"
+}
+
+default_source_status_code = requests.post(
+    datasources_url,
+    data=json.dumps(
+        {
+            "name": "InfluxDB",
+            "type": "influxdb",
+            "url": "http://localhost:8086",
+            "access": "proxy",
+            "isDefault": True,
+            "database": "covid19",
+            "user": "",
+            "password": ""
+        }
+    ),
+    headers=headers
+).status_code
+
+shifted_source_status_code = requests.post(
+    datasources_url,
+    data=json.dumps(
+        {
+            "name": "InfluxDB-Shifted",
+            "type": "influxdb",
+            "url": "http://localhost:8089",
+            "access": "proxy",
+            "isDefault": False,
+            "database": "covid19",
+            "user": "",
+            "password": ""
+        }
+    ),
+    headers=headers
+).status_code
+
+files = os.listdir(folder)
+dashboards_status_codes = {}
+for f in files:
+    with open(folder + f, 'r') as d:
+        c = json.load(d)
+        c['id'] = None
+        c['version'] = 1
+        payload = {
+            "dashboard": c,
+            "overwrite": False,
+        }
+        r = requests.post(
+            dashboards_url,
+            data=json.dumps(payload),
+            headers=headers
+        )
+        dashboards_status_codes[c['title']] = r.status_code
+        if 'lobal' in c['title']:
+            requests.post(star_dashboard_url + str(r.json()['dashboardId']))
+            pref = requests.put(
+                preferences_url, data=json.dumps({"homeDashboardId": r.json()['dashboardId']}), headers=headers
+            ).json()
+
+response = '\nGrafana bake done\n- Default source: %s\n- Shifted source: %s\n- Dashboards:\n' % (
+    default_source_status_code == 200,
+    shifted_source_status_code == 200
+)
+for name, code in dashboards_status_codes.items():
+    response += '  - %s: %s\n' % (name, code == 200)
+print(response)

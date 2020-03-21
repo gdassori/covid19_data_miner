@@ -17,14 +17,14 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1584469440311,
+  "iteration": 1584787086357,
   "links": [],
   "panels": [
     {
       "datasource": null,
       "description": "Total detected",
       "gridPos": {
-        "h": 4,
+        "h": 3,
         "w": 3,
         "x": 0,
         "y": 0
@@ -113,7 +113,7 @@
       "datasource": null,
       "description": "Quote",
       "gridPos": {
-        "h": 4,
+        "h": 3,
         "w": 3,
         "x": 3,
         "y": 0
@@ -203,7 +203,7 @@
       "datasource": null,
       "description": "Deaths \\ Contagions * 100",
       "gridPos": {
-        "h": 4,
+        "h": 3,
         "w": 2,
         "x": 7,
         "y": 0
@@ -292,7 +292,7 @@
       "datasource": null,
       "description": "Deaths \\ Contagions * 100",
       "gridPos": {
-        "h": 4,
+        "h": 3,
         "w": 2,
         "x": 9,
         "y": 0
@@ -385,7 +385,7 @@
       "datasource": null,
       "description": "Deaths \\ Contagions * 100",
       "gridPos": {
-        "h": 4,
+        "h": 3,
         "w": 2,
         "x": 12,
         "y": 0
@@ -474,7 +474,7 @@
       "datasource": null,
       "description": "Deaths \\ Contagions * 100",
       "gridPos": {
-        "h": 4,
+        "h": 3,
         "w": 2,
         "x": 14,
         "y": 0
@@ -563,7 +563,7 @@
       "datasource": null,
       "description": "Total detected",
       "gridPos": {
-        "h": 4,
+        "h": 3,
         "w": 3,
         "x": 17,
         "y": 0
@@ -652,7 +652,7 @@
       "datasource": null,
       "description": "",
       "gridPos": {
-        "h": 4,
+        "h": 3,
         "w": 2,
         "x": 20,
         "y": 0
@@ -741,7 +741,7 @@
       "datasource": null,
       "description": "",
       "gridPos": {
-        "h": 4,
+        "h": 3,
         "w": 2,
         "x": 22,
         "y": 0
@@ -842,10 +842,10 @@
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
-        "h": 13,
+        "h": 12,
         "w": 11,
         "x": 0,
-        "y": 4
+        "y": 3
       },
       "hiddenSeries": false,
       "id": 20,
@@ -905,6 +905,12 @@
               "key": "country",
               "operator": "=",
               "value": "$country"
+            },
+            {
+              "condition": "AND",
+              "key": "severe_diff",
+              "operator": ">",
+              "value": "0"
             }
           ]
         },
@@ -931,6 +937,12 @@
               "key": "country",
               "operator": "=",
               "value": "$country"
+            },
+            {
+              "condition": "AND",
+              "key": "severe_diff",
+              "operator": ">",
+              "value": "0"
             }
           ]
         }
@@ -992,7 +1004,7 @@
         "h": 12,
         "w": 6,
         "x": 11,
-        "y": 4
+        "y": 3
       },
       "hiddenSeries": false,
       "id": 6,
@@ -1150,7 +1162,7 @@
         "h": 12,
         "w": 7,
         "x": 17,
-        "y": 4
+        "y": 3
       },
       "hiddenSeries": false,
       "id": 5,
@@ -1300,6 +1312,211 @@
       }
     },
     {
+      "aliasColors": {
+        "Conf w/ Severe 15%": "green",
+        "Conf w/Let.2%": "rgba(31, 96, 196, 0.22)",
+        "Conf w/Let.3%": "light-blue",
+        "Confirmed Incr.": "dark-orange",
+        "Confirmed Total": "dark-blue"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "description": "Projection w/ a 3% let.",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 11,
+        "w": 11,
+        "x": 0,
+        "y": 15
+      },
+      "hiddenSeries": false,
+      "id": 4,
+      "interval": "",
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 4,
+      "points": true,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "Confirmed Incr.",
+          "bars": true,
+          "lines": false,
+          "points": false
+        },
+        {
+          "alias": "Conf w/Let.3%",
+          "fill": 0,
+          "zindex": -3
+        },
+        {
+          "alias": "Conf w/ Severe 15%",
+          "zindex": 1
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "Confirmed Total",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        },
+        {
+          "alias": "Confirmed Incr.",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_diff"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        },
+        {
+          "alias": "Conf w/Let.3%",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "*33.3"
+                ],
+                "type": "math"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Contagions w/ 3% CFR",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": "-1",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
       "columns": [],
       "datasource": null,
       "fontSize": "100%",
@@ -1307,7 +1524,7 @@
         "h": 29,
         "w": 13,
         "x": 11,
-        "y": 16
+        "y": 15
       },
       "id": 3,
       "interval": "",
@@ -1560,215 +1777,10 @@
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
-        "h": 11,
-        "w": 11,
-        "x": 0,
-        "y": 17
-      },
-      "hiddenSeries": false,
-      "id": 4,
-      "interval": "",
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 4,
-      "points": true,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "Confirmed Incr.",
-          "bars": true,
-          "lines": false,
-          "points": false
-        },
-        {
-          "alias": "Conf w/Let.3%",
-          "fill": 0,
-          "zindex": -3
-        },
-        {
-          "alias": "Conf w/ Severe 15%",
-          "zindex": 1
-        }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "Confirmed Total",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [
-                  "Severe"
-                ],
-                "type": "alias"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "$country"
-            }
-          ]
-        },
-        {
-          "alias": "Confirmed Incr.",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_diff"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [
-                  "Severe"
-                ],
-                "type": "alias"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "$country"
-            }
-          ]
-        },
-        {
-          "alias": "Conf w/Let.3%",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "death_cumulative"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [
-                  "*33.3"
-                ],
-                "type": "math"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "$country"
-            }
-          ]
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Contagions w/ 3% CFR",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": "",
-          "logBase": 1,
-          "max": null,
-          "min": "-1",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {
-        "Conf w/ Severe 15%": "green",
-        "Conf w/Let.2%": "rgba(31, 96, 196, 0.22)",
-        "Conf w/Let.3%": "light-blue",
-        "Confirmed Incr.": "dark-orange",
-        "Confirmed Total": "dark-blue"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "description": "Projection w/ a 3% let.",
-      "fill": 0,
-      "fillGradient": 0,
-      "gridPos": {
         "h": 12,
         "w": 11,
         "x": 0,
-        "y": 28
+        "y": 26
       },
       "hiddenSeries": false,
       "id": 7,
@@ -1962,7 +1974,7 @@
         "h": 13,
         "w": 11,
         "x": 0,
-        "y": 40
+        "y": 38
       },
       "hiddenSeries": false,
       "id": 2,
@@ -2136,7 +2148,7 @@
         "h": 3,
         "w": 2,
         "x": 0,
-        "y": 53
+        "y": 51
       },
       "id": 19,
       "mode": "html",
@@ -3013,5 +3025,5 @@
   "timezone": "",
   "title": "Country Overview",
   "uid": "Juf9Eu_Zz",
-  "version": 38
+  "version": 40
 }
