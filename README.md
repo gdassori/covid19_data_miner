@@ -35,19 +35,17 @@ Multiple sources selection
 ## Howto 
 
 - install docker
-- `./run_grafana.sh`
-- prepare and activate >= python 3.6 virtualenv
-- `pip install -r requirements.txt`
-- `./covid19 --help`
+- `./runcovid.sh`
+- docker exec -ti covid19 covid19 --help
 
 Open your browser on `http://localhost:3003` and import the dashboard under `contrib/`
 
 ##### Configuration by example:
 ```
-./covid19 settings --set-github-api-key <github-api-key>
-./covid19 settings --set-influxdb-endpoint localhost 8086
-./covid19 sources add worldometers
-./covid19 projections add summary worldometers country 1d
+docker exec -ti covid19 covid19 settings --set-github-api-key <github-api-key>
+docker exec -ti covid19 covid19 settings --set-influxdb-endpoint localhost 8086
+docker exec -ti covid19 covid19 sources add worldometers
+docker exec -ti covid19 covid19 projections add summary worldometers country 1d
 ```
 
 ##### Update to last data:
@@ -57,15 +55,15 @@ Open your browser on `http://localhost:3003` and import the dashboard under `con
 
 Some stuff is saved into `~/.covid19`
 ```
-:~/covid19_data_miner$ ls ~/.covid19
+:~/$ ls ~/.covid19
 config.json  grafana  influxdb
-:~/covid19_data_miner$
+:~/$
 ```
 
 
 Run docker influxdb\grafana image:
 ```
-./run_grafana.sh
+./runcovid.sh
 ```
 then open browser on `http://localhost:3003`
 
@@ -73,11 +71,10 @@ The default admin account for Grafana is `root/root`, anonymous dashboard browsi
 
 ##### Inside grafana:
 
-- Add influxdb source (`http://localhost:8086`), database `covid19`
-- Add influxdb shifted series (`http://localhost:8089`), database `covid19` (name: `InfluxDB-Shifted` as naming convention to use existing dashboards without changes.)
+- The latest dashboard should be updated. 
+- The sources should be created.
 
-Import a dashboard from contrib directory
-Navigate data.
+Open an issue if it doesn't work.
 
 
 #### Series LAG and different timeranges overlap:
