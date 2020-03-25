@@ -43,7 +43,8 @@ class DPCItaGithubPointsService:
         for row in rows:
             if 'data' == row[0]:
                 continue
-            updated_at = datetime.datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S')
+            dt_format = '%Y-%m-%dT%H:%M:%S' if 'T' in row[0] else '%Y-%m-%d %H:%M:%S'
+            updated_at = datetime.datetime.strptime(row[0], dt_format)
             if min_timestamp and updated_at < datetime.datetime.fromtimestamp(min_timestamp):
                 continue
             point = CovidPoint(
@@ -72,7 +73,8 @@ class DPCItaGithubPointsService:
         data = self._fetch_data()
         _csv = self._parse_csv(data)
         try:
-            dt = datetime.datetime.strptime(_csv[-1][0], '%Y-%m-%d %H:%M:%S')
+            dt_format = '%Y-%m-%dT%H:%M:%S' if 'T' in _csv[-1][0] else '%Y-%m-%d %H:%M:%S'
+            dt = datetime.datetime.strptime(_csv[-1][0], dt_format)
         except Exception as e:
             print(e)
             dt = None

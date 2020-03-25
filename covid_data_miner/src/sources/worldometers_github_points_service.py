@@ -126,7 +126,7 @@ class WorldometersGithubPointsService:
         # Country/Other, TotalCases, NewCases, TotalDeaths, NewDeaths, TotalRecovered,
         #                          ActiveCases, Serious/Critical, Tot\xa0Cases/1M pop
         h = rows[0]
-        assert len(rows[0]) in [9]
+        assert len(rows[0]) in [9, 10]
         assert all([
             'ountry' in h[0], 'otal' in h[1], 'ases' in h[1],
             'otal' in h[3], 'eath' in h[3], 'overed' in h[5], 'otal' in h[5],
