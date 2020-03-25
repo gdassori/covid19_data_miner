@@ -4,7 +4,6 @@ import csv
 import os
 
 from tools.rki_points_service import RKIPointsService
-from tools.worldometers_web_points_service import WorldometersWebPointsService
 import sys
 import string
 
