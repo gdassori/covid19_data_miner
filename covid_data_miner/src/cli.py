@@ -346,6 +346,7 @@ def update_projection(name, no_cascade):
 def update_all(no_cascade):
     configured = context.get_configured_sources()
     for name in configured.keys():
+        click.echo('Updating %s' % name)
         response = manager.check_source_updates_available(name)
         if not response['updates_available']:
             click.echo('Local data updated for %s, last update %s' % (name, response['remote_last']))

@@ -32,8 +32,12 @@ class CovidTrackingUSAPointsService:
         rows = self._parse_csv(data)
         for row in rows:
             if 'date' == row[0].strip():
+                assert row == [
+                    'date', 'state', 'positive', 'negative',
+                    'pending', 'hospitalized', 'death', 'total', 'dateChecked', 'totalTestResults'
+                ], row
                 continue
-            updated_at = datetime.datetime.strptime(row[7], '%Y-%m-%dT%H:%M:%SZ')
+            updated_at = datetime.datetime.strptime(row[8], '%Y-%m-%dT%H:%M:%SZ')
             if min_timestamp and updated_at < datetime.datetime.fromtimestamp(min_timestamp):
                 continue
             point = CovidPoint(
@@ -44,11 +48,11 @@ class CovidTrackingUSAPointsService:
                 region=row[1].replace("'", "."),
                 city="",
                 confirmed_cumulative=int(row[2] or 0),
-                death_cumulative=int(row[5] or 0),
+                death_cumulative=int(row[6] or 0),
                 recovered_cumulative=0,
-                hospitalized_cumulative=0,
+                hospitalized_cumulative=int(row[5] or 0),
                 severe_cumulative=0,
-                tests_cumulative=int(row[6] or 0)
+                tests_cumulative=int(row[9] or 0)
             )
             res.append(point)
         return res
@@ -62,7 +66,7 @@ class CovidTrackingUSAPointsService:
         data = self._fetch_data()
         _csv = self._parse_csv(data)
         try:
-            dt = datetime.datetime.strptime(_csv[1][7], '%Y-%m-%dT%H:%M:%SZ')
+            dt = datetime.datetime.strptime(_csv[1][8], '%Y-%m-%dT%H:%M:%SZ')
         except Exception as e:
             print(e)
             dt = None
