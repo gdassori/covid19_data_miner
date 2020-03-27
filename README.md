@@ -32,11 +32,13 @@ Multiple sources selection
 - auto import default dashboards in grafana.
 - auto configure sources in grafana. 
 
-## Howto 
+## First run 
 
 - install docker
-- `./runcovid.sh`
-- docker exec -ti covid19 covid19 --help
+- checkout git repository
+- run `./runcovid.sh`
+- `docker exec -ti covid19 bake_grafana` # Only the first time, setup the grafana dashboard.
+- `docker exec -ti covid19 covid19 --help`
 
 Open your browser on `http://localhost:3003` and import the dashboard under `contrib/`
 
