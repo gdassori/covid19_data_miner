@@ -32,10 +32,14 @@ class CovidTrackingUSAPointsService:
         rows = self._parse_csv(data)
         for row in rows:
             if 'date' == row[0].strip():
-                assert row == [
-                    'date', 'state', 'positive', 'negative',
-                    'pending', 'hospitalized', 'death', 'total', 'dateChecked', 'totalTestResults'
-                ], row
+                if row not in [
+                    [
+                        'date', 'state', 'positive', 'negative', 'pending', 'hospitalized', 'death', 'total', 'dateChecked', 'totalTestResults',
+                        'deathIncrease', 'hospitalizedIncrease', 'negativeIncrease', 'positiveIncrease', 'totalTestResultsIncrease'
+                    ],
+                    ['date', 'state', 'positive', 'negative', 'pending', 'hospitalized', 'death', 'total', 'dateChecked', 'totalTestResults']
+                ]:
+                    raise ValueError(row)
                 continue
             updated_at = datetime.datetime.strptime(row[8], '%Y-%m-%dT%H:%M:%SZ')
             if min_timestamp and updated_at < datetime.datetime.fromtimestamp(min_timestamp):
