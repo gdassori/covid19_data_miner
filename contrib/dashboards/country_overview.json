@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1584787086357,
+  "iteration": 1585329886776,
   "links": [],
   "panels": [
     {
@@ -842,8 +842,8 @@
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
-        "h": 12,
-        "w": 11,
+        "h": 14,
+        "w": 12,
         "x": 0,
         "y": 3
       },
@@ -991,25 +991,31 @@
     },
     {
       "aliasColors": {
-        "Death Today": "dark-blue",
-        "Death Total": "semi-dark-red"
+        "3% death rate to severes ~10%": "rgba(236, 211, 81, 0.58)",
+        "Deaths": "rgb(0, 0, 0)",
+        "ICU": "dark-red",
+        "Projection": "rgba(250, 100, 0, 0.46)",
+        "Recovered": "semi-dark-blue",
+        "Severe Today": "dark-blue",
+        "Severe Total": "dark-orange"
       },
       "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "fill": 0,
+      "fill": 7,
       "fillGradient": 0,
       "gridPos": {
-        "h": 12,
-        "w": 6,
-        "x": 11,
+        "h": 14,
+        "w": 12,
+        "x": 12,
         "y": 3
       },
       "hiddenSeries": false,
-      "id": 6,
+      "id": 21,
+      "interval": "",
       "legend": {
-        "alignAsTable": true,
+        "alignAsTable": false,
         "avg": false,
         "current": true,
         "max": false,
@@ -1020,34 +1026,27 @@
       },
       "lines": true,
       "linewidth": 1,
-      "nullPointMode": "null",
+      "nullPointMode": "connected",
       "options": {
         "dataLinks": []
       },
-      "percentage": false,
+      "percentage": true,
       "pointradius": 4,
-      "points": true,
+      "points": false,
       "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "Recovered Today",
-          "bars": true,
-          "color": "rgba(130, 89, 8, 0.5)",
-          "lines": false,
-          "points": false
-        }
-      ],
+      "seriesOverrides": [],
       "spaceLength": 10,
-      "stack": false,
+      "stack": true,
       "steppedLine": false,
       "targets": [
         {
-          "alias": "Recovered Total",
+          "alias": "Recovered",
           "groupBy": [],
+          "hide": false,
           "measurement": "summary_worldometers_country_86400",
           "orderByTime": "ASC",
           "policy": "default",
-          "refId": "E",
+          "refId": "A",
           "resultFormat": "time_series",
           "select": [
             [
@@ -1056,12 +1055,6 @@
                   "recovered_cumulative"
                 ],
                 "type": "field"
-              },
-              {
-                "params": [
-                  "Severe"
-                ],
-                "type": "alias"
               }
             ]
           ],
@@ -1074,144 +1067,15 @@
           ]
         },
         {
-          "alias": "Recovered Today",
+          "alias": "Non severe",
           "groupBy": [],
+          "hide": false,
           "measurement": "summary_worldometers_country_86400",
           "orderByTime": "ASC",
           "policy": "default",
-          "refId": "F",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "recovered_diff"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [
-                  "Severe"
-                ],
-                "type": "alias"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "$country"
-            }
-          ]
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Recovered",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 2,
-          "max": null,
-          "min": "-1",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {
-        "Death Today": "dark-blue",
-        "Death Total": "semi-dark-red"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "fill": 0,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 12,
-        "w": 7,
-        "x": 17,
-        "y": 3
-      },
-      "hiddenSeries": false,
-      "id": 5,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 4,
-      "points": true,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "Death Today",
-          "bars": true,
-          "color": "rgba(163, 82, 204, 0.31)",
-          "lines": false,
-          "points": false
-        },
-        {
-          "alias": "_",
-          "hiddenSeries": true,
-          "hideTooltip": true,
-          "legend": false
-        }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "Death Total",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "E",
+          "query": "SELECT p from (SELECT \"confirmed_cumulative\" - \"severe_cumulative\" - \"death_cumulative\" - \"recovered_cumulative\" as p FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = '$country') AND $timeFilter) WHERE p > 0",
+          "rawQuery": true,
+          "refId": "D",
           "resultFormat": "time_series",
           "select": [
             [
@@ -1220,12 +1084,6 @@
                   "death_cumulative"
                 ],
                 "type": "field"
-              },
-              {
-                "params": [
-                  "Severe"
-                ],
-                "type": "alias"
               }
             ]
           ],
@@ -1234,30 +1092,33 @@
               "key": "country",
               "operator": "=",
               "value": "$country"
+            },
+            {
+              "condition": "AND",
+              "key": "severe_diff",
+              "operator": ">",
+              "value": "0"
             }
           ]
         },
         {
-          "alias": "Death Today",
+          "alias": "ICU",
           "groupBy": [],
+          "hide": false,
           "measurement": "summary_worldometers_country_86400",
           "orderByTime": "ASC",
           "policy": "default",
-          "refId": "F",
+          "query": "SELECT \"severe_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = '$country' AND \"severe_diff\" > 0) AND $timeFilter AND \"severe_cumulative\" > 0",
+          "rawQuery": false,
+          "refId": "G",
           "resultFormat": "time_series",
           "select": [
             [
               {
                 "params": [
-                  "death_diff"
+                  "severe_cumulative"
                 ],
                 "type": "field"
-              },
-              {
-                "params": [
-                  "Severe"
-                ],
-                "type": "alias"
               }
             ]
           ],
@@ -1266,6 +1127,45 @@
               "key": "country",
               "operator": "=",
               "value": "$country"
+            },
+            {
+              "condition": "AND",
+              "key": "severe_cumulative",
+              "operator": ">",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "alias": "Deaths",
+          "groupBy": [],
+          "hide": false,
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            },
+            {
+              "condition": "AND",
+              "key": "death_cumulative",
+              "operator": ">",
+              "value": "0"
             }
           ]
         }
@@ -1274,7 +1174,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Deaths",
+      "title": "Daily GIMBE-Style cumulative",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1290,11 +1190,12 @@
       },
       "yaxes": [
         {
+          "decimals": null,
           "format": "short",
-          "label": null,
-          "logBase": 2,
+          "label": "",
+          "logBase": 1,
           "max": null,
-          "min": "-1",
+          "min": "-10",
           "show": true
         },
         {
@@ -1302,8 +1203,8 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": null,
-          "show": true
+          "min": "1",
+          "show": false
         }
       ],
       "yaxis": {
@@ -1330,7 +1231,7 @@
         "h": 11,
         "w": 11,
         "x": 0,
-        "y": 15
+        "y": 17
       },
       "hiddenSeries": false,
       "id": 4,
@@ -1517,6 +1418,524 @@
       }
     },
     {
+      "aliasColors": {
+        "Death Today": "dark-blue",
+        "Death Total": "semi-dark-red"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 6,
+        "x": 11,
+        "y": 17
+      },
+      "hiddenSeries": false,
+      "id": 6,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 4,
+      "points": true,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "Recovered Today",
+          "bars": true,
+          "color": "rgba(130, 89, 8, 0.5)",
+          "lines": false,
+          "points": false
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "Recovered Total",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "E",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "recovered_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        },
+        {
+          "alias": "Recovered Today",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "F",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "recovered_diff"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Recovered",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 2,
+          "max": null,
+          "min": "-1",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {
+        "Death Today": "dark-blue",
+        "Death Total": "semi-dark-red"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 7,
+        "x": 17,
+        "y": 17
+      },
+      "hiddenSeries": false,
+      "id": 5,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 4,
+      "points": true,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "Death Today",
+          "bars": true,
+          "color": "rgba(163, 82, 204, 0.31)",
+          "lines": false,
+          "points": false
+        },
+        {
+          "alias": "_",
+          "hiddenSeries": true,
+          "hideTooltip": true,
+          "legend": false
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "Death Total",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "E",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        },
+        {
+          "alias": "Death Today",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "F",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_diff"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Deaths",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 2,
+          "max": null,
+          "min": "-1",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {
+        "Conf w/ Severe 15%": "green",
+        "Conf w/Let.2%": "rgba(31, 96, 196, 0.22)",
+        "Conf w/Let.3%": "light-blue",
+        "Confirmed Incr.": "dark-orange",
+        "Confirmed Total": "dark-blue"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "description": "Projection w/ a 3% let.",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 11,
+        "x": 0,
+        "y": 28
+      },
+      "hiddenSeries": false,
+      "id": 7,
+      "interval": "",
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 4,
+      "points": true,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "Confirmed Incr.",
+          "bars": true,
+          "lines": false,
+          "points": false
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "Confirmed Total",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        },
+        {
+          "alias": "Confirmed Incr.",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_diff"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        },
+        {
+          "alias": "Conf w/Let.1%",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "*100"
+                ],
+                "type": "math"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "$country"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Contagions w/ 1% CFR VS Detected",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": "-1",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
       "columns": [],
       "datasource": null,
       "fontSize": "100%",
@@ -1524,7 +1943,7 @@
         "h": 29,
         "w": 13,
         "x": 11,
-        "y": 15
+        "y": 29
       },
       "id": 3,
       "interval": "",
@@ -1763,202 +2182,6 @@
     },
     {
       "aliasColors": {
-        "Conf w/ Severe 15%": "green",
-        "Conf w/Let.2%": "rgba(31, 96, 196, 0.22)",
-        "Conf w/Let.3%": "light-blue",
-        "Confirmed Incr.": "dark-orange",
-        "Confirmed Total": "dark-blue"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "description": "Projection w/ a 3% let.",
-      "fill": 0,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 12,
-        "w": 11,
-        "x": 0,
-        "y": 26
-      },
-      "hiddenSeries": false,
-      "id": 7,
-      "interval": "",
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 4,
-      "points": true,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "Confirmed Incr.",
-          "bars": true,
-          "lines": false,
-          "points": false
-        }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "Confirmed Total",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [
-                  "Severe"
-                ],
-                "type": "alias"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "$country"
-            }
-          ]
-        },
-        {
-          "alias": "Confirmed Incr.",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_diff"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [
-                  "Severe"
-                ],
-                "type": "alias"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "$country"
-            }
-          ]
-        },
-        {
-          "alias": "Conf w/Let.1%",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "death_cumulative"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [
-                  "*100"
-                ],
-                "type": "math"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "$country"
-            }
-          ]
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Contagions w/ 1% CFR VS Detected",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": "",
-          "logBase": 1,
-          "max": null,
-          "min": "-1",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {
         "3% death rate to severes ~10%": "rgba(236, 211, 81, 0.58)",
         "Projection": "rgba(250, 100, 0, 0.46)",
         "Severe Today": "dark-blue",
@@ -1974,7 +2197,7 @@
         "h": 13,
         "w": 11,
         "x": 0,
-        "y": 38
+        "y": 40
       },
       "hiddenSeries": false,
       "id": 2,
@@ -2148,7 +2371,7 @@
         "h": 3,
         "w": 2,
         "x": 0,
-        "y": 51
+        "y": 53
       },
       "id": 19,
       "mode": "html",
@@ -2160,6 +2383,7 @@
       "type": "text"
     }
   ],
+  "refresh": false,
   "schemaVersion": 22,
   "style": "dark",
   "tags": [],
@@ -3025,5 +3249,5 @@
   "timezone": "",
   "title": "Country Overview",
   "uid": "Juf9Eu_Zz",
-  "version": 40
+  "version": 48
 }

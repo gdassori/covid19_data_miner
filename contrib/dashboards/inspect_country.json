@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 3,
-  "iteration": 1584787042397,
+  "iteration": 1585329896672,
   "links": [],
   "panels": [
     {
@@ -281,7 +281,7 @@
           "measurement": "worldometers",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT \"severe_cumulative\"  FROM /^$measurement$/ WHERE (\"region\" =~ /^$region$/)  ORDER BY time DESC LIMIT 1",
+          "query": "SELECT \"severe_cumulative\"  FROM /^$measurement$/ WHERE (\"region\" =~ /^$region$/)  AND $timeFilter  ORDER BY time DESC LIMIT 1",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -502,8 +502,8 @@
       "description": "",
       "gridPos": {
         "h": 3,
-        "w": 4,
-        "x": 16,
+        "w": 3,
+        "x": 18,
         "y": 3
       },
       "id": 33,
@@ -596,7 +596,7 @@
       "gridPos": {
         "h": 3,
         "w": 2,
-        "x": 20,
+        "x": 21,
         "y": 3
       },
       "id": 37,
@@ -647,7 +647,7 @@
           "measurement": "worldometers",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "select 100* mean(a) / mean(b) from (SELECT \"severe_cumulative\" as a  FROM /^$measurement$/ WHERE (\"region\" =~ /^$region$/)  ORDER BY time DESC LIMIT 1), (SELECT (\"confirmed_cumulative\" - \"death_cumulative\" - \"recovered_cumulative\") as b  FROM /^$measurement$/ WHERE (\"region\" =~ /^$region$/) ORDER BY time DESC LIMIT 1) order by time desc;\n",
+          "query": "select 100*mean(severe) / mean(active_cumulative) from (select sum(severe_cumulative) as severe from (select last(severe_cumulative) as severe_cumulative from summary_dpc_ita_region_86400 where $timeFilter group by region)), (select sum(l1) - sum(l2) - sum(l3) as active_cumulative from (select last(confirmed_cumulative) as l1, last(death_cumulative) as l2, last(recovered_cumulative) as l3 from summary_dpc_ita_region_86400 group by region)) order by time desc\n",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1140,8 +1140,8 @@
       "description": "",
       "gridPos": {
         "h": 3,
-        "w": 4,
-        "x": 16,
+        "w": 3,
+        "x": 18,
         "y": 6
       },
       "id": 35,
@@ -1234,7 +1234,7 @@
       "gridPos": {
         "h": 3,
         "w": 2,
-        "x": 20,
+        "x": 21,
         "y": 6
       },
       "id": 36,
@@ -1289,7 +1289,7 @@
           "measurement": "worldometers",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT 100*\"death_cumulative\" / \"confirmed_cumulative\"  FROM /^$measurement$/ WHERE (\"region\" =~ /^$region$/) ORDER BY time DESC LIMIT 1",
+          "query": "select 100*sum(death_cumulative) / sum(confirmed_cumulative) from (SELECT \"death_cumulative\", \"confirmed_cumulative\"  FROM /^$measurement$/ WHERE $timeFilter GROUP by \"region\" ORDER BY time DESC) order by time desc;\n",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1683,8 +1683,8 @@
       "description": "",
       "gridPos": {
         "h": 3,
-        "w": 4,
-        "x": 16,
+        "w": 3,
+        "x": 18,
         "y": 9
       },
       "id": 34,
@@ -1772,255 +1772,45 @@
       "type": "stat"
     },
     {
-      "aliasColors": {
-        "Conf w/ Severe 15%": "green",
-        "Conf w/Let.2%": "rgba(31, 96, 196, 0.22)",
-        "Conf w/Let.3%": "light-blue",
-        "Confirmed Incr.": "dark-orange",
-        "Confirmed Total": "dark-blue"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": null,
-      "description": "Projection w/ a 3% let.",
-      "fill": 0,
-      "fillGradient": 0,
+      "description": "Deaths \\ Contagions * 100",
       "gridPos": {
-        "h": 17,
-        "w": 12,
-        "x": 0,
-        "y": 12
+        "h": 3,
+        "w": 2,
+        "x": 21,
+        "y": 9
       },
-      "hiddenSeries": false,
-      "id": 7,
-      "interval": "",
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
+      "id": 38,
       "options": {
-        "dataLinks": []
+        "colorMode": "value",
+        "fieldOptions": {
+          "calcs": [
+            "last"
+          ],
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "semi-dark-green",
+                  "value": null
+                }
+              ]
+            },
+            "title": "",
+            "unit": "percent"
+          },
+          "overrides": [],
+          "values": false
+        },
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto"
       },
-      "percentage": false,
-      "pointradius": 4,
-      "points": true,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "Confirmed Incr.",
-          "bars": true,
-          "lines": false,
-          "points": false
-        }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "6.6.2",
       "targets": [
         {
-          "alias": "Confirmed Total",
-          "groupBy": [],
-          "measurement": "/^$measurement$/",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [
-                  "Severe"
-                ],
-                "type": "alias"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "region",
-              "operator": "=~",
-              "value": "/^$region$/"
-            }
-          ]
-        },
-        {
-          "alias": "Confirmed Incr.",
-          "groupBy": [],
-          "measurement": "/^$measurement$/",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_diff"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [
-                  "Severe"
-                ],
-                "type": "alias"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "region",
-              "operator": "=~",
-              "value": "/^$region$/"
-            }
-          ]
-        },
-        {
-          "alias": "Conf w/Let.1%",
-          "groupBy": [],
-          "measurement": "/^$measurement$/",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "death_cumulative"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [
-                  "*100"
-                ],
-                "type": "math"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "region",
-              "operator": "=~",
-              "value": "/^$region$/"
-            }
-          ]
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Contagions w/ 1% CFR VS Detected",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": "",
-          "logBase": 1,
-          "max": null,
-          "min": "-1",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {
-        "Abruzzo": "semi-dark-yellow",
-        "Conf w/ Severe 15%": "green",
-        "Conf w/Let.2%": "rgba(31, 96, 196, 0.22)",
-        "Conf w/Let.3%": "light-blue",
-        "Confirmed Incr.": "dark-orange",
-        "Confirmed Total": "dark-blue"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "description": "",
-      "fill": 0,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 17,
-        "w": 12,
-        "x": 12,
-        "y": 12
-      },
-      "hiddenSeries": false,
-      "id": 23,
-      "interval": "",
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": false,
-        "max": true,
-        "min": false,
-        "rightSide": true,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 4,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "$tag_region",
           "groupBy": [
             {
               "params": [
@@ -2030,21 +1820,15 @@
             },
             {
               "params": [
-                "region"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "previous"
+                "null"
               ],
               "type": "fill"
             }
           ],
-          "measurement": "/^$measurement$/",
+          "measurement": "worldometers",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"confirmed_cumulative\") FROM /^$measurement$/ WHERE $timeFilter GROUP BY time($__interval), \"region\" fill(linear)",
+          "query": "select 100*sum(recovered_cumulative) / sum(confirmed_cumulative) from (SELECT \"recovered_cumulative\", \"confirmed_cumulative\"  FROM /^$measurement$/  GROUP by \"region\" ORDER BY time DESC) order by time desc;\n",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -2062,49 +1846,19 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=~",
+              "value": "/^$country$/"
+            }
+          ]
         }
       ],
-      "thresholds": [],
       "timeFrom": null,
-      "timeRegions": [],
       "timeShift": null,
-      "title": "Confirmed cumulative: $measurement",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "locale",
-          "label": "",
-          "logBase": 2,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "title": "Recovered $country",
+      "type": "stat"
     },
     {
       "columns": [],
@@ -2114,7 +1868,7 @@
         "h": 17,
         "w": 12,
         "x": 0,
-        "y": 29
+        "y": 12
       },
       "id": 3,
       "interval": "",
@@ -2417,83 +2171,56 @@
       "type": "table"
     },
     {
-      "columns": [],
+      "aliasColors": {
+        "Abruzzo": "semi-dark-yellow",
+        "Conf w/ Severe 15%": "green",
+        "Conf w/Let.2%": "rgba(31, 96, 196, 0.22)",
+        "Conf w/Let.3%": "light-blue",
+        "Confirmed Incr.": "dark-orange",
+        "Confirmed Total": "dark-blue"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
       "datasource": null,
       "description": "",
-      "fontSize": "100%",
+      "fill": 0,
+      "fillGradient": 0,
       "gridPos": {
         "h": 17,
         "w": 12,
         "x": 12,
-        "y": 29
+        "y": 12
       },
-      "id": 24,
+      "hiddenSeries": false,
+      "id": 40,
+      "interval": "1d",
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": true,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
       "links": [],
-      "options": {},
-      "pageSize": null,
-      "showHeader": true,
-      "sort": {
-        "col": 2,
-        "desc": true
+      "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
       },
-      "styles": [
-        {
-          "alias": "Last update",
-          "align": "auto",
-          "dateFormat": "YYYY-MM-DD",
-          "pattern": "Time",
-          "type": "hidden"
-        },
-        {
-          "alias": "Confirmed deaths",
-          "align": "auto",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": null,
-          "mappingType": 1,
-          "pattern": "last_1",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "Region/State",
-          "align": "left",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "decimals": null,
-          "pattern": "region",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "Detected cases",
-          "align": "auto",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": null,
-          "mappingType": 1,
-          "pattern": "last",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        }
-      ],
+      "percentage": false,
+      "pointradius": 4,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
       "targets": [
         {
           "alias": "$tag_region",
@@ -2520,10 +2247,10 @@
           "measurement": "/^$measurement$/",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT last(\"confirmed_cumulative\"), last(\"death_cumulative\") FROM /^$measurement$/ WHERE $timeFilter GROUP BY \"region\" fill(linear) limit 1",
+          "query": "SELECT mean(\"tests_diff\") FROM /^$measurement$/ WHERE $timeFilter AND tests_diff > 0 GROUP BY time($__interval), \"region\" fill(previous)",
           "rawQuery": true,
           "refId": "A",
-          "resultFormat": "table",
+          "resultFormat": "time_series",
           "select": [
             [
               {
@@ -2541,11 +2268,413 @@
           "tags": []
         }
       ],
+      "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
-      "title": "Confirmed cumulative: $measurement",
-      "transform": "table",
-      "type": "table"
+      "title": "Daily tests: $country",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "locale",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {
+        "Conf w/ Severe 15%": "green",
+        "Conf w/Let.2%": "rgba(31, 96, 196, 0.22)",
+        "Conf w/Let.3%": "light-blue",
+        "Confirmed Incr.": "dark-orange",
+        "Confirmed Total": "dark-blue"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "description": "Projection w/ a 3% let.",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 17,
+        "w": 12,
+        "x": 0,
+        "y": 29
+      },
+      "hiddenSeries": false,
+      "id": 7,
+      "interval": "",
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 4,
+      "points": true,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "Confirmed Incr.",
+          "bars": true,
+          "lines": false,
+          "points": false
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "Confirmed Total",
+          "groupBy": [],
+          "measurement": "/^$measurement$/",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "region",
+              "operator": "=~",
+              "value": "/^$region$/"
+            }
+          ]
+        },
+        {
+          "alias": "Confirmed Incr.",
+          "groupBy": [],
+          "measurement": "/^$measurement$/",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_diff"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "Severe"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "region",
+              "operator": "=~",
+              "value": "/^$region$/"
+            }
+          ]
+        },
+        {
+          "alias": "Conf w/Let.1%",
+          "groupBy": [],
+          "measurement": "/^$measurement$/",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "*100"
+                ],
+                "type": "math"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "region",
+              "operator": "=~",
+              "value": "/^$region$/"
+            }
+          ]
+        },
+        {
+          "alias": "Conf w/Let.0.4%",
+          "groupBy": [],
+          "measurement": "/^$measurement$/",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "D",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "*40"
+                ],
+                "type": "math"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "region",
+              "operator": "=~",
+              "value": "/^$region$/"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Contagions w/ 1% CFR VS Detected",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": "-1",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {
+        "Abruzzo": "semi-dark-yellow",
+        "Conf w/ Severe 15%": "green",
+        "Conf w/Let.2%": "rgba(31, 96, 196, 0.22)",
+        "Conf w/Let.3%": "light-blue",
+        "Confirmed Incr.": "dark-orange",
+        "Confirmed Total": "dark-blue"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "description": "",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 17,
+        "w": 12,
+        "x": 12,
+        "y": 29
+      },
+      "hiddenSeries": false,
+      "id": 39,
+      "interval": "1d",
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": true,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 4,
+      "points": true,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "$tag_region",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "region"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "previous"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "/^$measurement$/",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"severe_diff\") FROM /^$measurement$/ WHERE $timeFilter GROUP BY time($__interval), \"region\" ",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Daily ICU: $country",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "locale",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "aliasColors": {
@@ -2899,6 +3028,145 @@
     },
     {
       "aliasColors": {
+        "Abruzzo": "semi-dark-yellow",
+        "Conf w/ Severe 15%": "green",
+        "Conf w/Let.2%": "rgba(31, 96, 196, 0.22)",
+        "Conf w/Let.3%": "light-blue",
+        "Confirmed Incr.": "dark-orange",
+        "Confirmed Total": "dark-blue"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "description": "",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 17,
+        "w": 12,
+        "x": 12,
+        "y": 46
+      },
+      "hiddenSeries": false,
+      "id": 23,
+      "interval": "1d",
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": true,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 4,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "$tag_region",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "region"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "previous"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "/^$measurement$/",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"confirmed_diff\") FROM /^$measurement$/ WHERE $timeFilter AND \"confirmed_diff\" > 0 GROUP BY time($__interval), \"region\" fill(previous)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Detected today: $country",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "locale",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {
         "3% death rate to severes ~10%": "rgba(236, 211, 81, 0.58)",
         "Death": "semi-dark-red",
         "ICU": "semi-dark-yellow",
@@ -3039,6 +3307,137 @@
         "align": false,
         "alignLevel": null
       }
+    },
+    {
+      "columns": [],
+      "datasource": null,
+      "description": "",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 17,
+        "w": 12,
+        "x": 12,
+        "y": 63
+      },
+      "id": 24,
+      "links": [],
+      "options": {},
+      "pageSize": null,
+      "showHeader": true,
+      "sort": {
+        "col": 2,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "Last update",
+          "align": "auto",
+          "dateFormat": "YYYY-MM-DD",
+          "pattern": "Time",
+          "type": "hidden"
+        },
+        {
+          "alias": "Confirmed deaths",
+          "align": "auto",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": null,
+          "mappingType": 1,
+          "pattern": "last_1",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        },
+        {
+          "alias": "Region/State",
+          "align": "left",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": null,
+          "pattern": "region",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        },
+        {
+          "alias": "Detected cases",
+          "align": "auto",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": null,
+          "mappingType": 1,
+          "pattern": "last",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "alias": "$tag_region",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "region"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "previous"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "/^$measurement$/",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT last(\"confirmed_cumulative\"), last(\"death_cumulative\") FROM /^$measurement$/ WHERE $timeFilter GROUP BY \"region\" fill(linear) limit 1",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Confirmed cumulative: $measurement",
+      "transform": "table",
+      "type": "table"
     },
     {
       "aliasColors": {
@@ -3458,8 +3857,9 @@
       {
         "allValue": null,
         "current": {
-          "text": "summary_covidtracking_usa_region_86400",
-          "value": "summary_covidtracking_usa_region_86400"
+          "selected": true,
+          "text": "summary_dpc_ita_region_86400",
+          "value": "summary_dpc_ita_region_86400"
         },
         "datasource": "InfluxDB",
         "definition": "show measurements",
@@ -3483,8 +3883,8 @@
       {
         "allValue": null,
         "current": {
-          "text": "USA",
-          "value": "USA"
+          "text": "Italy",
+          "value": "Italy"
         },
         "datasource": "InfluxDB",
         "definition": "select distinct(country) from (select country, confirmed_cumulative as c from /^$measurement$/) ;",
@@ -3508,8 +3908,8 @@
       {
         "allValue": null,
         "current": {
-          "text": "CA",
-          "value": "CA"
+          "text": "Lombardia",
+          "value": "Lombardia"
         },
         "datasource": "InfluxDB",
         "definition": "select distinct(region) from (select region, confirmed_cumulative as c from /^$measurement$/) ;",
@@ -3553,5 +3953,5 @@
   "timezone": "utc",
   "title": "Inspect country",
   "uid": "Juf9Eu_Za",
-  "version": 47
+  "version": 65
 }

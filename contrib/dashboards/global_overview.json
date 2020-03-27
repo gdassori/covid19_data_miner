@@ -67,40 +67,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "France",
+          "alias": "Italy",
           "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "France"
-            },
-            {
-              "condition": "AND",
-              "key": "confirmed_diff",
-              "operator": ">",
-              "value": "0"
-            }
-          ]
-        },
-        {
-          "alias": "Italy -8 days",
-          "groupBy": [],
+          "hide": false,
           "measurement": "summary_worldometers_country_86400",
           "orderByTime": "ASC",
           "policy": "default",
@@ -110,13 +79,13 @@
             [
               {
                 "params": [
-                  "confirmed_cumulative"
+                  "death_cumulative"
                 ],
                 "type": "field"
               },
               {
                 "params": [
-                  "shift_8_days"
+                  "shift_14_days"
                 ],
                 "type": "alias"
               }
@@ -137,18 +106,18 @@
           ]
         },
         {
-          "alias": "Germany",
+          "alias": "UK",
           "groupBy": [],
           "measurement": "summary_worldometers_country_86400",
           "orderByTime": "ASC",
           "policy": "default",
-          "refId": "A",
+          "refId": "G",
           "resultFormat": "time_series",
           "select": [
             [
               {
                 "params": [
-                  "confirmed_cumulative"
+                  "death_cumulative"
                 ],
                 "type": "field"
               }
@@ -158,94 +127,7 @@
             {
               "key": "country",
               "operator": "=",
-              "value": "Germany"
-            },
-            {
-              "condition": "AND",
-              "key": "confirmed_diff",
-              "operator": ">",
-              "value": "0"
-            }
-          ]
-        },
-        {
-          "alias": "Spain",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "Spain"
-            },
-            {
-              "condition": "AND",
-              "key": "confirmed_diff",
-              "operator": ">",
-              "value": "0"
-            }
-          ]
-        },
-        {
-          "alias": "China -47d",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "E",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              },
-              {
-                "params": [
-                  "shift_47_days"
-                ],
-                "type": "alias"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "China"
+              "value": "UK"
             },
             {
               "condition": "AND",
@@ -257,36 +139,19 @@
         },
         {
           "alias": "USA",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
+          "groupBy": [],
           "measurement": "summary_worldometers_country_86400",
           "orderByTime": "ASC",
           "policy": "default",
-          "refId": "F",
+          "refId": "A",
           "resultFormat": "time_series",
           "select": [
             [
               {
                 "params": [
-                  "confirmed_cumulative"
+                  "death_cumulative"
                 ],
                 "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
               }
             ]
           ],
@@ -309,7 +174,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Overlaps: Europe | Italy Lag | China Lag | US",
+      "title": "Deaths : ITA -14D | UK | USA",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -327,7 +192,7 @@
         {
           "format": "short",
           "label": null,
-          "logBase": 1,
+          "logBase": 2,
           "max": null,
           "min": null,
           "show": true
@@ -348,18 +213,14 @@
     },
     {
       "aliasColors": {
-        "China": "semi-dark-red",
-        "Germany": "semi-dark-orange",
-        "Iran": "semi-dark-green",
-        "Italy": "dark-blue",
-        "UK": "rgb(48, 48, 145)",
-        "USA": "super-light-blue"
+        "Italy -9D": "semi-dark-yellow",
+        "Spain": "semi-dark-orange"
       },
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
-      "fill": 1,
+      "datasource": "InfluxDB-Shifted",
+      "fill": 0,
       "fillGradient": 0,
       "gridPos": {
         "h": 14,
@@ -368,72 +229,60 @@
         "y": 0
       },
       "hiddenSeries": false,
-      "hideTimeOverride": true,
-      "id": 24,
+      "id": 40,
+      "interval": "",
       "legend": {
         "alignAsTable": false,
         "avg": false,
-        "current": true,
-        "hideEmpty": false,
-        "hideZero": false,
+        "current": false,
         "max": false,
         "min": false,
         "rightSide": false,
         "show": true,
-        "sideWidth": null,
         "total": false,
-        "values": true
+        "values": false
       },
-      "lines": false,
+      "lines": true,
       "linewidth": 1,
-      "nullPointMode": "null",
+      "nullPointMode": "connected",
       "options": {
         "dataLinks": []
       },
       "percentage": false,
-      "pointradius": 2,
-      "points": false,
+      "pointradius": 3,
+      "points": true,
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "China",
-          "bars": false,
-          "fill": 1,
-          "lines": true,
-          "linewidth": 2,
-          "stack": false
-        },
-        {
-          "alias": "Italy"
+          "alias": "China -46days",
+          "linewidth": 2
         }
       ],
       "spaceLength": 10,
-      "stack": true,
+      "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "alias": "Italy",
-          "datasource": "InfluxDB",
+          "alias": "Italy -9D",
           "groupBy": [],
-          "hide": false,
           "measurement": "summary_worldometers_country_86400",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT \"confirmed_cumulative\"  - \"death_cumulative\" - \"recovered_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'Italy') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "A",
+          "refId": "D",
           "resultFormat": "time_series",
           "select": [
             [
               {
                 "params": [
-                  "confirmed_cumulative"
+                  "death_cumulative"
                 ],
                 "type": "field"
               },
               {
-                "params": [],
-                "type": "mean"
+                "params": [
+                  "shift_9_days"
+                ],
+                "type": "alias"
               }
             ]
           ],
@@ -442,25 +291,28 @@
               "key": "country",
               "operator": "=",
               "value": "Italy"
+            },
+            {
+              "condition": "AND",
+              "key": "confirmed_diff",
+              "operator": ">",
+              "value": "0"
             }
           ]
         },
         {
           "alias": "Spain",
-          "datasource": "InfluxDB",
           "groupBy": [],
           "measurement": "summary_worldometers_country_86400",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT \"confirmed_cumulative\"  - \"death_cumulative\" - \"recovered_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'Spain') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "B",
+          "refId": "G",
           "resultFormat": "time_series",
           "select": [
             [
               {
                 "params": [
-                  "confirmed_cumulative"
+                  "death_cumulative"
                 ],
                 "type": "field"
               }
@@ -471,238 +323,12 @@
               "key": "country",
               "operator": "=",
               "value": "Spain"
-            }
-          ]
-        },
-        {
-          "alias": "France",
-          "datasource": "InfluxDB",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT \"confirmed_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'France') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
+            },
             {
-              "key": "country",
-              "operator": "=",
-              "value": "France"
-            }
-          ]
-        },
-        {
-          "alias": "Germany",
-          "datasource": "InfluxDB",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT \"confirmed_cumulative\"  - \"death_cumulative\" - \"recovered_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'Germany') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "D",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "Germany"
-            }
-          ]
-        },
-        {
-          "alias": "USA",
-          "datasource": "InfluxDB",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT \"confirmed_cumulative\"  - \"death_cumulative\" - \"recovered_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'USA') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "E",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "USA"
-            }
-          ]
-        },
-        {
-          "alias": "UK",
-          "datasource": "InfluxDB",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT \"confirmed_cumulative\"  - \"death_cumulative\" - \"recovered_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'UK') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "F",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "UK"
-            }
-          ]
-        },
-        {
-          "alias": "Iran",
-          "datasource": "InfluxDB",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT \"confirmed_cumulative\"  - \"death_cumulative\" - \"recovered_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'Iran') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "I",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "Iran"
-            }
-          ]
-        },
-        {
-          "alias": "South Korea",
-          "datasource": "InfluxDB",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT \"confirmed_cumulative\"  - \"death_cumulative\" - \"recovered_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'South Korea') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "J",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "South Korea"
-            }
-          ]
-        },
-        {
-          "alias": "China",
-          "datasource": "InfluxDB",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT \"confirmed_cumulative\"  - \"death_cumulative\" - \"recovered_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'China') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "H",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "China"
-            }
-          ]
-        },
-        {
-          "alias": "USA",
-          "datasource": "InfluxDB",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT \"confirmed_cumulative\"  - \"death_cumulative\" - \"recovered_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'USA') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "G",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "USA"
+              "condition": "AND",
+              "key": "confirmed_diff",
+              "operator": ">",
+              "value": "0"
             }
           ]
         }
@@ -710,8 +336,8 @@
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
-      "timeShift": "20d",
-      "title": "Contagions Active",
+      "timeShift": null,
+      "title": "Deaths detected: ITA Shifted | ES",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -722,21 +348,21 @@
         "buckets": null,
         "mode": "time",
         "name": null,
-        "show": true,
+        "show": false,
         "values": []
       },
       "yaxes": [
         {
           "format": "short",
-          "label": "World",
-          "logBase": 1,
+          "label": null,
+          "logBase": 2,
           "max": null,
           "min": null,
           "show": true
         },
         {
           "format": "short",
-          "label": "China",
+          "label": null,
           "logBase": 1,
           "max": null,
           "min": null,
@@ -998,7 +624,7 @@
       "colorPrefix": false,
       "colorValue": false,
       "colors": [
-        "rgb(15, 87, 7)",
+        "rgb(10, 48, 105)",
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
@@ -1017,7 +643,7 @@
         "x": 20,
         "y": 4
       },
-      "id": 15,
+      "id": 17,
       "interval": null,
       "links": [],
       "mappingType": 1,
@@ -1037,7 +663,7 @@
       "options": {},
       "postfix": " ",
       "postfixFontSize": "80%",
-      "prefix": "Iran",
+      "prefix": "USA",
       "prefixFontSize": "120%",
       "rangeMaps": [
         {
@@ -1047,9 +673,9 @@
         }
       ],
       "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "fillColor": "rgba(196, 22, 42, 0.34)",
         "full": true,
-        "lineColor": "rgb(31, 120, 193)",
+        "lineColor": "#C4162A",
         "show": true,
         "ymax": null,
         "ymin": null
@@ -1094,7 +720,19 @@
             {
               "key": "country",
               "operator": "=",
-              "value": "Iran"
+              "value": "USA"
+            },
+            {
+              "condition": "OR",
+              "key": "country",
+              "operator": "=",
+              "value": "U.S."
+            },
+            {
+              "condition": "OR",
+              "key": "country",
+              "operator": "=",
+              "value": "United States"
             }
           ]
         }
@@ -1365,7 +1003,7 @@
       "colorPrefix": false,
       "colorValue": false,
       "colors": [
-        "rgb(10, 48, 105)",
+        "rgb(15, 87, 7)",
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
@@ -1384,7 +1022,7 @@
         "x": 20,
         "y": 10
       },
-      "id": 17,
+      "id": 15,
       "interval": null,
       "links": [],
       "mappingType": 1,
@@ -1404,7 +1042,7 @@
       "options": {},
       "postfix": " ",
       "postfixFontSize": "80%",
-      "prefix": "USA",
+      "prefix": "Iran",
       "prefixFontSize": "120%",
       "rangeMaps": [
         {
@@ -1414,9 +1052,9 @@
         }
       ],
       "sparkline": {
-        "fillColor": "rgba(196, 22, 42, 0.34)",
+        "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": true,
-        "lineColor": "#C4162A",
+        "lineColor": "rgb(31, 120, 193)",
         "show": true,
         "ymax": null,
         "ymin": null
@@ -1461,19 +1099,7 @@
             {
               "key": "country",
               "operator": "=",
-              "value": "USA"
-            },
-            {
-              "condition": "OR",
-              "key": "country",
-              "operator": "=",
-              "value": "U.S."
-            },
-            {
-              "condition": "OR",
-              "key": "country",
-              "operator": "=",
-              "value": "United States"
+              "value": "Iran"
             }
           ]
         }
@@ -1624,6 +1250,190 @@
         "UK": "rgb(48, 48, 145)",
         "USA": "super-light-blue"
       },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 14,
+        "w": 10,
+        "x": 0,
+        "y": 14
+      },
+      "hiddenSeries": false,
+      "hideTimeOverride": true,
+      "id": 32,
+      "interval": "1d",
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": true,
+        "hideEmpty": false,
+        "hideZero": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "sideWidth": null,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": true,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "China"
+        },
+        {
+          "alias": "Outside China"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "China",
+          "datasource": "InfluxDB",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"confirmed_cumulative\")  - mean(\"death_cumulative\") - mean(\"recovered_cumulative\") FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'China') AND $timeFilter GROUP BY time($interval) fill(linear)",
+          "rawQuery": true,
+          "refId": "H",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "China"
+            }
+          ]
+        },
+        {
+          "alias": "Outside China",
+          "datasource": "InfluxDB",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "previous"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "select asd from (SELECT sum(\"confirmed_cumulative\") - sum(\"recovered_cumulative\") - sum(\"death_cumulative\") as asd FROM \"summary_worldometers_country_86400\" WHERE (\"country\" != 'ttt') AND $timeFilter GROUP BY time($interval) fill(linear))",
+          "rawQuery": true,
+          "refId": "G",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "sum"
+              },
+              {
+                "params": [
+                  "- \"recovered_cumulative\""
+                ],
+                "type": "math"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "!=",
+              "value": "China"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": "20d",
+      "title": "Contagions Active",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "World",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": "China",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {
+        "China": "semi-dark-red",
+        "Germany": "semi-dark-orange",
+        "Iran": "semi-dark-green",
+        "Italy": "dark-blue",
+        "UK": "rgb(48, 48, 145)",
+        "USA": "super-light-blue"
+      },
       "bars": true,
       "dashLength": 10,
       "dashes": false,
@@ -1633,8 +1443,576 @@
       "gridPos": {
         "h": 14,
         "w": 10,
-        "x": 0,
+        "x": 10,
         "y": 14
+      },
+      "hiddenSeries": false,
+      "hideTimeOverride": true,
+      "id": 24,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": true,
+        "hideEmpty": false,
+        "hideZero": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "sideWidth": null,
+        "total": false,
+        "values": true
+      },
+      "lines": false,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "China",
+          "bars": false,
+          "fill": 1,
+          "lines": true,
+          "linewidth": 2,
+          "stack": false
+        },
+        {
+          "alias": "Italy"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "Italy",
+          "datasource": "InfluxDB",
+          "groupBy": [],
+          "hide": false,
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"confirmed_cumulative\"  - \"death_cumulative\" - \"recovered_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'Italy') AND $timeFilter",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "Italy"
+            }
+          ]
+        },
+        {
+          "alias": "Spain",
+          "datasource": "InfluxDB",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"confirmed_cumulative\"  - \"death_cumulative\" - \"recovered_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'Spain') AND $timeFilter",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "Spain"
+            }
+          ]
+        },
+        {
+          "alias": "France",
+          "datasource": "InfluxDB",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"confirmed_cumulative\"  - \"death_cumulative\" - \"recovered_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE  (\"country\" = 'France') AND $timeFilter",
+          "rawQuery": true,
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "France"
+            }
+          ]
+        },
+        {
+          "alias": "Germany",
+          "datasource": "InfluxDB",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"confirmed_cumulative\"  - \"death_cumulative\" - \"recovered_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'Germany') AND $timeFilter",
+          "rawQuery": true,
+          "refId": "D",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "Germany"
+            }
+          ]
+        },
+        {
+          "alias": "USA",
+          "datasource": "InfluxDB",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"confirmed_cumulative\"  - \"death_cumulative\" - \"recovered_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'USA') AND $timeFilter",
+          "rawQuery": true,
+          "refId": "E",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "USA"
+            }
+          ]
+        },
+        {
+          "alias": "UK",
+          "datasource": "InfluxDB",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"confirmed_cumulative\"  - \"death_cumulative\" - \"recovered_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'UK') AND $timeFilter",
+          "rawQuery": true,
+          "refId": "F",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "UK"
+            }
+          ]
+        },
+        {
+          "alias": "Iran",
+          "datasource": "InfluxDB",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"confirmed_cumulative\"  - \"death_cumulative\" - \"recovered_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'Iran') AND $timeFilter",
+          "rawQuery": true,
+          "refId": "I",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "Iran"
+            }
+          ]
+        },
+        {
+          "alias": "South Korea",
+          "datasource": "InfluxDB",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"confirmed_cumulative\"  - \"death_cumulative\" - \"recovered_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'South Korea') AND $timeFilter",
+          "rawQuery": true,
+          "refId": "J",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "South Korea"
+            }
+          ]
+        },
+        {
+          "alias": "China",
+          "datasource": "InfluxDB",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"confirmed_cumulative\"  - \"death_cumulative\" - \"recovered_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'China') AND $timeFilter",
+          "rawQuery": true,
+          "refId": "H",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "China"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": "20d",
+      "title": "Contagions Active",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "World",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": "China",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": true,
+      "colorPrefix": false,
+      "colorValue": false,
+      "colors": [
+        "rgb(87, 28, 36)",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": null,
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 4,
+        "x": 20,
+        "y": 14
+      },
+      "id": 14,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "options": {},
+      "postfix": " ",
+      "postfixFontSize": "80%",
+      "prefix": "U.K.",
+      "prefixFontSize": "120%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(224, 180, 0, 0.24)",
+        "full": true,
+        "lineColor": "#E0B400",
+        "show": true,
+        "ymax": null,
+        "ymin": null
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "worldometers",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "UK"
+            },
+            {
+              "condition": "OR",
+              "key": "country",
+              "operator": "=",
+              "value": "United Kingdom"
+            },
+            {
+              "condition": "OR",
+              "key": "country",
+              "operator": "=",
+              "value": "U.K."
+            },
+            {
+              "condition": "OR",
+              "key": "country",
+              "operator": "=",
+              "value": "UK"
+            }
+          ]
+        }
+      ],
+      "thresholds": "",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "",
+      "type": "singlestat",
+      "valueFontSize": "120%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "current"
+    },
+    {
+      "content": "###### **Covid19 Data Miner & Dashboard**\n- Open source: [Download](https://github.com/gdassori/covid19_data_miner) \n\n\n\n\n",
+      "datasource": null,
+      "description": "Covid19",
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 20,
+        "y": 16
+      },
+      "id": 31,
+      "mode": "markdown",
+      "options": {},
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Info",
+      "type": "text"
+    },
+    {
+      "aliasColors": {
+        "China": "semi-dark-red",
+        "Germany": "semi-dark-orange",
+        "Iran": "semi-dark-green",
+        "Italy": "dark-blue",
+        "UK": "rgb(48, 48, 145)",
+        "USA": "super-light-blue"
+      },
+      "bars": true,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 28
       },
       "hiddenSeries": false,
       "hideTimeOverride": true,
@@ -1668,7 +2046,7 @@
           "bars": false,
           "fill": 1,
           "lines": true,
-          "linewidth": 2,
+          "linewidth": 1,
           "nullPointMode": "connected",
           "stack": false,
           "steppedLine": true
@@ -1992,43 +2370,32 @@
       }
     },
     {
-      "aliasColors": {
-        "China": "semi-dark-red",
-        "Germany": "semi-dark-orange",
-        "Iran": "semi-dark-green",
-        "Italy": "dark-blue",
-        "UK": "rgb(48, 48, 145)",
-        "USA": "super-light-blue"
-      },
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "InfluxDB-Shifted",
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
         "h": 14,
         "w": 10,
-        "x": 10,
-        "y": 14
+        "x": 12,
+        "y": 28
       },
       "hiddenSeries": false,
-      "hideTimeOverride": true,
-      "id": 32,
-      "interval": "1d",
+      "id": 39,
+      "interval": "",
       "legend": {
         "alignAsTable": false,
         "avg": false,
-        "current": true,
-        "hideEmpty": false,
-        "hideZero": false,
+        "current": false,
         "max": false,
         "min": false,
         "rightSide": false,
         "show": true,
-        "sideWidth": null,
         "total": false,
-        "values": true
+        "values": false
       },
       "lines": true,
       "linewidth": 1,
@@ -2037,15 +2404,13 @@
         "dataLinks": []
       },
       "percentage": false,
-      "pointradius": 2,
+      "pointradius": 3,
       "points": true,
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "China"
-        },
-        {
-          "alias": "Outside China"
+          "alias": "China -46days",
+          "linewidth": 2
         }
       ],
       "spaceLength": 10,
@@ -2053,21 +2418,56 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "China",
-          "datasource": "InfluxDB",
+          "alias": "Italy -14D",
           "groupBy": [],
           "measurement": "summary_worldometers_country_86400",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"confirmed_cumulative\")  - mean(\"death_cumulative\") - mean(\"recovered_cumulative\") FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'China') AND $timeFilter GROUP BY time($interval) fill(linear)",
-          "rawQuery": true,
-          "refId": "H",
+          "refId": "D",
           "resultFormat": "time_series",
           "select": [
             [
               {
                 "params": [
-                  "confirmed_cumulative"
+                  "death_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "shift_14_days"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "Italy"
+            },
+            {
+              "condition": "AND",
+              "key": "confirmed_diff",
+              "operator": ">",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "alias": "UK",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "G",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
                 ],
                 "type": "field"
               }
@@ -2077,59 +2477,13 @@
             {
               "key": "country",
               "operator": "=",
-              "value": "China"
-            }
-          ]
-        },
-        {
-          "alias": "Outside China",
-          "datasource": "InfluxDB",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
+              "value": "UK"
             },
             {
-              "params": [
-                "previous"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "select asd from (SELECT sum(\"confirmed_cumulative\") - sum(\"recovered_cumulative\") - sum(\"death_cumulative\") as asd FROM \"summary_worldometers_country_86400\" WHERE (\"country\" != 'ttt') AND $timeFilter GROUP BY time($interval) fill(linear))",
-          "rawQuery": true,
-          "refId": "G",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "sum"
-              },
-              {
-                "params": [
-                  "- \"recovered_cumulative\""
-                ],
-                "type": "math"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "!=",
-              "value": "China"
+              "condition": "AND",
+              "key": "confirmed_diff",
+              "operator": ">",
+              "value": "0"
             }
           ]
         }
@@ -2137,8 +2491,8 @@
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
-      "timeShift": "20d",
-      "title": "Contagions Active",
+      "timeShift": null,
+      "title": "Deaths detected: ITA -14D | UK",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2149,21 +2503,21 @@
         "buckets": null,
         "mode": "time",
         "name": null,
-        "show": true,
+        "show": false,
         "values": []
       },
       "yaxes": [
         {
           "format": "short",
-          "label": "World",
-          "logBase": 1,
+          "label": null,
+          "logBase": 2,
           "max": null,
           "min": null,
           "show": true
         },
         {
           "format": "short",
-          "label": "China",
+          "label": null,
           "logBase": 1,
           "max": null,
           "min": null,
@@ -2174,201 +2528,6 @@
         "align": false,
         "alignLevel": null
       }
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": true,
-      "colorPrefix": false,
-      "colorValue": false,
-      "colors": [
-        "rgb(87, 28, 36)",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
-      "datasource": null,
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 2,
-        "w": 4,
-        "x": 20,
-        "y": 14
-      },
-      "id": 14,
-      "interval": null,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "options": {},
-      "postfix": " ",
-      "postfixFontSize": "80%",
-      "prefix": "U.K.",
-      "prefixFontSize": "120%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(224, 180, 0, 0.24)",
-        "full": true,
-        "lineColor": "#E0B400",
-        "show": true,
-        "ymax": null,
-        "ymin": null
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "worldometers",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "UK"
-            },
-            {
-              "condition": "OR",
-              "key": "country",
-              "operator": "=",
-              "value": "United Kingdom"
-            },
-            {
-              "condition": "OR",
-              "key": "country",
-              "operator": "=",
-              "value": "U.K."
-            },
-            {
-              "condition": "OR",
-              "key": "country",
-              "operator": "=",
-              "value": "UK"
-            }
-          ]
-        }
-      ],
-      "thresholds": "",
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "",
-      "type": "singlestat",
-      "valueFontSize": "120%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
-    },
-    {
-      "content": "###### **Covid19 Data Miner & Dashboard**\n- Open source: [Download](https://github.com/gdassori/covid19_data_miner) \n\n\n\n\n",
-      "datasource": null,
-      "description": "Covid19",
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 20,
-        "y": 16
-      },
-      "id": 31,
-      "mode": "markdown",
-      "options": {},
-      "targets": [
-        {
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Info",
-      "type": "text"
     },
     {
       "aliasColors": {
@@ -2391,7 +2550,7 @@
         "h": 12,
         "w": 12,
         "x": 0,
-        "y": 28
+        "y": 40
       },
       "hiddenSeries": false,
       "hideTimeOverride": true,
@@ -2424,7 +2583,10 @@
         {
           "alias": "China",
           "bars": false,
+          "fill": 2,
           "lines": true,
+          "linewidth": 1,
+          "stack": false,
           "steppedLine": true
         },
         {
@@ -2730,7 +2892,7 @@
         "UK": "rgb(48, 48, 145)",
         "USA": "super-light-blue"
       },
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
@@ -2740,195 +2902,7 @@
         "h": 12,
         "w": 12,
         "x": 12,
-        "y": 28
-      },
-      "hiddenSeries": false,
-      "hideTimeOverride": true,
-      "id": 35,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": true,
-        "hideEmpty": false,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "sideWidth": null,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "China",
-          "bars": false,
-          "fill": 1,
-          "lines": true,
-          "linewidth": 2,
-          "stack": false
-        },
-        {
-          "alias": "Italy"
-        }
-      ],
-      "spaceLength": 10,
-      "stack": true,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "China",
-          "datasource": "InfluxDB",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT \"confirmed_cumulative\"  - \"death_cumulative\" - \"recovered_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'China') AND $timeFilter",
-          "rawQuery": true,
-          "refId": "H",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "China"
-            }
-          ]
-        },
-        {
-          "alias": "Outside China",
-          "datasource": "InfluxDB",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "previous"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT sum(\"confirmed_cumulative\") - sum(\"recovered_cumulative\") - sum(\"death_cumulative\") FROM \"summary_worldometers_country_86400\" WHERE (\"country\" != 'China') AND $timeFilter GROUP BY time($interval) fill(linear)",
-          "rawQuery": true,
-          "refId": "G",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "sum"
-              },
-              {
-                "params": [
-                  "- \"recovered_cumulative\""
-                ],
-                "type": "math"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "!=",
-              "value": "China"
-            }
-          ]
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": "20d",
-      "title": "Contagions Active",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": "World",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": "China",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {
-        "China": "semi-dark-red",
-        "Germany": "semi-dark-orange",
-        "Iran": "semi-dark-green",
-        "Italy": "dark-blue",
-        "UK": "rgb(48, 48, 145)",
-        "USA": "super-light-blue"
-      },
-      "bars": true,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 14,
-        "w": 12,
-        "x": 0,
-        "y": 40
+        "y": 42
       },
       "hiddenSeries": false,
       "hideTimeOverride": true,
@@ -3275,369 +3249,6 @@
     },
     {
       "aliasColors": {
-        "China": "semi-dark-red",
-        "Germany": "semi-dark-orange",
-        "Iran": "semi-dark-green",
-        "Italy": "dark-blue",
-        "UK": "rgb(48, 48, 145)",
-        "USA": "super-light-blue"
-      },
-      "bars": true,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 14,
-        "w": 12,
-        "x": 12,
-        "y": 40
-      },
-      "hiddenSeries": false,
-      "hideTimeOverride": true,
-      "id": 22,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": true,
-        "hideEmpty": false,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "sideWidth": null,
-        "total": false,
-        "values": true
-      },
-      "lines": false,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "China",
-          "bars": false,
-          "lines": true,
-          "linewidth": 2,
-          "stack": false
-        }
-      ],
-      "spaceLength": 10,
-      "stack": true,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "Italy",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "death_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "Italy"
-            }
-          ]
-        },
-        {
-          "alias": "Spain",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "death_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "Spain"
-            }
-          ]
-        },
-        {
-          "alias": "France",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "death_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "France"
-            }
-          ]
-        },
-        {
-          "alias": "Germany",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "D",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "death_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "Germany"
-            }
-          ]
-        },
-        {
-          "alias": "USA",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "E",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "death_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "USA"
-            }
-          ]
-        },
-        {
-          "alias": "UK",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "F",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "death_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "UK"
-            }
-          ]
-        },
-        {
-          "alias": "South Korea",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "G",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "death_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "South Korea"
-            }
-          ]
-        },
-        {
-          "alias": "Iran",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "I",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "death_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "Iran"
-            }
-          ]
-        },
-        {
-          "alias": "South Korea",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "J",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "death_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "South Korea"
-            }
-          ]
-        },
-        {
-          "alias": "China",
-          "groupBy": [],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "H",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "death_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "China"
-            }
-          ]
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": "20d",
-      "title": "Deaths Cumulative",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {
         "France": "semi-dark-orange",
         "Germany": "light-blue",
         "Italy": "rgba(106, 153, 239, 0.17)",
@@ -3655,7 +3266,7 @@
         "h": 14,
         "w": 12,
         "x": 0,
-        "y": 54
+        "y": 52
       },
       "hiddenSeries": false,
       "id": 8,
@@ -4008,6 +3619,1319 @@
       }
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "InfluxDB-Shifted",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 54
+      },
+      "hiddenSeries": false,
+      "id": 38,
+      "interval": "",
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 3,
+      "points": true,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "China -46days",
+          "linewidth": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "France",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "France"
+            },
+            {
+              "condition": "AND",
+              "key": "confirmed_diff",
+              "operator": ">",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "alias": "Italy -8 days",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "D",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "shift_8_days"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "Italy"
+            },
+            {
+              "condition": "AND",
+              "key": "confirmed_diff",
+              "operator": ">",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "alias": "Germany",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "Germany"
+            },
+            {
+              "condition": "AND",
+              "key": "confirmed_diff",
+              "operator": ">",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "alias": "Spain",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "Spain"
+            },
+            {
+              "condition": "AND",
+              "key": "confirmed_diff",
+              "operator": ">",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "alias": "China -47d",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "none"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "E",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              },
+              {
+                "params": [
+                  "shift_47_days"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "China"
+            },
+            {
+              "condition": "AND",
+              "key": "confirmed_diff",
+              "operator": ">",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "alias": "USA",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "none"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "F",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "USA"
+            },
+            {
+              "condition": "AND",
+              "key": "confirmed_diff",
+              "operator": ">",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "alias": "UK",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "G",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "UK"
+            },
+            {
+              "condition": "AND",
+              "key": "confirmed_diff",
+              "operator": ">",
+              "value": "0"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Overlaps: Europe | Italy Lag | China Lag | US",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": false,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 2,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {
+        "Death": "dark-red",
+        "Severe": "dark-yellow"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "InfluxDB",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 14,
+        "w": 12,
+        "x": 0,
+        "y": 66
+      },
+      "hiddenSeries": false,
+      "hideTimeOverride": true,
+      "id": 3,
+      "interval": "",
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "hideEmpty": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 1,
+      "points": true,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "Confirmed"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "Severe",
+          "groupBy": [],
+          "measurement": "worldometers",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "severe_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "Italy"
+            }
+          ]
+        },
+        {
+          "alias": "Death",
+          "groupBy": [],
+          "measurement": "worldometers",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "Italy"
+            }
+          ]
+        },
+        {
+          "alias": "Confirmed",
+          "groupBy": [],
+          "measurement": "worldometers",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "Italy"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": "20d",
+      "title": "Italy Severe vs Death",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": "Deaths & Severes",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "decimals": null,
+          "format": "short",
+          "label": "Confirmed cases",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {
+        "China": "semi-dark-red",
+        "Germany": "semi-dark-orange",
+        "Iran": "semi-dark-green",
+        "Italy": "dark-blue",
+        "UK": "rgb(48, 48, 145)",
+        "USA": "super-light-blue"
+      },
+      "bars": true,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 66
+      },
+      "hiddenSeries": false,
+      "hideTimeOverride": true,
+      "id": 22,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": true,
+        "hideEmpty": false,
+        "hideZero": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "sideWidth": null,
+        "total": false,
+        "values": true
+      },
+      "lines": false,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "China",
+          "bars": false,
+          "lines": true,
+          "linewidth": 2,
+          "stack": false
+        }
+      ],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "Italy",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "Italy"
+            }
+          ]
+        },
+        {
+          "alias": "Spain",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "Spain"
+            }
+          ]
+        },
+        {
+          "alias": "France",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "France"
+            }
+          ]
+        },
+        {
+          "alias": "Germany",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "D",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "Germany"
+            }
+          ]
+        },
+        {
+          "alias": "USA",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "E",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "USA"
+            }
+          ]
+        },
+        {
+          "alias": "UK",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "F",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "UK"
+            }
+          ]
+        },
+        {
+          "alias": "South Korea",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "G",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "South Korea"
+            }
+          ]
+        },
+        {
+          "alias": "Iran",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "I",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "Iran"
+            }
+          ]
+        },
+        {
+          "alias": "South Korea",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "J",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "South Korea"
+            }
+          ]
+        },
+        {
+          "alias": "China",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "H",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "death_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "China"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": "20d",
+      "title": "Deaths Cumulative",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {
+        "China": "semi-dark-red",
+        "Germany": "semi-dark-orange",
+        "Iran": "semi-dark-green",
+        "Italy": "dark-blue",
+        "UK": "rgb(48, 48, 145)",
+        "USA": "super-light-blue"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 78
+      },
+      "hiddenSeries": false,
+      "hideTimeOverride": true,
+      "id": 35,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": true,
+        "hideEmpty": false,
+        "hideZero": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "sideWidth": null,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "China",
+          "bars": false,
+          "fill": 1,
+          "lines": true,
+          "linewidth": 2,
+          "stack": false
+        },
+        {
+          "alias": "Italy"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "China",
+          "datasource": "InfluxDB",
+          "groupBy": [],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"confirmed_cumulative\"  - \"death_cumulative\" - \"recovered_cumulative\" FROM \"summary_worldometers_country_86400\" WHERE (\"country\" = 'China') AND $timeFilter",
+          "rawQuery": true,
+          "refId": "H",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "China"
+            }
+          ]
+        },
+        {
+          "alias": "Outside China",
+          "datasource": "InfluxDB",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "previous"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT sum(\"confirmed_cumulative\") - sum(\"recovered_cumulative\") - sum(\"death_cumulative\") FROM \"summary_worldometers_country_86400\" WHERE (\"country\" != 'China') AND $timeFilter GROUP BY time($interval) fill(linear)",
+          "rawQuery": true,
+          "refId": "G",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "sum"
+              },
+              {
+                "params": [
+                  "- \"recovered_cumulative\""
+                ],
+                "type": "math"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "!=",
+              "value": "China"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": "20d",
+      "title": "Contagions Active",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "World",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": "China",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 80
+      },
+      "hiddenSeries": false,
+      "hideTimeOverride": true,
+      "id": 7,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "max": true,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+        {
+          "alias": "Italy",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "linear"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "Italy"
+            }
+          ]
+        },
+        {
+          "alias": "Iran",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "linear"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "Iran"
+            }
+          ]
+        },
+        {
+          "alias": "S.Korea",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "linear"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "summary_worldometers_country_86400",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "confirmed_cumulative"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "country",
+              "operator": "=",
+              "value": "S. Korea"
+            },
+            {
+              "condition": "OR",
+              "key": "country",
+              "operator": "=",
+              "value": "South Korea"
+            }
+          ]
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": null,
+          "yaxis": "left"
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": "20d",
+      "title": "Top 3 outside outside China",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
       "aliasColors": {
         "China": "semi-dark-red",
         "Germany": "semi-dark-orange",
@@ -4026,7 +4950,7 @@
         "h": 14,
         "w": 12,
         "x": 12,
-        "y": 54
+        "y": 90
       },
       "hiddenSeries": false,
       "hideTimeOverride": true,
@@ -4371,177 +5295,21 @@
       }
     },
     {
-      "aliasColors": {
-        "Death": "dark-red",
-        "Severe": "dark-yellow"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "InfluxDB",
-      "fill": 1,
-      "fillGradient": 0,
+      "content": "<img src=\"//www.shinystat.com/cgi-bin/shinystat.cgi?USER=gdax\" alt=\"Users\" style=\"border:0px\" /></a>\n\n\n",
+      "datasource": null,
       "gridPos": {
-        "h": 14,
-        "w": 12,
+        "h": 3,
+        "w": 2,
         "x": 0,
-        "y": 68
+        "y": 92
       },
-      "hiddenSeries": false,
-      "hideTimeOverride": true,
-      "id": 3,
-      "interval": "",
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "hideEmpty": false,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 1,
-      "points": true,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "Confirmed"
-        }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "Severe",
-          "groupBy": [],
-          "measurement": "worldometers",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "severe_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "Italy"
-            }
-          ]
-        },
-        {
-          "alias": "Death",
-          "groupBy": [],
-          "measurement": "worldometers",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "death_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "Italy"
-            }
-          ]
-        },
-        {
-          "alias": "Confirmed",
-          "groupBy": [],
-          "measurement": "worldometers",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "Italy"
-            }
-          ]
-        }
-      ],
-      "thresholds": [],
+      "id": 37,
+      "mode": "html",
+      "options": {},
       "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": "20d",
-      "title": "Italy Severe vs Death",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "none",
-          "label": "Deaths & Severes",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "decimals": null,
-          "format": "short",
-          "label": "Confirmed cases",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "timeShift": null,
+      "title": "Panel Title",
+      "type": "text"
     },
     {
       "aliasColors": {
@@ -4562,7 +5330,7 @@
         "h": 14,
         "w": 12,
         "x": 12,
-        "y": 68
+        "y": 104
       },
       "hiddenSeries": false,
       "hideTimeOverride": true,
@@ -4922,235 +5690,6 @@
       }
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 12,
-        "w": 12,
-        "x": 0,
-        "y": 82
-      },
-      "hiddenSeries": false,
-      "hideTimeOverride": true,
-      "id": 7,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": false,
-        "max": true,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": true,
-      "targets": [
-        {
-          "alias": "Italy",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "linear"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "Italy"
-            }
-          ]
-        },
-        {
-          "alias": "Iran",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "linear"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "Iran"
-            }
-          ]
-        },
-        {
-          "alias": "S.Korea",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "linear"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "summary_worldometers_country_86400",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "confirmed_cumulative"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "country",
-              "operator": "=",
-              "value": "S. Korea"
-            },
-            {
-              "condition": "OR",
-              "key": "country",
-              "operator": "=",
-              "value": "South Korea"
-            }
-          ]
-        }
-      ],
-      "thresholds": [
-        {
-          "colorMode": "critical",
-          "fill": true,
-          "line": true,
-          "op": "gt",
-          "value": null,
-          "yaxis": "left"
-        }
-      ],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": "20d",
-      "title": "Top 3 outside outside China",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
       "aliasColors": {
         "Confirmed": "dark-blue",
         "Deaths": "semi-dark-red",
@@ -5166,7 +5705,7 @@
         "h": 12,
         "w": 12,
         "x": 12,
-        "y": 82
+        "y": 118
       },
       "hiddenSeries": false,
       "hideTimeOverride": true,
@@ -5369,23 +5908,6 @@
       }
     },
     {
-      "content": "<img src=\"//www.shinystat.com/cgi-bin/shinystat.cgi?USER=gdax\" alt=\"Users\" style=\"border:0px\" /></a>\n\n\n",
-      "datasource": null,
-      "gridPos": {
-        "h": 3,
-        "w": 2,
-        "x": 0,
-        "y": 94
-      },
-      "id": 37,
-      "mode": "html",
-      "options": {},
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Panel Title",
-      "type": "text"
-    },
-    {
       "aliasColors": {
         "Confirmed": "dark-green",
         "Deaths": "semi-dark-red",
@@ -5401,7 +5923,7 @@
         "h": 12,
         "w": 12,
         "x": 12,
-        "y": 94
+        "y": 130
       },
       "hiddenSeries": false,
       "hideTimeOverride": true,
@@ -5618,7 +6140,7 @@
         "h": 12,
         "w": 12,
         "x": 12,
-        "y": 106
+        "y": 142
       },
       "hiddenSeries": false,
       "hideTimeOverride": true,
@@ -5805,5 +6327,5 @@
   "timezone": "",
   "title": "Global Overview",
   "uid": "bxqYla_Wk",
-  "version": 110
+  "version": 119
 }
