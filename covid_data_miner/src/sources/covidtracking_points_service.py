@@ -35,7 +35,7 @@ class CovidTrackingUSAPointsService:
                 city="",
                 confirmed_cumulative=int(entry['total'] or 0),
                 death_cumulative=int(entry['death'] or 0),
-                recovered_cumulative=entry['negative'],
+                recovered_cumulative=entry['negative'] or 0,
                 hospitalized_cumulative=int(entry['hospitalized'] or 0),
                 severe_cumulative=0,
                 tests_cumulative=int(entry['totalTestResults'] or 0)
