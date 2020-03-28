@@ -117,11 +117,11 @@ class HistoricalDataSummaryProjection(BaseProjection):
         )
         current.update(
             {
-                "confirmed_diff": current['confirmed_cumulative'] - previous['confirmed_cumulative'],
-                "hospitalized_diff": current['hospitalized_cumulative'] - previous['hospitalized_cumulative'],
-                "severe_diff": current['severe_cumulative'] - previous['severe_cumulative'],
-                "death_diff": current['death_cumulative'] - previous['death_cumulative'],
-                "recovered_diff": current['recovered_cumulative'] - previous['recovered_cumulative'],
+                "confirmed_diff": current['confirmed_cumulative'] or 0 - previous['confirmed_cumulative'] or 0,
+                "hospitalized_diff": current['hospitalized_cumulative'] or 0 - previous['hospitalized_cumulative'] or 0,
+                "severe_diff": current['severe_cumulative'] or 0 - previous['severe_cumulative'] or 0,
+                "death_diff": current['death_cumulative'] or 0 - previous['death_cumulative'] or 0,
+                "recovered_diff": current['recovered_cumulative'] or 0 - previous['recovered_cumulative'] or 0,
                 "tests_diff": (current['tests_cumulative'] if current.get('tests_cumulative', 0) else 0) -
                               (previous['tests_cumulative'] if previous.get('tests_cumulative', 0) else 0)
             }

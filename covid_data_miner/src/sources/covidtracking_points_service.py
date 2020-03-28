@@ -18,30 +18,12 @@ class CovidTrackingUSAPointsService:
     tags = ['region']
 
     def _fetch_data(self):
-        return requests.get('http://covidtracking.com/api/states/daily.csv').content.decode()
+        return requests.get('http://covidtracking.com/api/states/daily').json()
 
-    @staticmethod
-    def _parse_csv(entry: str):
+    def _get_points(self, data: typing.List[typing.Dict], min_timestamp=None) -> typing.List[CovidPoint]:
         res = []
-        for row in csv.reader([x for x in entry.split('\n') if x], delimiter=','):
-            res.append(row)
-        return res
-
-    def _get_points(self, data: str, min_timestamp=None) -> typing.List[CovidPoint]:
-        res = []
-        rows = self._parse_csv(data)
-        for row in rows:
-            if 'date' == row[0].strip():
-                if row not in [
-                    [
-                        'date', 'state', 'positive', 'negative', 'pending', 'hospitalized', 'death', 'total', 'dateChecked', 'totalTestResults',
-                        'deathIncrease', 'hospitalizedIncrease', 'negativeIncrease', 'positiveIncrease', 'totalTestResultsIncrease'
-                    ],
-                    ['date', 'state', 'positive', 'negative', 'pending', 'hospitalized', 'death', 'total', 'dateChecked', 'totalTestResults']
-                ]:
-                    raise ValueError(row)
-                continue
-            updated_at = datetime.datetime.strptime(row[8], '%Y-%m-%dT%H:%M:%SZ')
+        for entry in data:
+            updated_at = datetime.datetime.strptime(entry['dateChecked'], '%Y-%m-%dT%H:%M:%SZ')
             if min_timestamp and updated_at < datetime.datetime.fromtimestamp(min_timestamp):
                 continue
             point = CovidPoint(
@@ -49,14 +31,14 @@ class CovidTrackingUSAPointsService:
                 timestamp=updated_at,
                 last_update=int(updated_at.strftime('%s')),
                 country="USA",
-                region=row[1].replace("'", "."),
+                region=entry['state'].replace("'", "."),
                 city="",
-                confirmed_cumulative=int(row[2] or 0),
-                death_cumulative=int(row[6] or 0),
-                recovered_cumulative=0,
-                hospitalized_cumulative=int(row[5] or 0),
+                confirmed_cumulative=int(entry['total'] or 0),
+                death_cumulative=int(entry['death'] or 0),
+                recovered_cumulative=entry['negative'],
+                hospitalized_cumulative=int(entry['hospitalized'] or 0),
                 severe_cumulative=0,
-                tests_cumulative=int(row[9] or 0)
+                tests_cumulative=int(entry['totalTestResults'] or 0)
             )
             res.append(point)
         return res
@@ -68,9 +50,8 @@ class CovidTrackingUSAPointsService:
 
     def get_last_update(self) -> int:
         data = self._fetch_data()
-        _csv = self._parse_csv(data)
         try:
-            dt = datetime.datetime.strptime(_csv[1][8], '%Y-%m-%dT%H:%M:%SZ')
+            dt = datetime.datetime.strptime(data[0]['dateChecked'], '%Y-%m-%dT%H:%M:%SZ')
         except Exception as e:
             print(e)
             dt = None
