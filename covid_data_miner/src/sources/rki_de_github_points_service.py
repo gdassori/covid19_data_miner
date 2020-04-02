@@ -11,6 +11,8 @@ class RkiDeGithubPointsService:
     country = 'Germany'
     source_type = 'regional'
     source_name = 'Robert Koch Institute'
+    summary_projection = True
+
     tags = ['region']
 
     def __init__(self, authentication_key):

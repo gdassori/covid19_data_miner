@@ -11,6 +11,7 @@ class CovidTrackingUSAPointsService:
     country = 'USA'
     source_type = 'regional'
     source_name = 'covidtracking.com (CDC)'
+    summary_projection = True
 
     def __init__(self, authentication_key):
         self._ = authentication_key
@@ -34,11 +35,11 @@ class CovidTrackingUSAPointsService:
                 region=entry['state'].replace("'", "."),
                 city="",
                 confirmed_cumulative=int(entry['total'] or 0),
-                death_cumulative=int(entry['death'] or 0),
-                recovered_cumulative=entry['negative'] or 0,
-                hospitalized_cumulative=int(entry['hospitalized'] or 0),
+                death_cumulative=int(entry.get('death') or 0),
+                recovered_cumulative=entry.get('negative') or 0,
+                hospitalized_cumulative=int(entry.get('hospitalized') or 0),
                 severe_cumulative=0,
-                tests_cumulative=int(entry['totalTestResults'] or 0)
+                tests_cumulative=int(entry.get('totalTestResults') or 0)
             )
             res.append(point)
         return res

@@ -12,6 +12,7 @@ class CSSEGISandDataPointsService:
     country = 'World'
     source_type = 'global'
     source_name = 'CSSE (JHU)'
+    summary_projection = True
 
     tags = ['country', 'region']
 

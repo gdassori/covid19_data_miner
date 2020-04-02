@@ -81,10 +81,10 @@ class Covid19DataMinerManager:
         for projection in self._projections_by_source.get(source, []):
             projection.project(points)
             projections_updated.append(projection.name)
-            return {
-                "source_updated": True,
-                "projections": projections_updated
-            }
+        return {
+            "source_updated": True,
+            "projections": projections_updated
+        }
 
     def rewind_projection(self, projection_name: str, start_from: datetime.datetime, no_cascade: bool):
         projection = self._projections_by_name[projection_name]

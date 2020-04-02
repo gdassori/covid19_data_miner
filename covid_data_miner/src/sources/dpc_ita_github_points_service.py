@@ -10,6 +10,7 @@ class DPCItaGithubPointsService:
     country = 'Italy'
     source_type = 'regional'
     source_name = 'Dipartimento Protezione Civile'
+    summary_projection = True
 
     tags = ['region']
 

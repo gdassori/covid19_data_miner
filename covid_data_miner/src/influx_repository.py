@@ -5,7 +5,7 @@ import typing
 import influxdb as influxdb
 from influxdb import InfluxDBClient
 
-from covid_data_miner.src.domain import CovidPoint
+from covid_data_miner.src.domain import CovidPoint, IstatDeathRatePoint
 from covid_data_miner.src.utils import chunks
 
 
@@ -34,7 +34,45 @@ class InfluxDataRepository(InfluxDBRepository):
         self.databases = ['covid19']
         self.influxdb_client.ping()
 
-    def save_historical_points(self, *points: CovidPoint):
+    def save_historical_points(self, *points: (CovidPoint, IstatDeathRatePoint)):
+        if not points:
+            return
+        if isinstance(points[0], CovidPoint):
+            return self._save_covid_points(points)
+        elif isinstance(points[0], IstatDeathRatePoint):
+            return self._save_istat_points(points)
+        else:
+            raise ValueError('Error, unknown format')
+
+    def _save_istat_points(self, points: IstatDeathRatePoint):
+        for chunk in chunks(points, 10000):
+            saving_points = [
+                {
+                    "measurement": point.source,
+                    "time": int(point.timestamp.strftime('%s')),
+                    "tags": {
+                        "country": point.country,
+                        "region": point.region,
+                        "city": point.city,
+                        "province": point.province,
+                        "age_range": point.age_range
+                    },
+                    "fields": {
+                        "females_deaths": point.females_deaths,
+                        "males_deaths": point.males_deaths,
+                        "total_deaths": point.total_deaths,
+                        "age_range_field": point.age_range
+                    },
+                } for i, point in enumerate(chunk)
+            ]
+            self.influxdb_client.write_points(
+                saving_points,
+                database="covid19",
+                time_precision="s"
+            )
+        return True
+
+    def _save_covid_points(self, points: CovidPoint):
         saving_points = [
             {
                 "measurement": point.source,

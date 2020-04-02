@@ -17,3 +17,19 @@ CovidPoint = typing.NamedTuple(
         ("tests_cumulative", int)
     )
 )
+
+
+IstatDeathRatePoint = typing.NamedTuple(
+    "IstatDeathRate", (
+        ("timestamp", datetime.datetime),
+        ("country", str),
+        ("province", str),
+        ("region", str),
+        ("city", str),
+        ("age_range", str),
+        ("females_deaths", int),
+        ("males_deaths", int),
+        ("total_deaths", int),
+        ("source", str)
+    )
+)

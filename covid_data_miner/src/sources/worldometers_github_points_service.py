@@ -11,6 +11,8 @@ class WorldometersGithubPointsService:
     country = 'World'
     source_type = 'global'
     source_name = 'worldometers.info (many)'
+    summary_projection = True
+
     tags = ['country']
 
     def __init__(self, authentication_key):

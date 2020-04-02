@@ -125,13 +125,14 @@ def add(name, auth=None):
     context.add_source(name, auth)
     configured = context.get_configured_source(name)
     source = sources_factory.get_source(configured)
-    click.echo('source "{}" added'.format(name))
-    click.echo('Adding default projection for first tag')
-    tag = source.tags[0]
-    timeframe = 86400
-    alias = 'summary_{}_{}_{}'.format(name, tag, timeframe)
-    context.add_projection('summary', name, tag, timeframe, alias)
-    click.echo('summary projection "{}" added'.format(alias))
+    if source.summary_projection:
+        click.echo('source "{}" added'.format(name))
+        click.echo('Adding default projection for first tag')
+        tag = source.tags[0]
+        timeframe = 86400
+        alias = 'summary_{}_{}_{}'.format(name, tag, timeframe)
+        context.add_projection('summary', name, tag, timeframe, alias)
+        click.echo('summary projection "{}" added'.format(alias))
 
 
 @sources.command()
@@ -247,6 +248,11 @@ def add(name, source, tag, timeframe, alias=None):
     if tag not in {s['name']: s for s in sources}[source]["tags"]:
         click.echo('invalid tag "{}" for source "{}"'.format(tag, source))
         exit(1)
+    s = sources_factory.get_source(context.get_configured_source(source))
+    if not s.summary_projection:
+        click.echo('Summary projection not supported for this source')
+        exit(1)
+
     configured = context.get_configured_projections()
     timeframe = validate_projection_timeframe(timeframe)
     alias = validate_projection_alias(alias) or 'summary_{}_{}_{}'.format(source, tag, timeframe)
