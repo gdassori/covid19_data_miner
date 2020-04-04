@@ -1,10 +1,10 @@
-import csv
 import datetime
 import typing
 
 import requests
 
 from covid_data_miner.src.domain import CovidPoint
+from covid_data_miner.src.utils import normalize_data
 
 
 class CovidTrackingUSAPointsService:
@@ -32,7 +32,7 @@ class CovidTrackingUSAPointsService:
                 timestamp=updated_at,
                 last_update=int(updated_at.strftime('%s')),
                 country="USA",
-                region=entry['state'].replace("'", "."),
+                region=normalize_data(entry['state'].replace("'", ".")),
                 city="",
                 confirmed_cumulative=int(entry['total'] or 0),
                 death_cumulative=int(entry.get('death') or 0),

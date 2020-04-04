@@ -62,7 +62,7 @@ class WorldometersGithubPointsService:
         assert all([
             'ountr' in h[0], 'ases' in h[1], 'eath' in h[2], 'egion' in h[3],
             ]), h
-        return [[r[0], r[1], r[2], '', ''] for r in rows[1:]]
+        return [[r[0], r[1], r[2], '', '', ''] for r in rows[1:]]
 
     @staticmethod
     def _get_points_from_csv_v2(rows):
@@ -72,7 +72,7 @@ class WorldometersGithubPointsService:
         assert all([
             'ountr' in h[0], 'ases' in h[1], 'eath' in h[3], 'egion' in h[4]
         ]), rows[0]
-        return [[r[0], r[1], r[3], '', ''] for r in rows[1:]]
+        return [[r[0], r[1], r[3], '', '', ''] for r in rows[1:]]
 
     @staticmethod
     def _get_points_from_csv_v3(rows):
@@ -84,7 +84,7 @@ class WorldometersGithubPointsService:
             'otal' in h[3], 'eath' in h[3], any(['ured' in h[5], 'ered' in h[5]]), 'otal' in h[5],
             any(['ritical' in h[6], 'evere' in h[6]])
         ]), rows[0]
-        return [[r[0], r[1], r[3], r[5], r[6]] for r in rows[1:]]
+        return [[r[0], r[1], r[3], r[5], r[6], ''] for r in rows[1:]]
 
     @staticmethod
     def _get_points_from_csv_v4(rows):
@@ -99,7 +99,7 @@ class WorldometersGithubPointsService:
             'otal' in h[3], 'eath' in h[3], any(['ured' in h[5], 'overed' in h[5]]), 'otal' in h[5],
             any(['ritical' in h[6], 'severe' in h[6]])
         ]), rows[0]
-        return [[r[0], r[1], r[3], r[5], r[6]] for r in rows[1:]]
+        return [[r[0], r[1], r[3], r[5], r[6], ''] for r in rows[1:]]
 
     @staticmethod
     def _get_points_from_csv_v5(rows):
@@ -111,7 +111,7 @@ class WorldometersGithubPointsService:
             'otal' in h[3], 'eath' in h[3], 'overed' in h[6], 'otal' in h[6],
             any(['tical' in h[7], 'ever' in h[7]])
         ]), rows[0]
-        return [[r[0], r[1], r[3], r[6], r[7]] for r in rows[1:]]
+        return [[r[0], r[1], r[3], r[6], r[7], ''] for r in rows[1:]]
 
     @staticmethod
     def _get_points_from_csv_v6(rows):
@@ -121,20 +121,20 @@ class WorldometersGithubPointsService:
         assert all([
             'ountry' in h[0], 'otal' in h[1], 'ases' in h[1], 'otal' in h[3], 'eath' in h[3]
         ]), rows[0]
-        return [[r[0], r[1], r[3], '', ''] for r in rows[1:]]
+        return [[r[0], r[1], r[3], '', '', ''] for r in rows[1:]]
 
     @staticmethod
     def _get_points_from_csv_v7(rows):
         # Country/Other, TotalCases, NewCases, TotalDeaths, NewDeaths, TotalRecovered,
         #                          ActiveCases, Serious/Critical, Tot\xa0Cases/1M pop
         h = rows[0]
-        assert len(rows[0]) in [9, 10, 11]
+        assert len(rows[0]) in [9, 10, 11, 12]
         assert all([
             'ountry' in h[0], 'otal' in h[1], 'ases' in h[1],
             'otal' in h[3], 'eath' in h[3], 'overed' in h[5], 'otal' in h[5],
             'tical' in h[7]
         ]), rows[0]
-        return [[r[0], r[1], r[3], r[5], r[7]] for r in rows[1:]]
+        return [[r[0], r[1], r[3], r[5], r[7], r[10] if len(r) == 12 else ''] for r in rows[1:]]
 
     def _get_points(self, data: typing.List[typing.List], min_timestamp=None) -> typing.List[CovidPoint]:
         res = []
@@ -169,7 +169,7 @@ class WorldometersGithubPointsService:
                     recovered_cumulative=int(row[3].replace(',', '').strip() or 0),
                     hospitalized_cumulative=0,
                     severe_cumulative=int(row[4].replace(',', '').strip() or 0),
-                    tests_cumulative=0
+                    tests_cumulative=int(row[5].replace(',', '').strip() or 0),
                 )
                 res.append(point)
         return res

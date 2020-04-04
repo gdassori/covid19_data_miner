@@ -4,6 +4,7 @@ import typing
 import requests
 
 from covid_data_miner.src.domain import CovidPoint
+from covid_data_miner.src.utils import normalize_data
 
 
 class DPCItaGithubPointsService:
@@ -35,7 +36,7 @@ class DPCItaGithubPointsService:
                 timestamp=updated_at,
                 last_update=int(updated_at.strftime('%s')),
                 country="Italy",
-                region=row['denominazione_regione'].replace("'", "."),
+                region=normalize_data(row['denominazione_regione'].replace("'", ".")),
                 city="",
                 confirmed_cumulative=int(row['totale_positivi']),
                 death_cumulative=int(row['deceduti']),

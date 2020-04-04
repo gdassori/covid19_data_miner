@@ -6,6 +6,7 @@ from github import Github
 import base64
 
 from covid_data_miner.src.domain import CovidPoint
+from covid_data_miner.src.utils import normalize_data
 
 
 class CSSEGISandDataPointsService:
@@ -104,8 +105,8 @@ class CSSEGISandDataPointsService:
                     source="csse",
                     timestamp=datetime.datetime.fromtimestamp(last_update),
                     last_update=last_update,
-                    country=row[1],
-                    region=row[2],
+                    country=normalize_data(row[1]),
+                    region=normalize_data(row[2]),
                     city="",
                     confirmed_cumulative=int(row[3] or 0),
                     death_cumulative=int(row[4] or 0),

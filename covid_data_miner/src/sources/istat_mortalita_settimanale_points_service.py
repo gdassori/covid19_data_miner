@@ -5,6 +5,7 @@ import typing
 import requests
 
 from covid_data_miner.src.domain import CovidPoint, IstatDeathRatePoint
+from covid_data_miner.src.utils import normalize_data
 
 
 class IstatWeeklyDeathsGithubPointsService:
@@ -109,8 +110,8 @@ class IstatWeeklyDeathsGithubPointsService:
                         IstatDeathRatePoint(
                             timestamp=timestamp,
                             country='Italy',
-                            province=province,
-                            region=region,
+                            province=normalize_data(province),
+                            region=normalize_data(region),
                             city='',
                             females_deaths=_data['females_deaths'],
                             males_deaths=_data['males_deaths'],

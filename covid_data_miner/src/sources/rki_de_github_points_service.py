@@ -5,6 +5,7 @@ from github import Github
 import base64
 
 from covid_data_miner.src.domain import CovidPoint
+from covid_data_miner.src.utils import normalize_data
 
 
 class RkiDeGithubPointsService:
@@ -69,7 +70,7 @@ class RkiDeGithubPointsService:
                     timestamp=updated_at,
                     last_update=int(updated_at.strftime('%s')),
                     country="Germany",
-                    region=row[0],
+                    region=normalize_data(row[0]),
                     city="",
                     confirmed_cumulative=int(row[1].replace('.', '').strip() or 0),
                     death_cumulative=int(row[2].replace('.', '').strip() if len(row) > 2 and row[2] else 0),
