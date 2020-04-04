@@ -26,10 +26,21 @@ IstatDeathRatePoint = typing.NamedTuple(
         ("province", str),
         ("region", str),
         ("city", str),
-        ("age_range", str),
         ("females_deaths", int),
         ("males_deaths", int),
         ("total_deaths", int),
+        ("females_0_14_deaths", int),
+        ("males_0_14_deaths", int),
+        ("total_0_14_deaths", int),
+        ("females_15_64_deaths", int),
+        ("males_15_64_deaths", int),
+        ("total_15_64_deaths", int),
+        ("females_65_74_deaths", int),
+        ("males_65_74_deaths", int),
+        ("total_65_74_deaths", int),
+        ("females_over75_deaths", int),
+        ("males_over75_deaths", int),
+        ("total_over75_deaths", int),
         ("source", str)
     )
 )

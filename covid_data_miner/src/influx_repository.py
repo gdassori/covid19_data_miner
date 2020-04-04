@@ -53,15 +53,24 @@ class InfluxDataRepository(InfluxDBRepository):
                     "tags": {
                         "country": point.country,
                         "region": point.region,
-                        "city": point.city,
                         "province": point.province,
-                        "age_range": point.age_range
                     },
                     "fields": {
                         "females_deaths": point.females_deaths,
                         "males_deaths": point.males_deaths,
                         "total_deaths": point.total_deaths,
-                        "age_range_field": point.age_range
+                        "females_0_14_deaths": point.females_0_14_deaths,
+                        "males_0_14_deaths": point.males_0_14_deaths,
+                        "total_0_14_deaths": point.total_0_14_deaths,
+                        "females_15_64_deaths": point.females_15_64_deaths,
+                        "males_15_64_deaths": point.males_15_64_deaths,
+                        "total_15_64_deaths": point.total_15_64_deaths,
+                        "females_65_74_deaths": point.females_65_74_deaths,
+                        "males_65_74_deaths": point.males_65_74_deaths,
+                        "total_65_74_deaths": point.total_65_74_deaths,
+                        "females_over75_deaths": point.females_over75_deaths,
+                        "males_over75_deaths": point.males_over75_deaths,
+                        "total_over75_deaths": point.total_over75_deaths
                     },
                 } for i, point in enumerate(chunk)
             ]

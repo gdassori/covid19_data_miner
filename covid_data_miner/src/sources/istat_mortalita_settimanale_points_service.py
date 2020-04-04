@@ -50,26 +50,86 @@ class IstatWeeklyDeathsGithubPointsService:
                     data[v[1]][v[0].lower()] = i
         return data
 
+    @staticmethod
+    def _ensure_data_populated(data, region, province, timestamp):
+        template = {
+            "females_deaths": 0,
+            "males_deaths": 0,
+            "total_deaths": 0,
+            "females_0_14_deaths": 0,
+            "males_0_14_deaths": 0,
+            "total_0_14_deaths": 0,
+            "females_15_64_deaths": 0,
+            "males_15_64_deaths": 0,
+            "total_15_64_deaths": 0,
+            "females_65_74_deaths": 0,
+            "males_65_74_deaths": 0,
+            "total_65_74_deaths": 0,
+            "females_over75_deaths": 0,
+            "males_over75_deaths": 0,
+            "total_over75_deaths": 0,
+        }
+        if not data.get(region):
+            data[region] = {province: {timestamp: template}}
+        elif not data[region].get(province):
+            data[region][province] = {timestamp: template}
+        elif not data[region][province].get(timestamp):
+            data[region][province][timestamp] = template
+
+    @staticmethod
+    def _get_range_key(range):
+        return {
+            '0-14 anni': '0_14',
+            '15-64 anni': '15_64',
+            '65-74 anni': '65_74',
+            '75 anni e più': 'over75'
+        }[range]
+
     def _get_points(self, data: str, timestamp=None) -> typing.List[CovidPoint]:
         res = []
-        data = self._parse_csv(data)
-        index = data[0]
+        csv_data = self._parse_csv(data)
+        index = csv_data[0]
         years = self._get_years(index)
-        for row in data[1:]:
+        pre_res = {}
+        for row in csv_data[1:]:
             for year, yeardata in years.items():
-                point = IstatDeathRatePoint(
-                    source="istat_weekly_death_rate",
-                    country='Italy',
-                    age_range=row[7],
-                    region=row[3],
-                    province=row[4],
-                    city=row[5],
-                    timestamp=self._weekref_to_datetime(row, year),
-                    females_deaths=int(row[yeardata['femmine']]),
-                    males_deaths=int(row[yeardata['maschi']]),
-                    total_deaths=int(row[yeardata['totale']])
-                )
-                res.append(point)
+                timestamp = self._weekref_to_datetime(row, year)
+                key = self._get_range_key(row[7])
+                self._ensure_data_populated(pre_res, row[3], row[4], timestamp)
+                pre_res[row[3]][row[4]][timestamp]['females_deaths'] += int(row[yeardata['femmine']])
+                pre_res[row[3]][row[4]][timestamp]['males_deaths'] += int(row[yeardata['maschi']])
+                pre_res[row[3]][row[4]][timestamp]['total_deaths'] += int(row[yeardata['totale']])
+                pre_res[row[3]][row[4]][timestamp]['females_{}_deaths'.format(key)] += int(row[yeardata['femmine']])
+                pre_res[row[3]][row[4]][timestamp]['males_{}_deaths'.format(key)] += int(row[yeardata['maschi']])
+                pre_res[row[3]][row[4]][timestamp]['total_{}_deaths'.format(key)] += int(row[yeardata['totale']])
+        for region in pre_res.keys():
+            for province in pre_res[region].keys():
+                for timestamp, _data in pre_res[region][province].items():
+                    res.append(
+                        IstatDeathRatePoint(
+                            timestamp=timestamp,
+                            country='Italy',
+                            province=province,
+                            region=region,
+                            city='',
+                            females_deaths=_data['females_deaths'],
+                            males_deaths=_data['males_deaths'],
+                            total_deaths=_data['total_deaths'],
+                            females_0_14_deaths=_data['females_0_14_deaths'],
+                            males_0_14_deaths=_data['males_0_14_deaths'],
+                            total_0_14_deaths=_data['total_0_14_deaths'],
+                            females_15_64_deaths=_data['females_15_64_deaths'],
+                            males_15_64_deaths=_data['males_15_64_deaths'],
+                            total_15_64_deaths=_data['total_15_64_deaths'],
+                            females_65_74_deaths=_data['females_65_74_deaths'],
+                            males_65_74_deaths=_data['males_65_74_deaths'],
+                            total_65_74_deaths=_data['total_65_74_deaths'],
+                            females_over75_deaths=_data['females_over75_deaths'],
+                            males_over75_deaths=_data['males_over75_deaths'],
+                            total_over75_deaths=_data['total_over75_deaths'],
+                            source='istat_weekly_death_rate'
+                        )
+                    )
         return res
 
     def get_points_since(self, timestamp: int):
