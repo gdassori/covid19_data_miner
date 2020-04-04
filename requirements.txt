@@ -4,3 +4,4 @@ influxdb
 bs4
 click
 tabulate
+PyYaml
