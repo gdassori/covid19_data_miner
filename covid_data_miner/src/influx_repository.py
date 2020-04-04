@@ -5,7 +5,7 @@ import typing
 import influxdb as influxdb
 from influxdb import InfluxDBClient
 
-from covid_data_miner.src.domain import CovidPoint, IstatDeathRatePoint
+from covid_data_miner.src.domain import CovidPoint, IstatDeathRatePoint, InhabitantsPoint
 from covid_data_miner.src.utils import chunks
 
 
@@ -41,10 +41,38 @@ class InfluxDataRepository(InfluxDBRepository):
             return self._save_covid_points(points)
         elif isinstance(points[0], IstatDeathRatePoint):
             return self._save_istat_points(points)
+        elif isinstance(points[0], InhabitantsPoint):
+            return self._save_world_inhabitants(points)
         else:
             raise ValueError('Error, unknown format')
 
-    def _save_istat_points(self, points: IstatDeathRatePoint):
+    def _save_world_inhabitants(self, points: typing.Tuple[InhabitantsPoint]):
+        for chunk in chunks(points, 10000):
+            saving_points = [
+                {
+                    "measurement": 'world_inhabitants',
+                    "time": int(point.timestamp.strftime('%s')),
+                    "tags": {
+                        "country": point.country,
+                        "region": point.region,
+                        "province": point.province,
+                    },
+                    "fields": {
+                        "residents": point.residents,
+                        "size_sqm": point.size_sqm,
+                        "density": point.density,
+                        "municipalities": point.municipalities
+                    },
+                } for i, point in enumerate(chunk)
+            ]
+            self.influxdb_client.write_points(
+                saving_points,
+                database="covid19",
+                time_precision="s"
+            )
+        return True
+
+    def _save_istat_points(self, points: typing.Tuple[IstatDeathRatePoint]):
         for chunk in chunks(points, 10000):
             saving_points = [
                 {
@@ -81,7 +109,7 @@ class InfluxDataRepository(InfluxDBRepository):
             )
         return True
 
-    def _save_covid_points(self, points: CovidPoint):
+    def _save_covid_points(self, points: typing.Tuple[CovidPoint]):
         saving_points = [
             {
                 "measurement": point.source,
